@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/admin/:path*", "destination": "/Web admin/:path*" },
+    { "source": "/admin", "destination": "/Web admin/index.html" },
+    { "source": "/garage/:path*", "destination": "/Garage e commers/preview/:path*" },
+    { "source": "/garage", "destination": "/Garage e commers/preview/index.html" },
+    { "source": "/app/:path*", "destination": "/app/:path*" }
+  ]
+}
