@@ -26,22 +26,64 @@
       </a>
     </div>
 
-    <!-- Trip finished alert banner -->
-    <button id="tripDoneAlert" onclick="openTripDone()" class="w-full mb-3 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border:1.5px solid #6CE9A6;box-shadow:0 0 0 3px rgba(23,178,106,.1)">
+    <!-- Trip request alert banner -->
+    <button id="tripDoneAlert" onclick="openTripDone()" class="w-full mb-3 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
       <div class="flex items-center gap-3 px-3.5 py-3">
-        <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center" style="background:#17B26A">
-          <i data-icon="badge-check" class="w-5 h-5" style="color:#fff"></i>
-        </span>
+        <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:#FFCB00">🚛</span>
         <div class="flex-1 min-w-0">
-          <p class="text-[13px] font-bold text-navy-800 leading-tight">Renault T High — рейс завершён</p>
-          <p class="text-[11px] text-gray-500 mt-0.5">Jasur Ergashev · Tashkent → Prague · только что</p>
+          <p class="text-[13px] font-bold text-navy-800 leading-tight">Запрос рейса · Алишер Каримов</p>
+          <p class="text-[11px] text-gray-500 mt-0.5">VOLVO FH 12 · Ташкент → Самарканд · только что</p>
         </div>
-        <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Подтвердить</span>
+        <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
       </div>
-      <div style="height:3px;background:rgba(23,178,106,.25)">
-        <div style="height:100%;width:100%;background:#17B26A;animation:prog-pulse 2s ease-in-out infinite"></div>
+      <div style="height:3px;background:rgba(255,203,0,.25)">
+        <div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div>
       </div>
     </button>
+    <!-- Show all pending toggle -->
+    <button onclick="togglePendingList()" class="w-full flex items-center justify-between mb-2 px-1" style="background:none;border:none;cursor:pointer;padding-top:0">
+      <span style="font-size:12px;color:#667085">Ожидают подтверждения</span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#0F0F37">
+        <span id="pending-toggle-label">Показать все</span>
+        <span id="pending-badge" style="background:#FFCB00;color:#0F0F37;font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px">3</span>
+      </span>
+    </button>
+    <!-- Expandable pending list -->
+    <div id="pending-list" style="display:none;margin-bottom:10px">
+      <button id="pl-0" onclick="openPendingSheet(0)" class="w-full mb-2 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
+        <div class="flex items-center gap-3 px-3.5 py-3">
+          <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:#FFCB00">🚛</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-[13px] font-bold text-navy-800 leading-tight">Запрос рейса · Алишер Каримов</p>
+            <p class="text-[11px] text-gray-500 mt-0.5">VOLVO FH 12 · Ташкент → Самарканд · только что</p>
+          </div>
+          <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
+        </div>
+        <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
+      </button>
+      <button id="pl-1" onclick="openPendingSheet(1)" class="w-full mb-2 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
+        <div class="flex items-center gap-3 px-3.5 py-3">
+          <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center" style="background:#17B26A"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5L7 13L14.5 5.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div class="flex-1 min-w-0">
+            <p class="text-[13px] font-bold text-navy-800 leading-tight">Завершение рейса · Jasur Ergashev</p>
+            <p class="text-[11px] text-gray-500 mt-0.5">Renault T High · Tashkent → Prague · $2 820</p>
+          </div>
+          <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
+        </div>
+        <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
+      </button>
+      <button id="pl-2" onclick="openPendingSheet(2)" class="w-full rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
+        <div class="flex items-center gap-3 px-3.5 py-3">
+          <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:#FFCB00">📦</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-[13px] font-bold text-navy-800 leading-tight">Подтверждение заказа · B. Yuldashev</p>
+            <p class="text-[11px] text-gray-500 mt-0.5">Scania R500 · Samarkand → Almaty · 860 км</p>
+          </div>
+          <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
+        </div>
+        <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
+      </button>
+    </div>
     <style>
       @keyframes prog-pulse{0%,100%{opacity:.6}50%{opacity:1}}
       @keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.8);opacity:0}}
@@ -124,124 +166,226 @@
     ],
   };
 
-  window.openTripDone=function(){
-    const t=DONE_TRIP;
-    const totalIncome=t.incomes.reduce((s,r)=>s+r.amount,0);
-    const totalExp=t.expenseRows.reduce((s,r)=>s+r.amount,0);
-    const profit=totalIncome-totalExp;
-    const profitPct=Math.round(profit/totalIncome*100);
+  window.togglePendingList = function(){
+    const list = document.getElementById('pending-list');
+    const label = document.getElementById('pending-toggle-label');
+    const open = list.style.display === 'none';
+    list.style.display = open ? 'block' : 'none';
+    label.textContent = open ? 'Скрыть' : 'Показать все';
+  };
 
-    const expBar=(amt,total)=>{
-      const pct=Math.round(amt/total*100);
-      return `<div style="height:3px;border-radius:99px;background:#F2F4F7;margin-top:5px;overflow:hidden"><div style="height:100%;width:${pct}%;background:#F04438;border-radius:99px"></div></div>`;
-    };
+  const PENDING_SHEETS = [
+    {
+      icon:'🚛', type:'Запрос старта рейса',
+      title:'Алишер Каримов', titleSub:'VOLVO FH 12 · 01 A 234 DG',
+      from:'Ташкент', to:'Самарканд', dist:'350 км',
+      rows:[
+        {l:'Груз', v:'Электроника'},
+        {l:'Расстояние', v:'350 км'},
+        {l:'Время в пути', v:'5 часов'},
+        {l:'Ожидаемый доход', v:'2 500 000 UZS', green:true},
+      ],
+      confirmLabel:'Подтвердить', rejectLabel:'Отклонить'
+    },
+    {
+      icon:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5L9.5 17.5L19.5 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      iconBg:'#17B26A', iconRadius:'50%',
+      type:'Завершение рейса',
+      title:'Jasur Ergashev', titleSub:'Renault T High · 01 E 550 DC',
+      from:'Tashkent', to:'Prague', dist:'5 840 км',
+      rows:[
+        {l:'Груз', v:'Хлопковая ткань · 18 т'},
+        {l:'Расстояние', v:'5 840 км'},
+        {l:'В пути', v:'16 дней'},
+        {l:'Доход', v:'$4 200'},
+        {l:'Расходы', v:'$1 380'},
+        {l:'Прибыль', v:'$2 820', green:true},
+      ],
+      confirmLabel:'Подтвердить', rejectLabel:'Оспорить'
+    },
+    {
+      icon:'📦', type:'Подтверждение заказа',
+      title:'Bakhtiyor Yuldashev', titleSub:'Scania R500 · 70 B 456 DA',
+      from:'Самарканд', to:'Алматы', dist:'860 км',
+      rows:[
+        {l:'Груз', v:'Стройматериалы · 12 т'},
+        {l:'Расстояние', v:'860 км'},
+        {l:'Время в пути', v:'~9 часов'},
+        {l:'Ожидаемый доход', v:'3 100 000 UZS', green:true},
+      ],
+      confirmLabel:'Подтвердить', rejectLabel:'Отклонить'
+    },
+  ];
 
-    openSheet('Рейс завершён',
-      `<div style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-radius:16px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-        <img src="${t.truckImg}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0">
-        <div class="min-w-0">
-          <p style="font-size:15px;font-weight:800;color:#0F0F37">${t.truck}</p>
-          <p style="font-size:11px;color:#667085;margin-top:2px">${t.plate} · ${t.trailer}</p>
+  window.openPendingSheet = function(idx){
+    const p = PENDING_SHEETS[idx];
+    if(!p) return;
+    const rows = p.rows.map((r,i)=>`
+      <div style="display:flex;justify-content:space-between;padding:11px 14px;${i<p.rows.length-1?'border-bottom:1px solid #F2F4F7':'background:#FFFBEB'}">
+        <p style="font-size:13px;color:#667085">${r.l}</p>
+        <p style="font-size:${r.green?'14':'13'}px;font-weight:${r.green?'800':'700'};color:${r.green?'#17B26A':'#0F0F37'}">${r.v}</p>
+      </div>`).join('');
+    openSheet(p.type,
+      `<div style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-radius:16px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+        <div style="width:52px;height:52px;border-radius:${p.iconRadius||'12px'};background:${p.iconBg||'#FFCB00'};display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${p.icon}</div>
+        <div style="min-width:0">
+          <p style="font-size:15px;font-weight:800;color:#0F0F37">${p.title}</p>
+          <p style="font-size:11px;color:#667085;margin-top:2px">${p.titleSub}</p>
         </div>
-        <span style="margin-left:auto;flex-shrink:0;background:#17B26A;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">Завершён</span>
+        <span style="margin-left:auto;flex-shrink:0;background:#FFCB00;color:#0F0F37;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">Ожидает</span>
       </div>
-
-      <div style="display:flex;align-items:center;margin-bottom:14px">
+      <div style="display:flex;align-items:center;margin-bottom:16px">
         <div style="flex:1">
           <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Откуда</p>
-          <p style="font-size:15px;font-weight:800;color:#0F0F37;margin-top:2px">${t.from}</p>
-          <p style="font-size:11px;color:#98A2B3">${t.startDate}</p>
+          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">${p.from}</p>
         </div>
-        <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:0 10px">
-          <i data-icon="route" style="width:18px;height:18px;color:#D0D5DD"></i>
-          <p style="font-size:10px;color:#98A2B3;font-weight:600;margin-top:3px">${t.distance}</p>
+        <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:0 12px">
+          <span style="font-size:20px;color:#17B26A">→</span>
+          <p style="font-size:10px;color:#98A2B3;font-weight:600;margin-top:2px">${p.dist}</p>
         </div>
         <div style="flex:1;text-align:right">
           <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Куда</p>
-          <p style="font-size:15px;font-weight:800;color:#0F0F37;margin-top:2px">${t.to}</p>
-          <p style="font-size:11px;color:#98A2B3">${t.endDate}</p>
+          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">${p.to}</p>
         </div>
       </div>
+      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:16px;border:1px solid #EAECF0">${rows}</div>`,
+      `<button onclick="dismissPendingCard(${idx})" data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-error-600 font-bold">${p.rejectLabel}</button>
+       <button onclick="confirmPendingCard(${idx})" class="btn flex-1 h-12 rounded-xl font-bold flex items-center justify-center gap-2" style="background:#FFCB00;color:#0F0F37"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0"><path d="M2.5 7.5L6 11L12.5 4" stroke="#0F0F37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ${p.confirmLabel}</button>`,
+      p.titleSub);
+    setTimeout(()=>{
+      document.querySelector(`[onclick="confirmPendingCard(${idx})"]`)?.addEventListener('click',()=>{
+        document.getElementById('pl-'+idx)?.remove();
+        updatePendingCount();
+        closeSheet();
+      });
+      document.querySelector(`[onclick="dismissPendingCard(${idx})"]`)?.addEventListener('click',()=>{
+        document.getElementById('pl-'+idx)?.remove();
+        updatePendingCount();
+      });
+    },30);
+  };
 
-      <div style="display:flex;align-items:center;gap:10px;background:#F9FAFB;border-radius:14px;padding:11px 13px;margin-bottom:16px">
-        <img src="${t.driverImg}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0">
-        <div>
-          <p style="font-size:13px;font-weight:700;color:#0F0F37">${t.driver}</p>
-          <p style="font-size:11px;color:#667085">${t.days} дней · ${t.cargo}</p>
-        </div>
-      </div>
+  window.confirmPendingCard = function(){};
+  window.dismissPendingCard = function(){};
 
-      <!-- Summary row -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:16px">
-        <div style="background:#F9FAFB;border-radius:12px;padding:11px;text-align:center">
-          <p style="font-size:9px;color:#98A2B3;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Доход</p>
-          <p style="font-size:15px;font-weight:800;color:#17B26A;margin-top:3px">$${totalIncome.toLocaleString()}</p>
-        </div>
-        <div style="background:#F9FAFB;border-radius:12px;padding:11px;text-align:center">
-          <p style="font-size:9px;color:#98A2B3;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Расходы</p>
-          <p style="font-size:15px;font-weight:800;color:#F04438;margin-top:3px">$${totalExp.toLocaleString()}</p>
-        </div>
-        <div style="background:#ECFDF5;border-radius:12px;padding:11px;text-align:center;border:1.5px solid #6CE9A6">
-          <p style="font-size:9px;color:#067647;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Прибыль</p>
-          <p style="font-size:15px;font-weight:800;color:#17B26A;margin-top:3px">$${profit.toLocaleString()}</p>
-        </div>
-      </div>
+  function updatePendingCount(){
+    const remaining = document.querySelectorAll('#pending-list > button').length;
+    const badge = document.getElementById('pending-badge');
+    if(badge) badge.textContent = remaining;
+    if(remaining === 0){
+      document.getElementById('pending-list').style.display = 'none';
+      document.querySelector('[onclick="togglePendingList()"]').style.display = 'none';
+    }
+  }
 
-      <!-- Income breakdown -->
-      <p style="font-size:11px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Доходы</p>
-      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:14px">
-        ${t.incomes.map((r,i)=>`
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;${i>0?'border-top:1px solid #F2F4F7':''}">
-          <p style="font-size:13px;color:#344054;font-weight:500">${r.label}</p>
-          <p style="font-size:13px;font-weight:700;color:#17B26A">+$${r.amount.toLocaleString()}</p>
-        </div>`).join('')}
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-top:1.5px solid #EAECF0;background:#fff">
-          <p style="font-size:13px;font-weight:700;color:#0F0F37">Итого доход</p>
-          <p style="font-size:14px;font-weight:800;color:#17B26A">$${totalIncome.toLocaleString()}</p>
-        </div>
-      </div>
+  const PENDING_ITEMS = [
+    {
+      id:'p1', icon:'🚛', type:'Запрос старта рейса',
+      title:'Алишер Каримов', sub:'VOLVO FH 12 · Ташкент → Самарканд',
+      detail:'Груз: Электроника · 350 км · 5 ч · 2 500 000 UZS',
+      confirmLabel:'Подтвердить старт', rejectLabel:'Отклонить'
+    },
+    {
+      id:'p2', icon:'✅', type:'Завершение рейса',
+      title:'Renault T High · Jasur Ergashev', sub:'Tashkent → Prague · 2 810 км',
+      detail:'Доход: $4 200 · Расходы: $1 380 · Прибыль: $2 820',
+      confirmLabel:'Подтвердить завершение', rejectLabel:'Оспорить'
+    },
+    {
+      id:'p3', icon:'📦', type:'Подтверждение заказа',
+      title:'Bakhtiyor Yuldashev · Scania R500', sub:'Samarkand → Almaty · 860 км',
+      detail:'Груз: Стройматериалы · 12 т · ~9 ч · 3 100 000 UZS',
+      confirmLabel:'Принять заказ', rejectLabel:'Отклонить'
+    },
+  ];
 
-      <!-- Expense breakdown -->
-      <p style="font-size:11px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Расходы</p>
-      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:6px">
-        ${t.expenseRows.map((r,i)=>`
-        <div style="padding:11px 14px;${i>0?'border-top:1px solid #F2F4F7':''}">
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="width:32px;height:32px;border-radius:10px;background:#FEF2F2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <i data-icon="${r.icon}" style="width:15px;height:15px;color:#F04438"></i>
-            </span>
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;justify-content:space-between">
-                <p style="font-size:13px;font-weight:600;color:#344054">${r.label}</p>
-                <p style="font-size:13px;font-weight:700;color:#F04438;flex-shrink:0;margin-left:8px">$${r.amount.toLocaleString()}</p>
-              </div>
-              <p style="font-size:11px;color:#98A2B3;margin-top:1px">${r.note}</p>
-              ${expBar(r.amount,totalExp)}
-            </div>
+  window.openAllPending = function(){
+    const body = PENDING_ITEMS.map(p=>`
+      <div id="pcard-${p.id}" style="background:#F9FAFB;border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid #EAECF0">
+        <div style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">${p.type}</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="width:38px;height:38px;border-radius:10px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${p.icon}</div>
+          <div>
+            <p style="font-size:13px;font-weight:700;color:#0F0F37">${p.title}</p>
+            <p style="font-size:11px;color:#667085;margin-top:1px">${p.sub}</p>
           </div>
-        </div>`).join('')}
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-top:1.5px solid #EAECF0;background:#fff">
-          <p style="font-size:13px;font-weight:700;color:#0F0F37">Итого расходы</p>
-          <p style="font-size:14px;font-weight:800;color:#F04438">$${totalExp.toLocaleString()}</p>
+        </div>
+        <p style="font-size:12px;color:#667085;margin-bottom:10px;padding:8px 10px;background:#fff;border-radius:10px;border:1px solid #F2F4F7">${p.detail}</p>
+        <div style="display:flex;gap:8px">
+          <button onclick="dismissPending('${p.id}')" style="flex:1;height:36px;border-radius:10px;border:1.5px solid #EAECF0;background:#fff;color:#F04438;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">${p.rejectLabel}</button>
+          <button onclick="confirmPending('${p.id}')" style="flex:1;height:36px;border-radius:10px;border:none;background:#FFCB00;color:#0F0F37;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">${p.confirmLabel}</button>
+        </div>
+      </div>`).join('');
+    openSheet('Ожидают подтверждения', body, '','· 3 действия');
+  };
+
+  window.confirmPending = function(id){
+    const el = document.getElementById('pcard-'+id);
+    if(el) el.style.opacity='0.4';
+    if(el) el.style.pointerEvents='none';
+  };
+  window.dismissPending = function(id){
+    const el = document.getElementById('pcard-'+id);
+    if(el) el.remove();
+  };
+
+  window.openTripDone=function(){
+    openSheet('Запрос рейса от водителя',
+      `<div style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-radius:16px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+        <div style="width:52px;height:52px;border-radius:12px;background:#FFCB00;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">🚛</div>
+        <div class="min-w-0">
+          <p style="font-size:15px;font-weight:800;color:#0F0F37">Алишер Каримов</p>
+          <p style="font-size:11px;color:#667085;margin-top:2px">VOLVO FH 12 · 01 A 234 DG</p>
+        </div>
+        <span style="margin-left:auto;flex-shrink:0;background:#FFCB00;color:#0F0F37;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">Ожидает</span>
+      </div>
+
+      <div style="display:flex;align-items:center;margin-bottom:16px">
+        <div style="flex:1">
+          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Откуда</p>
+          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">Ташкент</p>
+        </div>
+        <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:0 12px">
+          <span style="font-size:20px;color:#17B26A">→</span>
+          <p style="font-size:10px;color:#98A2B3;font-weight:600;margin-top:2px">350 км</p>
+        </div>
+        <div style="flex:1;text-align:right">
+          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Куда</p>
+          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">Самарканд</p>
         </div>
       </div>
-      <div style="background:#ECFDF5;border-radius:14px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;border:1.5px solid #6CE9A6">
-        <div>
-          <p style="font-size:12px;color:#067647;font-weight:600">Чистая прибыль</p>
-          <p style="font-size:11px;color:#6CE9A6;margin-top:1px">Маржа ${profitPct}%</p>
+
+      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:16px;border:1px solid #EAECF0">
+        <div style="display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid #F2F4F7">
+          <p style="font-size:13px;color:#667085">Груз</p>
+          <p style="font-size:13px;font-weight:700;color:#0F0F37">Электроника</p>
         </div>
-        <p style="font-size:22px;font-weight:800;color:#17B26A">$${profit.toLocaleString()}</p>
+        <div style="display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid #F2F4F7">
+          <p style="font-size:13px;color:#667085">Расстояние</p>
+          <p style="font-size:13px;font-weight:700;color:#0F0F37">350 км</p>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid #F2F4F7">
+          <p style="font-size:13px;color:#667085">Время в пути</p>
+          <p style="font-size:13px;font-weight:700;color:#0F0F37">5 часов</p>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:11px 14px;background:#FFFBEB">
+          <p style="font-size:13px;color:#667085">Ожидаемый доход</p>
+          <p style="font-size:14px;font-weight:800;color:#17B26A">2 500 000 UZS</p>
+        </div>
       </div>`,
-      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Закрыть</button>
-       <button id="confirm-done" class="btn flex-1 h-12 rounded-xl font-bold text-navy-800 flex items-center justify-center gap-2" style="background:#FFCB00">
-         <i data-icon="badge-check" class="w-5 h-5"></i>Завершить рейс
+      `<button id="reject-trip" data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-error-600 font-bold">Отклонить</button>
+       <button id="confirm-trip" class="btn flex-1 h-12 rounded-xl font-bold text-navy-800 flex items-center justify-center gap-2" style="background:#FFCB00">
+         <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5L6 11L12.5 4" stroke="#0F0F37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Подтвердить
        </button>`,
-      'Renault T High · Jasur Ergashev');
+      'Алишер Каримов · VOLVO FH 12');
 
     setTimeout(()=>{
-      document.getElementById('confirm-done').addEventListener('click',()=>{
+      document.getElementById('confirm-trip').addEventListener('click',()=>{
         document.getElementById('tripDoneAlert').style.display='none';
         closeSheet();
+      });
+      document.getElementById('reject-trip').addEventListener('click',()=>{
+        document.getElementById('tripDoneAlert').style.display='none';
       });
     },30);
   };
