@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleet — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=29"></script>
+<link rel="stylesheet" href="assets/styles.css?v=29">
+<script src="assets/panda.js?v=29"></script>
+</head>
+<body>
+<div class="app has-nav">
+  <!-- Header -->
+  <div class="sticky-head px-5 pt-5 pb-3 border-b border-gray-100">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h1 class="text-2xl font-bold text-navy-800 tracking-tight">Fleet</h1>
+        <p class="text-xs text-gray-500">48 vehicles</p>
+      </div>
+      <a href="notifications.html" class="relative w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50">
+        <i data-icon="bell" class="w-5 h-5"></i>
+        <span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] text-[10px] font-bold bg-error-500 text-white rounded-full flex items-center justify-center px-1">3</span>
+      </a>
+    </div>
+
+    <!-- Trip finished alert banner -->
+    <button id="tripDoneAlert" onclick="openTripDone()" class="w-full mb-3 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border:1.5px solid #6CE9A6;box-shadow:0 0 0 3px rgba(23,178,106,.1)">
+      <div class="flex items-center gap-3 px-3.5 py-3">
+        <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center" style="background:#17B26A">
+          <i data-icon="badge-check" class="w-5 h-5" style="color:#fff"></i>
+        </span>
+        <div class="flex-1 min-w-0">
+          <p class="text-[13px] font-bold text-navy-800 leading-tight">Renault T High — рейс завершён</p>
+          <p class="text-[11px] text-gray-500 mt-0.5">Jasur Ergashev · Tashkent → Prague · только что</p>
+        </div>
+        <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Подтвердить</span>
+      </div>
+      <div style="height:3px;background:rgba(23,178,106,.25)">
+        <div style="height:100%;width:100%;background:#17B26A;animation:prog-pulse 2s ease-in-out infinite"></div>
+      </div>
+    </button>
+    <style>
+      @keyframes prog-pulse{0%,100%{opacity:.6}50%{opacity:1}}
+      @keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.8);opacity:0}}
+    </style>
+
+    <div class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3.5 h-11 shadow-xs">
+      <i data-icon="search" class="w-5 h-5 text-gray-400"></i>
+      <input class="flex-1 outline-none text-[15px] text-navy-800 placeholder:text-gray-400" placeholder="Search: brand, plate, driver, tag…">
+    </div>
+    <div class="flex gap-2 mt-3 overflow-x-auto hide-scroll" id="tabs" data-tabs></div>
+  </div>
+
+  <!-- List -->
+  <div class="app-scroll bg-gray-50 px-4 py-4">
+    <div class="space-y-3" id="list"></div>
+  </div>
+
+  <!-- Sheet overlay -->
+  <div id="sheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head">
+        <div><h2 id="s-title" class="text-lg font-bold text-navy-800">—</h2><p id="s-sub" class="text-xs text-gray-400 mt-0.5 hidden"></p></div>
+        <button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
+      </div>
+      <div class="sheet-body" id="s-body"></div>
+      <div class="sheet-foot" id="s-foot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs=[['all','All',48,1],['trip','On trip',12],['idle','Idle',18],['repair','Repair',4],['nosignal','No signal',2],['done','Shift ended',12]];
+  document.getElementById('tabs').innerHTML = tabs.map(([k,l,c,a])=>`
+    <button class="seg-tab ${a?'on':''}">${l}<span class="c">${c}</span></button>`).join('');
+
+  const trucks=[
+    {name:'Volvo FH16',plate:'01 A 123 BC',statusKey:'trip',driver:'Alisher Karimov',trailer:'Schmitz · 60 H 545 AA',trailerType:'Curtainsider',img:'assets/img/trucks/truck1.jpg',route:{from:'Tashkent',to:'Moscow',pct:67},href:'truck-detail.html?s=trip'},
+    {name:'Scania R500',plate:'70 B 456 DA',statusKey:'nosignal',driver:'Bakhtiyor Yuldashev',trailer:'Kogel · 60 H 457 AA',trailerType:'Refrigerator',img:'assets/img/trucks/truck2.jpg',href:'truck-detail.html?s=idle'},
+    {name:'MAN TGX',plate:'01 D 789 AC',statusKey:'repair',days:5,driver:null,trailer:'Krone · 75 A 112 BC',trailerType:'Flatbed',img:'assets/img/trucks/truck3.jpg',href:'truck-detail.html?s=repair'},
+    {name:'DAF XF 105',plate:'60 A 467 AA',statusKey:'trip',driver:'Vali Rakhimov',trailer:'Kogel · 60 H 545 AA',trailerType:'Refrigerator',img:'assets/img/trucks/truck4.jpg',route:{from:'Samarkand',to:'Almaty',pct:42},href:'truck-detail.html?s=trip'},
+    {name:'Mercedes Actros',plate:'30 C 201 BA',statusKey:'idle',days:2,driver:'Sardor Kholmatov',trailer:null,trailerType:null,img:'assets/img/trucks/truck5.jpg',href:'truck-detail.html?s=idle'},
+    {name:'Renault T High',plate:'01 E 550 DC',statusKey:'done',driver:'Jasur Ergashev',trailer:'Schmitz · 90 K 330 AA',trailerType:'Curtainsider',img:'assets/img/trucks/truck6.jpg',href:'truck-detail.html?s=idle'},
+  ];
+  document.getElementById('list').innerHTML = trucks.map(Panda.truckCard).join('');
+
+  Panda.mountNav('fleet');
+  Panda.render();
+
+  // Sheet
+  const ov=document.getElementById('sheet'),sBody=document.getElementById('s-body'),sFoot=document.getElementById('s-foot'),sTitle=document.getElementById('s-title'),sSub=document.getElementById('s-sub');
+  function openSheet(t,b,f,sub){
+    sTitle.textContent=t;
+    if(sub){sSub.textContent=sub;sSub.classList.remove('hidden');}else{sSub.classList.add('hidden');}
+    sBody.innerHTML=b; sFoot.innerHTML=f||''; Panda.render(); ov.classList.add('open');
+    sFoot.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+  }
+  function closeSheet(){ov.classList.remove('open');}
+  ov.addEventListener('click',e=>{if(e.target===ov)closeSheet();});
+  ov.querySelector('[data-close]').addEventListener('click',closeSheet);
+
+  const DONE_TRIP={
+    truck:'Renault T High', plate:'01 E 550 DC', driver:'Jasur Ergashev', driverImg:'assets/img/drivers/d5.jpg',
+    truckImg:'assets/img/trucks/truck6.jpg', trailer:'Schmitz · 90 K 330 AA',
+    from:'Tashkent', to:'Prague', startDate:'08 июн 2026', endDate:'24 июн 2026', days:16,
+    distance:'5 840 км', cargo:'Хлопковая ткань · 18 т',
+    incomes:[
+      {label:'Фрахт (основной)', amount:6200},
+      {label:'Доп. услуги (экспресс)', amount:400},
+      {label:'Страховая компенсация', amount:200},
+    ],
+    expenseRows:[
+      {icon:'fuel',   label:'Топливо',            note:'1 840 л · Дизель',          amount:1840},
+      {icon:'user',   label:'Зарплата водителя',   note:'16 дней · $80/день',         amount:1280},
+      {icon:'shield', label:'Таможня / границы',   note:'4 перехода',                 amount:480},
+      {icon:'receipt',label:'Дорожные сборы',      note:'Польша, Чехия, Германия',    amount:310},
+      {icon:'wrench', label:'Техническое обслуж.', note:'Плановое ТО в Польше',       amount:150},
+      {icon:'credit-card',label:'Стоянки',         note:'6 ночей · $18/ночь',         amount:108},
+      {icon:'box',    label:'Питание водителя',    note:'16 дней',                    amount:112},
+      {icon:'alert-triangle',label:'Штраф (Польша)',note:'Превышение скорости',       amount:70},
+    ],
+  };
+
+  window.openTripDone=function(){
+    const t=DONE_TRIP;
+    const totalIncome=t.incomes.reduce((s,r)=>s+r.amount,0);
+    const totalExp=t.expenseRows.reduce((s,r)=>s+r.amount,0);
+    const profit=totalIncome-totalExp;
+    const profitPct=Math.round(profit/totalIncome*100);
+
+    const expBar=(amt,total)=>{
+      const pct=Math.round(amt/total*100);
+      return `<div style="height:3px;border-radius:99px;background:#F2F4F7;margin-top:5px;overflow:hidden"><div style="height:100%;width:${pct}%;background:#F04438;border-radius:99px"></div></div>`;
+    };
+
+    openSheet('Рейс завершён',
+      `<div style="background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-radius:16px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+        <img src="${t.truckImg}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0">
+        <div class="min-w-0">
+          <p style="font-size:15px;font-weight:800;color:#0F0F37">${t.truck}</p>
+          <p style="font-size:11px;color:#667085;margin-top:2px">${t.plate} · ${t.trailer}</p>
+        </div>
+        <span style="margin-left:auto;flex-shrink:0;background:#17B26A;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">Завершён</span>
+      </div>
+
+      <div style="display:flex;align-items:center;margin-bottom:14px">
+        <div style="flex:1">
+          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Откуда</p>
+          <p style="font-size:15px;font-weight:800;color:#0F0F37;margin-top:2px">${t.from}</p>
+          <p style="font-size:11px;color:#98A2B3">${t.startDate}</p>
+        </div>
+        <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:0 10px">
+          <i data-icon="route" style="width:18px;height:18px;color:#D0D5DD"></i>
+          <p style="font-size:10px;color:#98A2B3;font-weight:600;margin-top:3px">${t.distance}</p>
+        </div>
+        <div style="flex:1;text-align:right">
+          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Куда</p>
+          <p style="font-size:15px;font-weight:800;color:#0F0F37;margin-top:2px">${t.to}</p>
+          <p style="font-size:11px;color:#98A2B3">${t.endDate}</p>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;background:#F9FAFB;border-radius:14px;padding:11px 13px;margin-bottom:16px">
+        <img src="${t.driverImg}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0">
+        <div>
+          <p style="font-size:13px;font-weight:700;color:#0F0F37">${t.driver}</p>
+          <p style="font-size:11px;color:#667085">${t.days} дней · ${t.cargo}</p>
+        </div>
+      </div>
+
+      <!-- Summary row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:16px">
+        <div style="background:#F9FAFB;border-radius:12px;padding:11px;text-align:center">
+          <p style="font-size:9px;color:#98A2B3;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Доход</p>
+          <p style="font-size:15px;font-weight:800;color:#17B26A;margin-top:3px">$${totalIncome.toLocaleString()}</p>
+        </div>
+        <div style="background:#F9FAFB;border-radius:12px;padding:11px;text-align:center">
+          <p style="font-size:9px;color:#98A2B3;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Расходы</p>
+          <p style="font-size:15px;font-weight:800;color:#F04438;margin-top:3px">$${totalExp.toLocaleString()}</p>
+        </div>
+        <div style="background:#ECFDF5;border-radius:12px;padding:11px;text-align:center;border:1.5px solid #6CE9A6">
+          <p style="font-size:9px;color:#067647;font-weight:700;text-transform:uppercase;letter-spacing:.05em">Прибыль</p>
+          <p style="font-size:15px;font-weight:800;color:#17B26A;margin-top:3px">$${profit.toLocaleString()}</p>
+        </div>
+      </div>
+
+      <!-- Income breakdown -->
+      <p style="font-size:11px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Доходы</p>
+      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:14px">
+        ${t.incomes.map((r,i)=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;${i>0?'border-top:1px solid #F2F4F7':''}">
+          <p style="font-size:13px;color:#344054;font-weight:500">${r.label}</p>
+          <p style="font-size:13px;font-weight:700;color:#17B26A">+$${r.amount.toLocaleString()}</p>
+        </div>`).join('')}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-top:1.5px solid #EAECF0;background:#fff">
+          <p style="font-size:13px;font-weight:700;color:#0F0F37">Итого доход</p>
+          <p style="font-size:14px;font-weight:800;color:#17B26A">$${totalIncome.toLocaleString()}</p>
+        </div>
+      </div>
+
+      <!-- Expense breakdown -->
+      <p style="font-size:11px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Расходы</p>
+      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:6px">
+        ${t.expenseRows.map((r,i)=>`
+        <div style="padding:11px 14px;${i>0?'border-top:1px solid #F2F4F7':''}">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:32px;height:32px;border-radius:10px;background:#FEF2F2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i data-icon="${r.icon}" style="width:15px;height:15px;color:#F04438"></i>
+            </span>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <p style="font-size:13px;font-weight:600;color:#344054">${r.label}</p>
+                <p style="font-size:13px;font-weight:700;color:#F04438;flex-shrink:0;margin-left:8px">$${r.amount.toLocaleString()}</p>
+              </div>
+              <p style="font-size:11px;color:#98A2B3;margin-top:1px">${r.note}</p>
+              ${expBar(r.amount,totalExp)}
+            </div>
+          </div>
+        </div>`).join('')}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-top:1.5px solid #EAECF0;background:#fff">
+          <p style="font-size:13px;font-weight:700;color:#0F0F37">Итого расходы</p>
+          <p style="font-size:14px;font-weight:800;color:#F04438">$${totalExp.toLocaleString()}</p>
+        </div>
+      </div>
+      <div style="background:#ECFDF5;border-radius:14px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;border:1.5px solid #6CE9A6">
+        <div>
+          <p style="font-size:12px;color:#067647;font-weight:600">Чистая прибыль</p>
+          <p style="font-size:11px;color:#6CE9A6;margin-top:1px">Маржа ${profitPct}%</p>
+        </div>
+        <p style="font-size:22px;font-weight:800;color:#17B26A">$${profit.toLocaleString()}</p>
+      </div>`,
+      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Закрыть</button>
+       <button id="confirm-done" class="btn flex-1 h-12 rounded-xl font-bold text-navy-800 flex items-center justify-center gap-2" style="background:#FFCB00">
+         <i data-icon="badge-check" class="w-5 h-5"></i>Завершить рейс
+       </button>`,
+      'Renault T High · Jasur Ergashev');
+
+    setTimeout(()=>{
+      document.getElementById('confirm-done').addEventListener('click',()=>{
+        document.getElementById('tripDoneAlert').style.display='none';
+        closeSheet();
+      });
+    },30);
+  };
+</script>
+</body>
+</html>

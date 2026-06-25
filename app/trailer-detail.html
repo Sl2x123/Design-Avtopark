@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailer — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center justify-between border-b border-gray-100">
+    <a href="garage-trailers.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">Trailer</h1>
+    <button id="editTrailerBtn" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="pencil" class="w-5 h-5"></i></button>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-4 space-y-4">
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="relative h-40">
+        <img src="assets/img/trailers/trailer1.jpg" class="w-full h-full object-cover">
+        <span class="absolute top-3 right-3 inline-flex items-center gap-1.5 bg-success-50 text-success-700 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow"><span class="dot" style="background:#17B26A"></span>On trip</span>
+      </div>
+      <div class="p-4">
+        <p id="tr-brand" class="text-xs font-medium text-gray-400">Schmitz</p>
+        <h2 id="tr-model" class="text-lg font-bold text-navy-800">Cargobull S.KO</h2>
+        <div class="mt-2"><span class="plate" style="height:28px;font-size:15px"><span class="uz">UZ</span><span id="tr-plate" class="num">60 H 545 AA</span></span></div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Trailer info</h3>
+      <div class="divide-y divide-gray-100">
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Assigned truck</span><span class="text-sm font-semibold text-navy-700">Volvo FH16</span></div>
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Total trips</span><span class="text-sm font-semibold text-navy-800">142</span></div>
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Total mileage</span><span class="text-sm font-semibold text-navy-800">389,700 km</span></div>
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Capacity</span><span class="text-sm font-semibold text-navy-800">24 t</span></div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Assignment history</h3>
+      <div class="space-y-3" id="hist"></div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="px-4 py-3.5 border-b border-gray-100"><h3 class="text-sm font-semibold text-navy-800">Documents</h3></div>
+      <div id="docs"></div>
+    </div>
+  </div>
+
+  <!-- Edit trailer sheet -->
+  <div id="sheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head"><h2 class="text-lg font-bold text-navy-800">Edit trailer</h2><button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button></div>
+      <div class="sheet-body space-y-4">
+        <label class="dropzone">
+          <span class="w-11 h-11 rounded-xl bg-white border border-primary-200 flex items-center justify-center text-navy-700"><i data-icon="upload" class="w-5 h-5"></i></span>
+          <span class="text-sm font-semibold text-navy-800 mt-1">Change trailer photo</span>
+          <span class="text-xs text-gray-400">PNG or JPG · max 10 MB</span>
+          <input type="file" accept="image/*" class="hidden">
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">Brand</label><div class="f-sel"><select id="et-brand" class="f-field"><option>Schmitz</option><option>Kogel</option><option>Krone</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+          <div><label class="f-label">Model</label><input id="et-model" class="f-field" value="Cargobull S.KO"></div>
+        </div>
+        <div><label class="f-label">License plate</label><div class="f-plate"><span class="seg">UZ</span><input id="et-plate" value="60 H 545 AA"></div></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">Type</label><div class="f-sel"><select class="f-field"><option>Tent (tarpaulin)</option><option>Refrigerator</option><option>Container</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+          <div><label class="f-label">Capacity (kg)</label><input class="f-field" value="24,000"></div>
+        </div>
+        <div><label class="f-label">Assign to truck</label><div class="f-sel"><select class="f-field"><option>Volvo FH16</option><option>DAF XF 105</option><option>— Not assigned —</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+      </div>
+      <div class="sheet-foot">
+        <button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Cancel</button>
+        <button id="et-save" class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const ov=document.getElementById('sheet');
+    document.getElementById('editTrailerBtn').addEventListener('click',()=>ov.classList.add('open'));
+    ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+    ov.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+    document.getElementById('et-save').addEventListener('click',()=>{
+      document.getElementById('tr-brand').textContent=document.getElementById('et-brand').value;
+      document.getElementById('tr-model').textContent=document.getElementById('et-model').value;
+      document.getElementById('tr-plate').textContent=document.getElementById('et-plate').value;
+      ov.classList.remove('open');
+    });
+  })();
+  const hist=[['04/01/2026 — Now','Volvo FH16','01 A 123 BC'],['01/01/2026 — 04/01/2026','DAF XF 105','60 A 467 AA']];
+  document.getElementById('hist').innerHTML = hist.map(([p,n,pl])=>`
+    <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="truck" class="w-4.5 h-4.5"></i></div>
+    <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${n} <span class="text-xs text-gray-400 font-normal">${pl}</span></p><p class="text-[11px] text-gray-400">${p}</p></div></div>`).join('');
+
+  const DS={ok:{cls:'bg-success-50 text-success-700',label:'Active',dot:'#17B26A'},exp:{cls:'bg-error-50 text-error-700',label:'Expired',dot:'#F04438'}};
+  const docs=[['Vehicle passport','ok','310 days left','file-text'],['Insurance','exp','Expired 3 days ago','shield']];
+  document.getElementById('docs').innerHTML = docs.map((d,i)=>{const s=DS[d[1]];return `
+    <div class="flex items-center gap-3 px-4 py-3 ${i?'border-t border-gray-100':''}">
+      <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="${d[3]}" class="w-4.5 h-4.5"></i></div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${d[0]}</p><p class="text-[11px] text-gray-400">${d[2]}</p></div>
+      <span class="inline-flex items-center gap-1.5 ${s.cls} text-[11px] font-semibold px-2 py-1 rounded-full"><span class="dot" style="background:${s.dot}"></span>${s.label}</span></div>`;}).join('');
+  Panda.render();
+</script>
+</body>
+</html>

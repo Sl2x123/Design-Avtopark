@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account settings — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
+    <a href="profile.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">Account settings</h1>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-5 space-y-5">
+    <div class="flex flex-col items-center">
+      <div class="relative">
+        <img id="avatar" src="assets/img/drivers/d6.jpg" class="w-24 h-24 rounded-full object-cover">
+        <label class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary-500 border-2 border-white shadow flex items-center justify-center text-navy-800 cursor-pointer">
+          <i data-icon="camera" class="w-4 h-4"></i>
+          <input id="avatarInput" type="file" accept="image/*" class="hidden">
+        </label>
+      </div>
+      <p class="text-base font-bold text-navy-800 mt-2" id="d-name">Jamshid Turaev</p>
+      <p class="text-xs text-gray-400">Owner</p>
+    </div>
+
+    <div>
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-1">Personal info</p>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden" id="rows"></div>
+    </div>
+    <p class="text-center text-xs text-gray-400">Tap any field to edit it</p>
+  </div>
+
+  <div id="editSheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 id="es-title" class="text-lg font-bold text-navy-800">Edit</h2>
+        <button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
+      </div>
+      <div class="sheet-body" id="es-body"></div>
+      <div class="sheet-foot">
+        <button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold hover:bg-gray-50">Cancel</button>
+        <button id="es-save" class="btn flex-1 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold shadow-sm">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const fields={
+    name:{label:'Name',icon:'user',type:'text',value:'Jamshid Turaev'},
+    phone:{label:'Phone',icon:'phone',type:'tel',value:'+998 90 727 77 22'},
+    email:{label:'Email',icon:'mail',type:'email',value:'jamshid@avtopakt.uz'},
+    language:{label:'Language',icon:'languages',type:'select',value:'English',options:['English','Russian','Uzbek']},
+    timezone:{label:'Timezone',icon:'clock',type:'select',value:'GMT+5',options:['GMT+3','GMT+4','GMT+5','GMT+6']},
+  };
+  const order=['name','phone','email','language','timezone'];
+  const sep='<div class="border-t border-gray-100"></div>';
+  function renderRows(){
+    document.getElementById('rows').innerHTML = order.map(k=>{
+      const f=fields[k];
+      return `<button data-field="${k}" class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 text-left">
+        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="${f.icon}" class="w-4.5 h-4.5"></i></div>
+        <span class="flex-1 text-sm font-semibold text-navy-800">${f.label}</span>
+        <span class="text-sm text-gray-400" id="v-${k}">${f.value}</span>
+        <i data-icon="chevron-right" class="w-4.5 h-4.5 text-gray-300"></i>
+      </button>`;
+    }).join(sep);
+    Panda.render();
+    document.querySelectorAll('[data-field]').forEach(b=>b.addEventListener('click',()=>openEdit(b.dataset.field)));
+  }
+
+  const ov=document.getElementById('editSheet');
+  let current=null;
+  function openEdit(k){
+    current=k; const f=fields[k];
+    document.getElementById('es-title').textContent='Edit '+f.label.toLowerCase();
+    let body='';
+    if(f.type==='select'){
+      body=`<label class="f-label">${f.label}</label><div class="f-sel"><select id="es-input" class="f-field">${f.options.map(o=>`<option ${o===f.value?'selected':''}>${o}</option>`).join('')}</select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div>`;
+    } else {
+      body=`<label class="f-label">${f.label}</label><input id="es-input" type="${f.type}" class="f-field" value="${f.value}">`;
+    }
+    document.getElementById('es-body').innerHTML=body;
+    Panda.render();
+    ov.classList.add('open');
+  }
+  document.getElementById('es-save').addEventListener('click',()=>{
+    const val=document.getElementById('es-input').value;
+    fields[current].value=val;
+    document.getElementById('v-'+current).textContent=val;
+    if(current==='name') document.getElementById('d-name').textContent=val;
+    ov.classList.remove('open');
+  });
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+  ov.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+
+  document.getElementById('avatarInput').addEventListener('change',e=>{
+    const file=e.target.files[0]; if(!file) return;
+    const r=new FileReader(); r.onload=ev=>document.getElementById('avatar').src=ev.target.result; r.readAsDataURL(file);
+  });
+
+  renderRows();
+  Panda.render();
+</script>
+</body>
+</html>

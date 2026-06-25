@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garage · Trucks — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=30"></script>
+<link rel="stylesheet" href="assets/styles.css?v=30">
+<script src="assets/panda.js?v=30"></script>
+</head>
+<body>
+<div class="app has-nav">
+  <div class="sticky-head px-5 pt-5 border-b border-gray-100">
+    <div class="relative flex items-center justify-between mb-3">
+      <h1 class="text-2xl font-bold text-navy-800 tracking-tight">Garage</h1>
+      <button id="searchBtn" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="search" class="w-5 h-5"></i></button>
+      <div id="searchExpand" class="absolute inset-y-0 right-0 bg-white flex items-center" style="width:0;overflow:hidden;transition:width .3s cubic-bezier(.4,0,.2,1)">
+        <div class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3.5 h-10 w-full shadow-xs">
+          <i data-icon="search" class="w-5 h-5 text-gray-400 shrink-0"></i>
+          <input id="searchInput" class="flex-1 min-w-0 outline-none text-[15px] text-navy-800 placeholder:text-gray-400" placeholder="Search trucks">
+          <button id="searchClose" class="text-gray-400 shrink-0"><i data-icon="x" class="w-4 h-4"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="flex bg-gray-100 rounded-lg p-1 mb-3">
+      <a href="garage-trucks.html" class="flex-1 text-center text-sm font-semibold py-2 rounded-md bg-white text-navy-800 shadow-xs">Trucks</a>
+      <a href="garage-drivers.html" class="flex-1 text-center text-sm font-semibold py-2 rounded-md text-gray-500">Drivers</a>
+      <a href="garage-trailers.html" class="flex-1 text-center text-sm font-semibold py-2 rounded-md text-gray-500">Trailers</a>
+    </div>
+    <div class="flex gap-2 pb-3 overflow-x-auto hide-scroll" data-tabs>
+      <button class="seg-tab on">All 48</button>
+      <button class="seg-tab">On trip 28</button>
+      <button class="seg-tab">Idle 16</button>
+      <button class="seg-tab">Repair 4</button>
+    </div>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 pt-4 pb-28"><div class="space-y-3" id="list"></div></div>
+  <a href="#" id="addBtn" class="fab-add"><i data-icon="plus"></i>Add truck</a>
+
+  <!-- Add Truck modal -->
+  <div id="sheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 class="text-lg font-bold text-navy-800">Add Truck</h2>
+        <button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
+      </div>
+      <div class="sheet-body space-y-4">
+        <label class="dropzone">
+          <span class="w-11 h-11 rounded-xl bg-white border border-primary-200 flex items-center justify-center text-navy-700"><i data-icon="upload" class="w-5 h-5"></i></span>
+          <span class="text-sm font-semibold text-navy-800 mt-1">Upload truck photo</span>
+          <span class="text-xs text-gray-400">PNG or JPG · max 10 MB</span>
+          <input type="file" accept="image/*" class="hidden">
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">Brand</label><div class="f-sel"><select class="f-field"><option>DAF</option><option>Volvo</option><option>Scania</option><option>MAN</option><option>Mercedes</option><option>Renault</option><option>Iveco</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+          <div><label class="f-label">Model</label><input class="f-field" placeholder="e.g. XF 105"></div>
+        </div>
+        <div><label class="f-label">License plate</label><div class="f-plate"><span class="seg">UZ</span><input placeholder="60 A 467 AA"></div></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">Year</label><div class="f-sel"><select class="f-field"><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+          <div><label class="f-label">Type</label><div class="f-sel"><select class="f-field"><option>Tractor unit</option><option>Rigid truck</option><option>Tipper</option><option>Tanker</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">Color</label><input class="f-field" placeholder="e.g. White"></div>
+          <div><label class="f-label">Mileage (km)</label><input class="f-field" inputmode="numeric" placeholder="e.g. 280,000"></div>
+        </div>
+        <div><label class="f-label">VIN number</label><input class="f-field" placeholder="e.g.  XLRTE47MS0E123456"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">Assign driver</label><div class="f-sel"><select class="f-field"><option>— Not assigned —</option><option>Alisher Karimov</option><option>Vali Rakhimov</option><option>Sardor Kholmatov</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+          <div><label class="f-label">Assign trailer</label><div class="f-sel"><select class="f-field"><option>— Not assigned —</option><option>Schmitz · 60 H 545 AA</option><option>Kogel · 60 H 457 AA</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+        </div>
+      </div>
+      <div class="sheet-foot">
+        <button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold hover:bg-gray-50">Cancel</button>
+        <button data-close class="btn flex-1 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold shadow-sm">Add Truck</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const trucks=[
+    {name:'DAF XF 105',plate:'60 A 467 AA',driver:'Vali Rakhimov',trailer:'Kogel · 60 H 545 AA',trailerType:'Refrigerator',statusKey:'trip',route:{from:'Samarkand',to:'Almaty',pct:42},rev:4500,exp:3100,prof:1400,img:'assets/img/trucks/truck4.jpg',finance:true,href:'truck-detail.html?s=trip'},
+    {name:'MAN TGX 18.440',plate:'10 B 777 CD',driver:'Bek',trailer:'Krone · 75 A 112 BC',trailerType:'Flatbed',statusKey:'idle',days:2,rev:0,exp:0,prof:0,img:'assets/img/trucks/truck3.jpg',finance:true,href:'truck-detail.html?s=idle'},
+    {name:'Volvo FH16',plate:'01 A 123 BC',driver:'Alisher Karimov',trailer:'Schmitz · 60 H 545 AA',trailerType:'Curtainsider',statusKey:'trip',route:{from:'Tashkent',to:'Moscow',pct:67},rev:6200,exp:3800,prof:2400,img:'assets/img/trucks/truck1.jpg',finance:true,href:'truck-detail.html?s=trip'},
+    {name:'Mercedes Actros',plate:'30 C 201 BA',driver:'Sardor Kholmatov',trailer:null,trailerType:null,statusKey:'repair',days:5,rev:0,exp:0,prof:0,img:'assets/img/trucks/truck5.jpg',finance:true,href:'truck-detail.html?s=repair'},
+    {name:'Scania R500',plate:'70 B 456 DA',driver:'Bakhtiyor Yuldashev',trailer:'Kogel · 60 H 457 AA',trailerType:'Refrigerator',statusKey:'trip',route:{from:'Andijan',to:'Prague',pct:70},rev:5100,exp:3300,prof:1800,img:'assets/img/trucks/truck2.jpg',finance:true,href:'truck-detail.html?s=trip'},
+  ];
+  document.getElementById('list').innerHTML = trucks.map(Panda.truckCard).join('');
+  Panda.mountNav('garage');
+  Panda.render();
+
+  const sx=document.getElementById('searchExpand');
+  document.getElementById('searchBtn').addEventListener('click',()=>{const row=sx.parentElement,t=row.querySelector('h1');sx.style.width=(row.clientWidth-t.offsetWidth-12)+'px';setTimeout(()=>document.getElementById('searchInput').focus(),150);});
+  document.getElementById('searchClose').addEventListener('click',()=>{sx.style.width='0';document.getElementById('searchInput').value='';});
+
+  const ov=document.getElementById('sheet');
+  document.getElementById('addBtn').addEventListener('click',e=>{e.preventDefault();ov.classList.add('open');});
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+  ov.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+</script>
+</body>
+</html>

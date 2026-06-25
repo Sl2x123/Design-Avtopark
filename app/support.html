@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
+    <a href="profile.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">Support</h1>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-5 space-y-5">
+    <!-- contact actions -->
+    <div class="grid grid-cols-2 gap-3">
+      <button data-act="contact" class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4 text-left card-press">
+        <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center mb-2 text-navy-700"><i data-icon="message-circle" class="w-5 h-5"></i></div>
+        <p class="text-sm font-bold text-navy-800">Contact support</p>
+        <p class="text-[11px] text-gray-400">Avg. reply ~15 min</p>
+      </button>
+      <button data-act="ticket" class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4 text-left card-press">
+        <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center mb-2 text-navy-700"><i data-icon="file-text" class="w-5 h-5"></i></div>
+        <p class="text-sm font-bold text-navy-800">Create a ticket</p>
+        <p class="text-[11px] text-gray-400">Track your request</p>
+      </button>
+    </div>
+
+    <!-- FAQ -->
+    <div>
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-1">FAQ</p>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden" id="faq"></div>
+    </div>
+
+    <!-- legal -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <button data-act="privacy" class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 text-left">
+        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="file-text" class="w-4.5 h-4.5"></i></div>
+        <span class="flex-1 text-sm font-semibold text-navy-800">Privacy Policy</span><i data-icon="chevron-right" class="w-4.5 h-4.5 text-gray-300"></i>
+      </button>
+      <div class="border-t border-gray-100"></div>
+      <button data-act="terms" class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 text-left">
+        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="scroll-text" class="w-4.5 h-4.5"></i></div>
+        <span class="flex-1 text-sm font-semibold text-navy-800">Terms of Service</span><i data-icon="chevron-right" class="w-4.5 h-4.5 text-gray-300"></i>
+      </button>
+    </div>
+    <p class="text-center text-xs text-gray-400">Avtopakt Fura · v1.0.0</p>
+  </div>
+
+  <div id="sheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 id="s-title" class="text-lg font-bold text-navy-800">—</h2>
+        <button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
+      </div>
+      <div class="sheet-body" id="s-body"></div>
+      <div class="sheet-foot" id="s-foot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const faqs=[
+    ['How do I add a new truck?','Open Garage → Trucks and tap "Add truck". Fill in the details and save.'],
+    ['How do I assign a driver to a truck?','In the truck card or in "Add truck", use the "Assign driver" field.'],
+    ['How is the route shown on the map?','Tap a truck marker on the Map — it zooms in, centers and draws the route.'],
+    ['How do I renew my subscription?','Go to Profile → Subscription and tap "Change plan" or "Renew".'],
+  ];
+  document.getElementById('faq').innerHTML = faqs.map((f,i)=>`
+    <div class="${i?'border-t border-gray-100':''}">
+      <button class="faq-q w-full flex items-center gap-3 px-4 py-3.5 text-left">
+        <span class="flex-1 text-sm font-semibold text-navy-800">${f[0]}</span>
+        <i data-icon="chevron-down" class="w-4.5 h-4.5 text-gray-400 transition-transform"></i>
+      </button>
+      <div class="faq-a hidden px-4 pb-3.5 -mt-1 text-[13px] text-gray-500 leading-snug">${f[1]}</div>
+    </div>`).join('');
+
+  const ov=document.getElementById('sheet');
+  const body=document.getElementById('s-body'), foot=document.getElementById('s-foot'), title=document.getElementById('s-title');
+  function open(t,b,f){title.textContent=t;body.innerHTML=b;foot.innerHTML=f||'';Panda.render();ov.classList.add('open');
+    foot.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));}
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+  ov.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+
+  const msgForm=`<div class="space-y-4">
+      <div><label class="f-label">Subject</label><input class="f-field" placeholder="Briefly describe the issue"></div>
+      <div><label class="f-label">Message</label><textarea class="f-field" style="height:120px;padding-top:12px" placeholder="Tell us what happened…"></textarea></div>
+    </div>`;
+  const legal=t=>`<p class="text-[13px] text-gray-600 leading-relaxed">${t}</p>`;
+  const acts={
+    contact:()=>open('Contact support', msgForm,
+      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Cancel</button><button data-close class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Send</button>`),
+    ticket:()=>open('Create a ticket', msgForm,
+      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Cancel</button><button data-close class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Submit</button>`),
+    privacy:()=>open('Privacy Policy', legal('We respect your privacy. Avtopakt Fura collects only the data required to run your fleet — company, vehicles, drivers and trip information — and never shares it with third parties without your consent. You can request export or deletion of your data at any time from this screen.'),
+      `<button data-close class="btn w-full h-12 rounded-lg bg-navy-800 text-white font-bold">Close</button>`),
+    terms:()=>open('Terms of Service', legal('By using Avtopakt Fura you agree to use the service for lawful fleet-management purposes. Subscriptions renew automatically unless cancelled. We provide the service "as is" and continuously improve it. Full terms are available on our website.'),
+      `<button data-close class="btn w-full h-12 rounded-lg bg-navy-800 text-white font-bold">Close</button>`),
+  };
+  document.querySelectorAll('[data-act]').forEach(b=>b.addEventListener('click',()=>acts[b.dataset.act]()));
+
+  document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>{
+    const a=q.nextElementSibling, ic=q.querySelector('svg, .pi');
+    a.classList.toggle('hidden');
+    if(ic) ic.style.transform = a.classList.contains('hidden')?'':'rotate(180deg)';
+  }));
+
+  Panda.render();
+</script>
+</body>
+</html>

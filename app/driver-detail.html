@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center justify-between border-b border-gray-100">
+    <a href="garage-drivers.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">Driver</h1>
+    <button id="editDriverBtn" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="pencil" class="w-5 h-5"></i></button>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-4 space-y-4">
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-5 flex flex-col items-center text-center">
+      <img src="assets/img/drivers/d3.jpg" class="w-20 h-20 rounded-full object-cover mb-3">
+      <h2 id="dd-name" class="text-lg font-bold text-navy-800">Vali Rakhimov</h2>
+      <div class="flex items-center gap-1.5 text-sm text-gray-500 mt-0.5"><i data-icon="phone" class="w-4 h-4"></i><span id="dd-phone">+998 90 727 77 22</span></div>
+      <span class="inline-flex items-center gap-1.5 bg-success-50 text-success-700 text-xs font-semibold px-3 py-1.5 rounded-full mt-3"><span class="dot" style="background:#17B26A"></span>On trip</span>
+    </div>
+
+    <a href="map.html" class="card-press block rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="relative h-32"><div id="mini" class="absolute inset-0"></div>
+        <span class="absolute top-2.5 left-2.5 z-[400] bg-white/90 backdrop-blur text-[11px] font-semibold text-gray-700 px-2 py-1 rounded-md shadow-sm">Current trip</span></div>
+      <div class="grid grid-cols-3 divide-x divide-gray-100">
+        <div class="px-3 py-2.5"><p class="text-[10px] text-gray-400">Route</p><p class="text-[13px] font-semibold text-navy-800 truncate">Andijan→Prague</p></div>
+        <div class="px-3 py-2.5"><p class="text-[10px] text-gray-400">Speed</p><p class="text-[13px] font-semibold text-navy-800">72 km/h</p></div>
+        <div class="px-3 py-2.5"><p class="text-[10px] text-gray-400">Location</p><p class="text-[13px] font-semibold text-navy-800">Poland</p></div>
+      </div>
+    </a>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Driver info</h3>
+      <div class="divide-y divide-gray-100">
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Driver license</span><span class="text-sm font-semibold text-navy-800">AB 1234567</span></div>
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Assigned truck</span><span class="text-sm font-semibold text-navy-700">DAF XF 105</span></div>
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Total trips</span><span class="text-sm font-semibold text-navy-800">96</span></div>
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Total mileage</span><span class="text-sm font-semibold text-navy-800">312,400 km</span></div>
+        <div class="flex items-center justify-between py-2.5"><span class="text-sm text-gray-500">Tenure</span><span class="text-sm font-semibold text-navy-800">3 yr 4 mo</span></div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Assignment history</h3>
+      <div class="space-y-3" id="hist"></div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="px-4 py-3.5 border-b border-gray-100"><h3 class="text-sm font-semibold text-navy-800">Documents</h3></div>
+      <div id="docs"></div>
+    </div>
+  </div>
+
+  <!-- Edit driver sheet -->
+  <div id="sheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head"><h2 class="text-lg font-bold text-navy-800">Edit driver</h2><button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button></div>
+      <div class="sheet-body space-y-4">
+        <div class="flex items-center gap-4">
+          <img id="ed-photo" src="assets/img/drivers/d3.jpg" class="w-16 h-16 rounded-full object-cover shrink-0">
+          <label class="inline-flex h-9 px-4 rounded-lg border border-gray-300 text-sm font-semibold text-navy-800 bg-white items-center cursor-pointer hover:bg-gray-50">Change photo<input id="ed-photoIn" type="file" accept="image/*" class="hidden"></label>
+        </div>
+        <div><label class="f-label">Full name</label><input id="ed-name" class="f-field" value="Vali Rakhimov"></div>
+        <div><label class="f-label">Phone number</label><div class="f-plate"><span class="seg">🇺🇿 +998</span><input id="ed-phone" inputmode="numeric" value="90 727 77 22"></div></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">License number</label><input class="f-field" value="AB 1234567"></div>
+          <div><label class="f-label">License expiry</label><input type="date" class="f-field"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="f-label">Experience (years)</label><input class="f-field" value="8"></div>
+          <div><label class="f-label">Assigned truck</label><div class="f-sel"><select class="f-field"><option>DAF XF 105</option><option>Volvo FH16</option><option>MAN TGX</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+        </div>
+      </div>
+      <div class="sheet-foot">
+        <button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Cancel</button>
+        <button id="ed-save" class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const ov=document.getElementById('sheet');
+    document.getElementById('editDriverBtn').addEventListener('click',()=>ov.classList.add('open'));
+    ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+    ov.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+    document.getElementById('ed-photoIn').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>document.getElementById('ed-photo').src=ev.target.result;r.readAsDataURL(f);});
+    document.getElementById('ed-save').addEventListener('click',()=>{
+      document.getElementById('dd-name').textContent=document.getElementById('ed-name').value;
+      document.getElementById('dd-phone').textContent='+998 '+document.getElementById('ed-phone').value;
+      ov.classList.remove('open');
+    });
+  })();
+  const hist=[['09/02/2026 — Now','DAF XF 105','60 A 467 AA'],['03/01/2026 — 09/02/2026','MAN TGX','01 D 789 AC'],['05/10/2025 — 03/01/2026','Volvo FH','01 A 123 BC']];
+  document.getElementById('hist').innerHTML = hist.map(([p,n,pl])=>`
+    <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="truck" class="w-4.5 h-4.5"></i></div>
+    <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${n} <span class="text-xs text-gray-400 font-normal">${pl}</span></p><p class="text-[11px] text-gray-400">${p}</p></div></div>`).join('');
+
+  const DS={ok:{cls:'bg-success-50 text-success-700',label:'Active',dot:'#17B26A'},soon:{cls:'bg-warning-50 text-warning-700',label:'Expiring',dot:'#F79009'}};
+  const docs=[['Driver license','ok','420 days left','id-card'],['Passport','ok','900 days left','book-user'],['Medical certificate','soon','22 days left','stethoscope']];
+  document.getElementById('docs').innerHTML = docs.map((d,i)=>{const s=DS[d[1]];return `
+    <div class="flex items-center gap-3 px-4 py-3 ${i?'border-t border-gray-100':''}">
+      <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="${d[3]}" class="w-4.5 h-4.5"></i></div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${d[0]}</p><p class="text-[11px] text-gray-400">${d[2]}</p></div>
+      <span class="inline-flex items-center gap-1.5 ${s.cls} text-[11px] font-semibold px-2 py-1 rounded-full"><span class="dot" style="background:${s.dot}"></span>${s.label}</span></div>`;}).join('');
+
+  const mini=L.map('mini',{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false}).setView([52.0,19.0],5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(mini);
+  L.marker([52.0,19.0],{icon:L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,26],html:`<div style="width:24px;height:24px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#0F0F37;border:2px solid #fff;box-shadow:0 0 0 4px rgba(15,15,55,.2);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="12" height="12" fill="#FFCB00" style="transform:rotate(45deg)">${window.PANDA_ICONS['truck']}</svg></div>`})}).addTo(mini);
+
+  Panda.render();
+</script>
+</body>
+</html>

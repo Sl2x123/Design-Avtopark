@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create company — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
+    <a href="otp.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <div><h1 class="text-base font-semibold text-navy-800">Create company</h1><p class="text-xs text-gray-500">Step 1 of 2</p></div>
+  </div>
+
+  <div class="app-scroll px-6 py-5">
+    <div class="w-14 h-14 rounded-2xl bg-primary-50 border border-primary-100 flex items-center justify-center mb-4 text-primary-700">
+      <i data-icon="building-2" class="w-7 h-7"></i>
+    </div>
+    <p class="text-gray-500 text-sm mb-6 leading-relaxed">Fill in your company details. Owner account, company and fleet are created automatically.</p>
+
+    <div class="space-y-4">
+      <div><label class="block text-sm font-medium text-gray-700 mb-1.5">Company name</label><input value="Avtopakt Logistics" class="field"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1.5">Legal form</label>
+        <div class="field flex items-center justify-between cursor-pointer"><span>LLC</span><i data-icon="chevron-down" class="w-5 h-5 text-gray-400"></i></div>
+      </div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1.5">Tax ID (INN)</label><input value="305 678 912" inputmode="numeric" class="field"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1.5">Address</label><input value="Tashkent, Chilanzar district" class="field"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1.5">Email <span class="text-gray-400 font-normal">(optional)</span></label><input placeholder="info@company.uz" class="field"></div>
+    </div>
+  </div>
+
+  <div class="px-6 pt-3 pb-7 border-t border-gray-100">
+    <a href="plans.html" class="btn h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm">Create company</a>
+  </div>
+</div>
+<style>
+  .field{ width:100%; height:48px; padding:0 14px; border:1px solid #D0D5DD; border-radius:8px; font-size:15px; color:#0F0F37; outline:none; box-shadow:0 1px 2px rgba(16,24,40,.05); background:#fff; }
+  .field:focus{ border-color:#FFCB00; box-shadow:0 0 0 4px rgba(255,203,0,.3); }
+  .field::placeholder{ color:#98A2B3; }
+</style>
+<script>Panda.render();</script>
+</body>
+</html>

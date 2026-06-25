@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="px-5 py-4">
+    <a href="login.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+  </div>
+  <div class="app-scroll px-6 flex flex-col">
+    <div class="flex-1 flex flex-col">
+      <div class="w-14 h-14 rounded-2xl bg-primary-50 border border-primary-100 flex items-center justify-center mb-5 text-primary-700">
+        <i data-icon="shield-check" class="w-7 h-7"></i>
+      </div>
+      <h2 class="text-xl font-semibold text-navy-800 mb-1.5">Verification code</h2>
+      <p class="text-gray-500 text-sm mb-7">Code sent to <span class="font-semibold text-gray-700">+998 90 *** ** 67</span></p>
+
+      <div class="grid grid-cols-6 gap-2 mb-2">
+        <input maxlength="1" value="4" class="otp-cell">
+        <input maxlength="1" value="7" class="otp-cell">
+        <input maxlength="1" value="2" class="otp-cell">
+        <input maxlength="1" class="otp-cell focused">
+        <input maxlength="1" class="otp-cell">
+        <input maxlength="1" class="otp-cell">
+      </div>
+
+      <a href="create-company.html" class="btn mt-6 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm">Verify</a>
+
+      <div class="mt-6 text-center text-sm text-gray-500">
+        Didn't get the code?
+        <span class="text-gray-400 font-medium ml-1" id="timer">Resend in 0:60</span>
+      </div>
+    </div>
+    <p class="text-center text-gray-400 text-xs pb-8">Demo code prefilled — tap "Verify"</p>
+  </div>
+</div>
+<style>
+  .otp-cell{ height:56px; text-align:center; font-size:22px; font-weight:700; color:#0F0F37;
+    border:1px solid #D0D5DD; border-radius:10px; outline:none; box-shadow:0 1px 2px rgba(16,24,40,.05); }
+  .otp-cell:focus,.otp-cell.focused{ border-color:#FFCB00; box-shadow:0 0 0 4px rgba(255,203,0,.3); }
+</style>
+<script>
+  Panda.render();
+  let t=60; const el=document.getElementById('timer');
+  const iv=setInterval(()=>{ t--; const m=Math.floor(t/60), s=String(t%60).padStart(2,'0');
+    el.textContent=`Resend in ${m}:${s}`;
+    if(t<=0){ clearInterval(iv); el.outerHTML='<span class="text-navy-700 font-semibold ml-1 cursor-pointer">Resend code</span>'; }
+  },1000);
+  const cells=[...document.querySelectorAll('.otp-cell')];
+  cells.forEach((c,i)=>{ c.addEventListener('input',()=>{ if(c.value&&cells[i+1]) cells[i+1].focus(); });
+    c.addEventListener('keydown',e=>{ if(e.key==='Backspace'&&!c.value&&cells[i-1]) cells[i-1].focus(); }); });
+</script>
+</body>
+</html>

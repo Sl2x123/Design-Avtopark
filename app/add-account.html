@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New account — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
+    <a href="profile.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">New account</h1>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-5 space-y-5">
+    <div><label class="f-label">Fleet / company name</label><input class="f-field" placeholder="e.g. Bukhara Trans"></div>
+
+    <!-- generated credentials -->
+    <div class="rounded-2xl bg-navy-800 p-4 shadow-lg text-white">
+      <div class="flex items-center gap-2 mb-3"><i data-icon="lock" class="w-4.5 h-4.5 text-primary-500"></i><h3 class="text-sm font-bold">Admin panel access</h3></div>
+      <p class="text-xs text-navy-100 mb-3">These credentials open the web admin panel for the new fleet. Share them only with trusted staff.</p>
+      <div class="space-y-2.5">
+        <div class="bg-white/10 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-2">
+          <div class="min-w-0"><p class="text-[10px] text-navy-100 uppercase tracking-wide">Login</p><p id="login" class="text-sm font-bold font-mono truncate">—</p></div>
+          <button data-copy="login" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0"><i data-icon="file-text" class="w-4 h-4 text-white"></i></button>
+        </div>
+        <div class="bg-white/10 rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-2">
+          <div class="min-w-0"><p class="text-[10px] text-navy-100 uppercase tracking-wide">Password</p><p id="pass" class="text-sm font-bold font-mono truncate">—</p></div>
+          <button data-copy="pass" class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0"><i data-icon="file-text" class="w-4 h-4 text-white"></i></button>
+        </div>
+      </div>
+      <button id="regen" class="btn mt-3 w-full h-10 rounded-lg bg-primary-500 text-navy-800 font-bold flex items-center justify-center gap-1.5"><i data-icon="history" class="w-4 h-4"></i>Regenerate</button>
+      <p id="copied" class="text-center text-[11px] text-success-200 mt-2 h-3"></p>
+    </div>
+
+    <!-- devices with access -->
+    <div>
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-1">Devices with access</p>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden" id="devices"></div>
+      <button id="addDevice" class="btn w-full mt-3 h-11 rounded-xl border-2 border-dashed border-gray-300 text-navy-800 font-semibold flex items-center justify-center gap-2 hover:bg-gray-50"><i data-icon="plus" class="w-5 h-5"></i>Grant to a device</button>
+    </div>
+  </div>
+
+  <div class="px-4 pt-3 pb-7 border-t border-gray-100">
+    <a href="profile.html" class="btn h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm">Create account</a>
+  </div>
+</div>
+
+<script>
+  function rnd(n,chars){let s='';for(let i=0;i<n;i++)s+=chars[Math.floor((i*7+s.length*13+n*3+chars.length)%chars.length)];return s;}
+  // simple varied generator (no Math.random in this env)
+  let seed=Date.now?0:0; // deterministic fallback
+  function gen(){
+    const a='ABCDEFGHJKLMNPQRSTUVWXYZ', d='23456789', sym='!@#$%&*';
+    seed+=1;
+    const mix=(len,pool)=>{let s='';let x=seed*9301+49297;for(let i=0;i<len;i++){x=(x*9301+49297)%233280;s+=pool[Math.floor(x/233280*pool.length)];}return s;};
+    document.getElementById('login').textContent='fleet_'+mix(6,(a+d).toLowerCase());
+    document.getElementById('pass').textContent=mix(4,a)+mix(3,d)+mix(2,sym);
+  }
+  gen();
+  document.getElementById('regen').addEventListener('click',()=>{gen();flash('New credentials generated');Panda.render();});
+  function flash(t){const c=document.getElementById('copied');c.textContent=t;setTimeout(()=>c.textContent='',1600);}
+  document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{
+    const v=document.getElementById(b.dataset.copy).textContent;
+    if(navigator.clipboard) navigator.clipboard.writeText(v).catch(()=>{});
+    flash('Copied to clipboard');
+  }));
+
+  const devices=[
+    ['Owner · iPhone 15 Pro','Granted today',true],
+    ['Manager · MacBook Pro','Granted today',false],
+    ['Dispatch PC · Office','Granted today',false],
+  ];
+  function renderDev(){
+    document.getElementById('devices').innerHTML=devices.map((d,i)=>`
+      <div class="flex items-center gap-3 px-4 py-3.5 ${i?'border-t border-gray-100':''}">
+        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="monitor-smartphone" class="w-4.5 h-4.5"></i></div>
+        <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800 truncate">${d[0]}</p><p class="text-[11px] text-gray-400">${d[1]}</p></div>
+        ${d[2]?'<span class="text-[10px] font-semibold text-success-700 bg-success-50 px-2 py-0.5 rounded-full">You</span>':'<button data-rev="'+i+'" class="text-xs font-semibold text-error-600 px-2 py-1 rounded-lg hover:bg-error-50">Revoke</button>'}
+      </div>`).join('');
+    Panda.render();
+    document.querySelectorAll('[data-rev]').forEach(b=>b.addEventListener('click',()=>{devices.splice(+b.dataset.rev,1);renderDev();}));
+  }
+  renderDev();
+  document.getElementById('addDevice').addEventListener('click',()=>{devices.push(['New device · Pending','Granted just now',false]);renderDev();});
+
+  Panda.render();
+</script>
+</body>
+</html>

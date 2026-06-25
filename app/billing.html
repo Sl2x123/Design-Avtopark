@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Billing — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
+    <a href="profile.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">Billing</h1>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-4">
+    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-1">Payment history</p>
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden" id="list"></div>
+  </div>
+</div>
+<script>
+  const ST={ok:{cls:'bg-success-50 text-success-700',label:'Paid'},fail:{cls:'bg-error-50 text-error-700',label:'Failed'}};
+  const pays=[
+    ['06/01/2026','Professional','$79','ok','Card •••• 9012'],
+    ['05/01/2026','Professional','$79','ok','Payme'],
+    ['04/01/2026','Professional','$79','ok','Click'],
+    ['03/01/2026','Starter','$29','ok','Card •••• 9012'],
+    ['02/01/2026','Starter','$29','fail','Card •••• 1100'],
+  ];
+  document.getElementById('list').innerHTML = pays.map((p,i)=>{const s=ST[p[3]];return `
+    <a href="#" class="flex items-center gap-3 px-4 py-3.5 ${i?'border-t border-gray-100':''} hover:bg-gray-50">
+      <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center shrink-0 text-navy-700"><i data-icon="receipt" class="w-5 h-5"></i></div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${p[1]}</p><p class="text-[11px] text-gray-400">${p[0]} · ${p[4]}</p></div>
+      <div class="text-right"><p class="text-sm font-bold text-navy-800">${p[2]}</p><span class="text-[10px] font-semibold ${s.cls} px-1.5 py-0.5 rounded-full">${s.label}</span></div></a>`;}).join('');
+  Panda.render();
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app has-nav">
+  <div class="sticky-head px-5 pt-5 pb-3 border-b border-gray-100">
+    <h1 class="text-2xl font-bold text-navy-800 tracking-tight mb-3">Analytics</h1>
+    <div class="flex gap-2 overflow-x-auto hide-scroll" data-tabs>
+      <button class="seg-tab">Today</button>
+      <button class="seg-tab on">7 days</button>
+      <button class="seg-tab">This month</button>
+      <button class="seg-tab">Last month</button>
+    </div>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-4 space-y-4">
+    <!-- Revenue / Expenses / Profit -->
+    <div class="grid grid-cols-3 gap-2.5" id="fin"></div>
+
+    <!-- Trips / Mileage / Fuel -->
+    <div class="grid grid-cols-3 gap-2.5" id="counts"></div>
+
+    <!-- Fleet status -->
+    <div class="rounded-2xl bg-white border border-gray-200 p-4 shadow-xs">
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Fleet status</h3>
+      <div class="grid grid-cols-5 gap-1.5 text-center" id="fleetstat"></div>
+    </div>
+
+    <!-- Profit ranking -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-navy-800">Profit ranking</h3>
+        <div class="f-sel"><select class="f-field !h-9 !text-[13px] !pr-9 !w-auto"><option>By profit</option><option>By revenue</option><option>By trips</option></select><i data-icon="chevron-down" class="f-chev w-4 h-4"></i></div>
+      </div>
+      <div class="space-y-2" id="rank"></div>
+    </div>
+
+    <!-- Expense breakdown -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <h3 class="text-sm font-semibold text-navy-800 mb-4">Expense breakdown</h3>
+      <div class="flex items-center gap-4">
+        <div class="relative shrink-0" style="width:118px;height:118px">
+          <div id="pie" style="width:118px;height:118px;border-radius:50%"></div>
+          <div class="absolute bg-white rounded-full flex flex-col items-center justify-center shadow-xs" style="inset:25px">
+            <p class="text-[9px] text-gray-400">Total</p>
+            <p id="pieTotal" class="text-[13px] font-bold text-navy-800"></p>
+          </div>
+        </div>
+        <div class="flex-1 space-y-2" id="pieLegend"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const money=n=>'$'+Number(n).toLocaleString('en-US');
+
+  // Revenue / Expenses / Profit — [label, value, textColor, cardClasses]
+  const fin=[
+    ['Revenue', money(120000), 'text-success-700', 'bg-gray-50 border-gray-100'],
+    ['Expenses', money(82000), 'text-error-600', 'bg-gray-50 border-gray-100'],
+    ['Profit', money(38000), 'text-navy-800', 'bg-primary-50 border-primary-200'],
+  ];
+  document.getElementById('fin').innerHTML = fin.map(([l,v,fg,bg])=>`
+    <div class="rounded-2xl border ${bg} p-3">
+      <p class="text-[12px] text-gray-400">${l}</p>
+      <p class="text-[17px] font-bold ${fg} mt-1 leading-tight whitespace-nowrap">${v}</p>
+    </div>`).join('');
+
+  // Trips / Mileage / Fuel — one row
+  const counts=[
+    ['Trips','87','route','bg-primary-100','text-navy-700'],
+    ['Mileage','152,000 km','gauge','bg-blue-50','text-blue-600'],
+    ['Fuel','42,500 L','fuel','bg-gray-100','text-gray-600'],
+  ];
+  document.getElementById('counts').innerHTML = counts.map(([l,v,ic,bg,fg])=>`
+    <div class="rounded-2xl bg-white border border-gray-200 p-3 shadow-xs">
+      <span class="w-7 h-7 rounded-full ${bg} ${fg} flex items-center justify-center mb-1.5"><i data-icon="${ic}" class="w-3.5 h-3.5"></i></span>
+      <p class="text-[12px] text-gray-500">${l}</p>
+      <p class="text-[15px] font-bold text-navy-800 leading-tight">${v}</p>
+    </div>`).join('');
+
+  // Expense breakdown pie
+  const exp=[
+    ['Fuel',34440,'#F79009'],
+    ['Salary',19680,'#2E90FA'],
+    ['Service',11480,'#7A5AF8'],
+    ['Insurance',6560,'#17B26A'],
+    ['Fines',4100,'#F04438'],
+    ['Other',5740,'#98A2B3'],
+  ];
+  const expTotal=exp.reduce((s,e)=>s+e[1],0);
+  let acc=0;
+  const stops=exp.map(e=>{const a=acc/expTotal*100;acc+=e[1];const b=acc/expTotal*100;return `${e[2]} ${a}% ${b}%`;}).join(',');
+  document.getElementById('pie').style.background=`conic-gradient(${stops})`;
+  document.getElementById('pieTotal').textContent=money(expTotal);
+  document.getElementById('pieLegend').innerHTML=exp.map(e=>{const pct=Math.round(e[1]/expTotal*100);return `
+    <div class="flex items-center gap-2">
+      <span class="shrink-0" style="width:10px;height:10px;border-radius:3px;background:${e[2]}"></span>
+      <span class="text-[12px] text-gray-600 flex-1">${e[0]}</span>
+      <span class="text-[12px] font-bold text-navy-800">${pct}%</span>
+      <span class="text-[11px] text-gray-400 w-14 text-right">${money(e[1])}</span>
+    </div>`;}).join('');
+
+  const fs=[['On trip','12','#17B26A'],['Idle','8','#2E90FA'],['Repair','3','#F79009'],['No signal','2','#667085'],['Resting','6','#0F0F37']];
+  document.getElementById('fleetstat').innerHTML = fs.map(([l,v,c])=>`
+    <div class="rounded-xl bg-gray-50 py-2.5"><p class="text-lg font-bold" style="color:${c}">${v}</p><p class="text-[10px] text-gray-500 leading-tight mt-0.5">${l}</p></div>`).join('');
+
+  // ranking
+  const rank=[
+    ['DAF XF 105','60 A 467 AA',18500,11200,7300,100],
+    ['MAN TGX','10 B 123 BB',16800,10000,6800,93],
+    ['Volvo FH','01 C 234 CC',15400,9500,5900,81],
+    ['Scania R','77 D 345 DD',14900,9800,5100,70],
+    ['Mercedes Actros','20 E 456 EE',13200,9200,4000,55],
+    ['Iveco Stralis','90 F 567 FF',12100,8600,3500,48],
+    ['Renault T','45 G 678 GG',11000,7800,3200,44],
+    ['MAN TGS','33 H 789 HH',10200,7600,2600,36],
+  ];
+  function tier(pct){
+    if(pct>=70) return {bg:'bg-success-50',badge:'bg-success-500',pc:'text-success-600'};
+    if(pct>=50) return {bg:'bg-warning-50',badge:'bg-warning-500',pc:'text-warning-600'};
+    return {bg:'bg-error-50',badge:'bg-error-500',pc:'text-error-600'};
+  }
+  document.getElementById('rank').innerHTML = rank.map((r,i)=>{
+    const t=tier(r[5]);
+    return `<a href="truck-detail.html" class="flex items-center gap-2.5 rounded-2xl p-2.5 card-press" style="background:linear-gradient(to right,#ABEFC6 ${r[5]}%,#E4E7EC ${r[5]}%)">
+      <span class="w-7 h-7 rounded-lg ${t.badge} text-white font-bold flex items-center justify-center text-sm shrink-0">${i+1}</span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-sm font-bold text-navy-800 truncate">${r[0]}</p>
+          <span class="text-sm font-bold ${t.pc} shrink-0">${r[5]}%</span>
+        </div>
+        <p class="text-[11px] text-gray-400">${r[1]}</p>
+        <div class="flex gap-3 mt-1 text-[11px]">
+          <span class="text-gray-400">Rev <b class="text-blue-600">${money(r[2])}</b></span>
+          <span class="text-gray-400">Exp <b class="text-error-600">${money(r[3])}</b></span>
+          <span class="text-gray-400">Profit <b class="text-success-700">${money(r[4])}</b></span>
+        </div>
+      </div>
+      <span class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-500 shrink-0"><i data-icon="chevron-right" class="w-4 h-4"></i></span>
+    </a>`;
+  }).join('');
+
+  Panda.mountNav('analytics');
+  Panda.render();
+</script>
+</body>
+</html>

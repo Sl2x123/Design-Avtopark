@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subscription — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
+    <a href="profile.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">Subscription</h1>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-4 space-y-4">
+    <div class="rounded-2xl bg-navy-800 shadow-lg p-5 text-white">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-semibold">Fleet Pro Plan</span>
+        <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold bg-success-400/20 text-success-200 px-2 py-1 rounded-full"><span class="dot" style="background:#75E0A7"></span>Active</span>
+      </div>
+      <p class="text-3xl font-bold mt-3 text-primary-500">$79<span class="text-base text-navy-100 font-medium">/mo</span></p>
+      <div class="mt-4 pt-4 border-t border-white/15 grid grid-cols-2 gap-3 text-sm">
+        <div><p class="text-navy-100 text-xs">Valid until</p><p class="font-semibold">06/01/2027</p></div>
+        <div><p class="text-navy-100 text-xs">Next charge</p><p class="font-semibold">$79 · 06/01/2027</p></div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Plan usage</h3>
+      <div class="space-y-3" id="limits"></div>
+    </div>
+
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs">
+      <div class="flex items-center justify-between px-4 py-3.5">
+        <div><p class="text-sm font-semibold text-navy-800">Auto-renew</p><p class="text-xs text-gray-400">Billed every month</p></div>
+        <span class="w-11 h-6 rounded-full bg-primary-500 relative"><span class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow"></span></span>
+      </div>
+      <div class="border-t border-gray-100 flex items-center justify-between px-4 py-3.5">
+        <div class="flex items-center gap-2 text-gray-700"><i data-icon="credit-card" class="w-4.5 h-4.5 text-gray-500"></i><p class="text-sm font-semibold text-navy-800">•••• 9012</p></div>
+        <span class="text-xs text-navy-700 font-semibold">Change</span>
+      </div>
+    </div>
+
+    <a href="plans.html" class="btn h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm">Change plan</a>
+    <button class="btn w-full h-11 rounded-lg text-error-600 text-sm font-semibold">Cancel subscription</button>
+  </div>
+</div>
+<script>
+  const lim=[['Trucks',48,50],['Drivers',32,75],['Trailers',26,50]];
+  document.getElementById('limits').innerHTML = lim.map(([l,v,m])=>`
+    <div><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">${l}</span><span class="font-semibold text-gray-700">${v} / ${m}</span></div>
+    <div class="h-2 rounded-full bg-gray-100"><div class="h-2 rounded-full ${v/m>0.85?'bg-warning-500':'bg-navy-800'}" style="width:${Math.round(v/m*100)}%"></div></div></div>`).join('');
+  Panda.render();
+</script>
+</body>
+</html>

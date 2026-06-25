@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truck — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <!-- Hero gallery -->
+  <div class="relative h-56">
+    <div id="gallery" class="flex h-full overflow-x-auto snap-x snap-mandatory hide-scroll">
+      <img src="assets/img/trucks/truck4.jpg" class="w-full h-full object-cover shrink-0 snap-center">
+      <img src="assets/img/trucks/truck1.jpg" class="w-full h-full object-cover shrink-0 snap-center">
+      <img src="assets/img/trucks/truck6.jpg" class="w-full h-full object-cover shrink-0 snap-center">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent pointer-events-none"></div>
+    <a href="garage-trucks.html" class="absolute top-5 left-4 w-10 h-10 rounded-full bg-black/35 backdrop-blur flex items-center justify-center text-white"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <button id="editBindBtn" class="absolute top-5 right-4 w-10 h-10 rounded-full bg-black/35 backdrop-blur flex items-center justify-center text-white"><i data-icon="pencil" class="w-5 h-5"></i></button>
+    <div id="dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5"></div>
+  </div>
+
+  <div class="app-scroll px-4 pt-4 pb-8 space-y-4 bg-gray-50">
+    <!-- Block 1: main info -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-sm p-4">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-xs font-medium text-gray-400">DAF · Tractor unit</p>
+        <span id="b1-status" class="inline-flex items-center gap-1.5 bg-success-50 text-success-700 text-[11px] font-semibold px-2.5 py-1 rounded-full"><span class="dot" style="background:#17B26A"></span>On trip</span>
+      </div>
+      <div class="flex items-center justify-between gap-2 mt-1">
+        <h1 class="text-xl font-bold text-navy-800">DAF XF 105</h1>
+        <span class="plate" style="height:26px;font-size:14px"><span class="uz">UZ</span><span class="num">60 A 467 AA</span></span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-gray-100">
+        <div><p class="text-[11px] text-gray-400">Year</p><p class="text-sm font-bold text-navy-800">2018</p></div>
+        <div><p class="text-[11px] text-gray-400">Type</p><p class="text-sm font-bold text-navy-800">Tractor</p></div>
+        <div><p class="text-[11px] text-gray-400">Mileage</p><p class="text-sm font-bold text-navy-800">458,300 km</p></div>
+      </div>
+    </div>
+
+    <!-- Block 2: bindings -->
+    <div class="grid grid-cols-2 gap-3">
+      <a href="driver-detail.html" class="rounded-2xl bg-white border border-gray-200 shadow-xs p-3.5 card-press">
+        <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Driver</p>
+        <div class="flex items-center gap-2"><img src="assets/img/drivers/d3.jpg" class="w-9 h-9 rounded-full object-cover"><div class="min-w-0"><p id="b2-driver" class="text-sm font-semibold text-navy-800 truncate">Vali Rakhimov</p><p class="text-[11px] text-gray-500">+998 90 727 77 22</p></div></div>
+      </a>
+      <a href="trailer-detail.html" class="rounded-2xl bg-white border border-gray-200 shadow-xs p-3.5 card-press">
+        <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Trailer</p>
+        <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500"><i data-icon="container" class="w-5 h-5"></i></span><div class="min-w-0"><p id="b2-trailer" class="text-sm font-semibold text-navy-800 truncate">Kogel</p><p id="b2-trailerplate" class="text-[11px] text-gray-500">60 H 545 AA</p></div></div>
+      </a>
+    </div>
+
+    <!-- Add order (only when idle) -->
+    <button id="addOrderBtn" class="hidden btn w-full h-12 rounded-2xl bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center gap-2 shadow-sm"><i data-icon="plus" class="w-5 h-5"></i>Add new order</button>
+
+    <!-- Active trip -->
+    <div id="activeTrip" class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <div class="flex items-center justify-between mb-3"><h3 class="text-sm font-semibold text-navy-800">Active trip</h3><span class="text-[11px] font-semibold text-success-700 bg-success-50 px-2 py-0.5 rounded-full">In transit</span></div>
+      <div class="flex items-center gap-2 text-base font-bold text-navy-800"><span>Andijan</span><i data-icon="arrow-right" class="w-4 h-4 text-gray-400"></i><span>Prague</span></div>
+      <p class="text-[13px] text-gray-500 mt-1.5"><span class="font-semibold text-navy-800">12,089 km</span> of 32,400 km · <span class="font-semibold text-success-700">37%</span></p>
+      <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+        <div><p class="text-[11px] text-gray-400">Trip revenue</p><p class="text-base font-bold text-success-700">$8,000</p></div>
+        <button id="tripCostsBtn" class="btn border border-gray-300 text-navy-800 text-sm font-semibold px-3.5 h-10 rounded-lg flex items-center gap-1.5 hover:bg-gray-50"><i data-icon="receipt" class="w-4 h-4"></i>Trip costs</button>
+      </div>
+    </div>
+
+    <!-- Mini map -->
+    <a id="miniMapCard" href="map.html" class="card-press block rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="relative h-32"><div id="mini" class="absolute inset-0"></div>
+        <span class="absolute top-2.5 right-2.5 z-[400] bg-white/90 backdrop-blur text-[11px] font-semibold text-gray-700 px-2 py-1 rounded-md shadow-sm">Open map →</span></div>
+      <div class="grid grid-cols-3 divide-x divide-gray-100">
+        <div class="px-3 py-2.5"><p class="text-[10px] text-gray-400">Location</p><p class="text-[13px] font-semibold text-navy-800">Poland</p></div>
+        <div class="px-3 py-2.5"><p class="text-[10px] text-gray-400">Speed</p><p class="text-[13px] font-semibold text-navy-800">72 km/h</p></div>
+        <div class="px-3 py-2.5"><p class="text-[10px] text-gray-400">Route</p><p class="text-[13px] font-semibold text-navy-800 truncate">Andijan→Prague</p></div>
+      </div>
+    </a>
+
+    <!-- Add Charges CTA -->
+    <button id="addExpenseBtn" class="w-full flex items-center gap-3 px-5 h-16 rounded-2xl font-black text-navy-800 shadow-sm" style="background:#FFCB00">
+      <span class="w-9 h-9 rounded-full border-2 border-navy-800/25 flex items-center justify-center text-xl font-black shrink-0">+</span>
+      <span class="flex-1 text-left text-[17px] tracking-wide">ADD CHARGES</span>
+      <i data-icon="chevron-right" class="w-6 h-6 shrink-0 opacity-60"></i>
+    </button>
+
+    <!-- Quick Add -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs px-4 pt-3.5 pb-4">
+      <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">Quick Add</p>
+      <div class="flex gap-3 overflow-x-auto hide-scroll pb-0.5">
+        <button class="quick-charge flex flex-col items-center gap-1.5 shrink-0" data-cat="Топливо">
+          <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#ECFDF5"><i data-icon="fuel" class="w-6 h-6" style="color:#16A34A"></i></span>
+          <span class="text-[11px] font-semibold" style="color:#16A34A">Топливо</span>
+        </button>
+        <button class="quick-charge flex flex-col items-center gap-1.5 shrink-0" data-cat="Питание">
+          <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#FFF7ED"><i data-icon="receipt" class="w-6 h-6" style="color:#EA580C"></i></span>
+          <span class="text-[11px] font-semibold" style="color:#EA580C">Питание</span>
+        </button>
+        <button class="quick-charge flex flex-col items-center gap-1.5 shrink-0" data-cat="Стоянка">
+          <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#EFF6FF"><i data-icon="map" class="w-6 h-6" style="color:#2563EB"></i></span>
+          <span class="text-[11px] font-semibold" style="color:#2563EB">Стоянка</span>
+        </button>
+        <button class="quick-charge flex flex-col items-center gap-1.5 shrink-0" data-cat="Мойка">
+          <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#F0F9FF"><i data-icon="life-buoy" class="w-6 h-6" style="color:#0284C7"></i></span>
+          <span class="text-[11px] font-semibold" style="color:#0284C7">Мойка</span>
+        </button>
+        <button class="quick-charge flex flex-col items-center gap-1.5 shrink-0" data-cat="Штраф">
+          <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#FEF2F2"><i data-icon="alert-triangle" class="w-6 h-6" style="color:#DC2626"></i></span>
+          <span class="text-[11px] font-semibold" style="color:#DC2626">Штраф</span>
+        </button>
+        <button class="quick-charge flex flex-col items-center gap-1.5 shrink-0" data-cat="Сервис">
+          <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#FFFBEB"><i data-icon="wrench" class="w-6 h-6" style="color:#D97706"></i></span>
+          <span class="text-[11px] font-semibold" style="color:#D97706">Сервис</span>
+        </button>
+        <button class="quick-charge flex flex-col items-center gap-1.5 shrink-0" data-cat="Другое">
+          <span class="w-14 h-14 rounded-2xl flex items-center justify-center" style="background:#F9FAFB"><i data-icon="box" class="w-6 h-6" style="color:#6B7280"></i></span>
+          <span class="text-[11px] font-semibold" style="color:#6B7280">Другое</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Recent expenses -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="px-4 py-3.5 border-b border-gray-100"><h3 class="text-sm font-semibold text-navy-800">Recent expenses</h3></div>
+      <div id="expList"></div>
+    </div>
+
+    <!-- Monthly stats -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <div class="flex items-center justify-between mb-3"><h3 class="text-sm font-semibold text-navy-800">Stats</h3></div>
+      <div class="flex gap-2 mb-3 overflow-x-auto hide-scroll" id="periodTabs"></div>
+      <div class="grid grid-cols-3 gap-2 mb-3">
+        <div class="rounded-xl bg-gray-50 p-2.5"><p class="text-[10px] text-gray-400">Revenue</p><p id="st-rev" class="text-sm font-bold text-success-700">$18,500</p></div>
+        <div class="rounded-xl bg-gray-50 p-2.5"><p class="text-[10px] text-gray-400">Expenses</p><p id="st-exp" class="text-sm font-bold text-error-700">$11,200</p></div>
+        <div class="rounded-xl bg-primary-50 p-2.5"><p class="text-[10px] text-navy-600">Profit</p><p id="st-prof" class="text-sm font-bold text-navy-800">$7,300</p></div>
+      </div>
+      <div class="grid grid-cols-4 gap-2 text-center">
+        <div><p id="st-trips" class="text-base font-bold text-navy-800">4</p><p class="text-[10px] text-gray-400">trips</p></div>
+        <div><p id="st-idle" class="text-base font-bold text-navy-800">8</p><p class="text-[10px] text-gray-400">idle days</p></div>
+        <div><p id="st-repair" class="text-base font-bold text-navy-800">5</p><p class="text-[10px] text-gray-400">repair days</p></div>
+        <div><p id="st-offline" class="text-base font-bold text-navy-800">5</p><p class="text-[10px] text-gray-400">offline days</p></div>
+      </div>
+    </div>
+
+    <!-- Trip history -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="px-4 py-3.5 border-b border-gray-100 flex items-center justify-between"><h3 class="text-sm font-semibold text-navy-800">Trip history</h3><button id="seeAllTrips" class="text-xs text-navy-700 font-semibold">See all</button></div>
+      <div id="trips"></div>
+    </div>
+
+    <!-- Assignment history -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Assignment history</h3>
+      <div class="flex bg-gray-100 rounded-lg p-1 mb-3">
+        <button data-ah="drivers" class="ah-tab flex-1 text-center text-sm font-semibold py-2 rounded-md bg-white text-navy-800 shadow-xs">Drivers</button>
+        <button data-ah="trailers" class="ah-tab flex-1 text-center text-sm font-semibold py-2 rounded-md text-gray-500">Trailers</button>
+      </div>
+      <div class="space-y-2.5" id="ah-list"></div>
+    </div>
+
+    <!-- Documents -->
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+      <div class="px-4 py-3.5 border-b border-gray-100 flex items-center justify-between"><h3 class="text-sm font-semibold text-navy-800">Documents</h3><span class="inline-flex items-center gap-1 text-[11px] font-semibold text-warning-700 bg-warning-50 px-2 py-1 rounded-full"><i data-icon="alert-triangle" class="w-3 h-3"></i>1 expiring</span></div>
+      <div id="docs"></div>
+    </div>
+  </div>
+
+  <!-- generic sheet -->
+  <div id="sheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head"><div><h2 id="s-title" class="text-lg font-bold text-navy-800">—</h2><p id="s-sub" class="text-xs text-gray-400 mt-0.5 hidden"></p></div><span id="s-badge" style="display:none"></span><button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button></div>
+      <div class="sheet-body" id="s-body"></div>
+      <div class="sheet-foot" id="s-foot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const status=new URLSearchParams(location.search).get('s')||'trip';
+  const DRIVERS=['Vali Rakhimov','Alisher Karimov','Sardor Kholmatov','Bakhtiyor Yuldashev'];
+  const TRAILERS=[['Kogel','60 H 545 AA'],['Schmitz','60 H 545 AA'],['Krone','75 A 112 BC'],['Kogel','60 H 457 AA']];
+
+  const ov=document.getElementById('sheet'), sBody=document.getElementById('s-body'), sFoot=document.getElementById('s-foot'), sTitle=document.getElementById('s-title'), sSub=document.getElementById('s-sub'), sBadge=document.getElementById('s-badge');
+  function openSheet(t,b,f,sub,badge){sTitle.textContent=t;if(sub){sSub.textContent=sub;sSub.classList.remove('hidden');}else{sSub.classList.add('hidden');}if(badge){sBadge.innerHTML=badge;sBadge.style.display='inline-flex';}else{sBadge.style.display='none';}sBody.innerHTML=b;sFoot.innerHTML=f||'';Panda.render();ov.classList.add('open');
+    sFoot.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));}
+  function closeSheet(){ov.classList.remove('open');}
+  ov.addEventListener('click',e=>{if(e.target===ov)closeSheet();});
+  ov.querySelector('[data-close]').addEventListener('click',closeSheet);
+  const money=n=>'$'+Number(n).toLocaleString('en-US');
+
+  // ---- status / add order ----
+  const ST_MAP={
+    trip:   {cls:'bg-success-50 text-success-700',  dot:'#17B26A', label:'On trip'},
+    idle:   {cls:'bg-blue-50 text-blue-700',         dot:'#2E90FA', label:'Idle'},
+    repair: {cls:'bg-warning-50 text-warning-700',   dot:'#F79009', label:'Repair'},
+  };
+  if(status!=='trip'){
+    document.getElementById('activeTrip').classList.add('hidden');
+    document.getElementById('miniMapCard').classList.add('hidden');
+    if(status==='idle') document.getElementById('addOrderBtn').classList.remove('hidden');
+    const s=ST_MAP[status]||ST_MAP.idle;
+    const sb=document.getElementById('b1-status');
+    sb.className='inline-flex items-center gap-1.5 '+s.cls+' text-[11px] font-semibold px-2.5 py-1 rounded-full';
+    sb.innerHTML='<span class="dot" style="background:'+s.dot+'"></span>'+s.label;
+  }
+  function openAddOrder(){
+    openSheet('Начать рейс',
+      `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ОТКУДА</p>
+          <input id="ao-from" class="f-field" placeholder="Ташкент">
+        </div>
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">КУДА</p>
+          <input id="ao-to" class="f-field" placeholder="Прага">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ДАТА ОТПРАВКИ</p>
+          <input id="ao-dep" type="date" class="f-field">
+        </div>
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ОЖИДАЕМОЕ ПРИБЫТИЕ</p>
+          <input id="ao-arr" type="date" class="f-field">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ГРУЗ</p>
+          <input id="ao-cargo" class="f-field" placeholder="Фрукты, электроника...">
+        </div>
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ВЕС ГРУЗА</p>
+          <input id="ao-weight" class="f-field" inputmode="numeric" placeholder="22 000 кг">
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">РАССТОЯНИЕ (КМ)</p>
+        <input id="ao-dist" class="f-field" inputmode="numeric" placeholder="6 300">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ВОДИТЕЛЬ</p>
+          <div class="f-sel"><select id="ao-driver" class="f-field">${DRIVERS.map(d=>`<option>${d}</option>`).join('')}</select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div>
+        </div>
+        <div>
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ПРИЦЕП</p>
+          <div class="f-sel"><select id="ao-trailer" class="f-field">${TRAILERS.map((t,i)=>`<option value="${i}">${t[0]} · ${t[1]}</option>`).join('')}</select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div>
+        </div>
+      </div>
+      <div style="background:#F6FEF9;border-radius:16px;padding:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <span style="width:32px;height:32px;border-radius:10px;background:#FFCB00;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#0F0F37;flex-shrink:0">+</span>
+          <p style="font-size:15px;font-weight:700;color:#0F0F37">Доход по рейсу (фрахт)</p>
+        </div>
+        <div id="ao-income-rows" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input id="ao-inc-name" class="f-field" style="flex:1" placeholder="Название (напр. Фрахт)">
+          <div style="position:relative;width:110px;flex-shrink:0">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#667085;font-weight:600;font-size:13px">$</span>
+            <input id="ao-inc-amt" class="f-field" style="padding-left:24px" inputmode="numeric" placeholder="0">
+          </div>
+          <button id="ao-inc-add" style="width:44px;height:44px;border-radius:12px;background:#FFCB00;border:none;cursor:pointer;font-size:20px;font-weight:800;color:#0F0F37;flex-shrink:0;display:flex;align-items:center;justify-content:center">+</button>
+        </div>
+      </div>`,
+      `<button id="ao-start" class="btn w-full h-13 rounded-xl font-black text-navy-800 text-[15px]" style="background:#FFCB00;height:52px;display:flex;align-items:center;justify-content:center;gap:8px"><i data-icon="arrow-right" style="width:18px;height:18px"></i>Начать рейс</button>`,
+      'Заполните данные и добавьте доход заранее');
+    Panda.render();
+    setTimeout(()=>{
+      const rows=[];
+      document.getElementById('ao-inc-add').addEventListener('click',()=>{
+        const nm=document.getElementById('ao-inc-name').value.trim()||'Фрахт';
+        const amt=parseFloat(document.getElementById('ao-inc-amt').value)||0;
+        if(amt<=0) return;
+        rows.push({nm,amt});
+        document.getElementById('ao-income-rows').innerHTML=rows.map((r,i)=>`
+          <div style="display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:10px 12px">
+            <span style="flex:1;font-size:14px;font-weight:600;color:#0F0F37">${r.nm}</span>
+            <span style="font-size:14px;font-weight:700;color:#17B26A">+$${r.amt.toLocaleString('en-US')}</span>
+            <button data-ri="${i}" style="width:24px;height:24px;border-radius:6px;background:#FEF2F2;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center"><i data-icon="x" style="width:12px;height:12px;color:#F04438"></i></button>
+          </div>`).join('');
+        Panda.render();
+        document.querySelectorAll('[data-ri]').forEach(b=>b.addEventListener('click',()=>{rows.splice(+b.dataset.ri,1);b.closest('[data-ri]')?.remove();}));
+        document.getElementById('ao-inc-name').value='';
+        document.getElementById('ao-inc-amt').value='';
+      });
+      document.getElementById('ao-start').addEventListener('click',()=>{
+        closeSheet();
+        document.getElementById('activeTrip').classList.remove('hidden');
+        document.getElementById('addOrderBtn').classList.add('hidden');
+        document.getElementById('miniMapCard').classList.remove('hidden');
+        const f=document.getElementById('ao-from').value||'Ташкент';
+        const t=document.getElementById('ao-to').value||'Прага';
+        document.querySelector('#activeTrip .flex.items-center.gap-2 span:first-child').textContent=f;
+        document.querySelector('#activeTrip .flex.items-center.gap-2 span:last-child').textContent=t;
+        const sb=document.getElementById('b1-status');
+        sb.className='inline-flex items-center gap-1.5 bg-success-50 text-success-700 text-[11px] font-semibold px-2.5 py-1 rounded-full';
+        sb.innerHTML='<span class="dot" style="background:#17B26A"></span>On trip';
+      });
+    },30);
+  }
+  document.getElementById('addOrderBtn').addEventListener('click', openAddOrder);
+
+  // ---- edit truck (full create-style modal) ----
+  document.getElementById('editBindBtn').addEventListener('click',()=>openSheet('Edit Truck',
+    `<div class="space-y-4">
+      <label class="dropzone">
+        <span class="w-11 h-11 rounded-xl bg-white border border-primary-200 flex items-center justify-center text-navy-700"><i data-icon="upload" class="w-5 h-5"></i></span>
+        <span class="text-sm font-semibold text-navy-800 mt-1">Change truck photo</span>
+        <span class="text-xs text-gray-400">PNG or JPG · max 10 MB</span>
+        <input type="file" accept="image/*" class="hidden">
+      </label>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="f-label">Brand</label><div class="f-sel"><select class="f-field"><option>DAF</option><option>Volvo</option><option>Scania</option><option>MAN</option><option>Mercedes</option><option>Renault</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+        <div><label class="f-label">Model</label><input class="f-field" value="XF 105"></div>
+      </div>
+      <div><label class="f-label">License plate</label><div class="f-plate"><span class="seg">UZ</span><input value="60 A 467 AA"></div></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="f-label">Year</label><div class="f-sel"><select class="f-field"><option>2018</option><option>2019</option><option>2020</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+        <div><label class="f-label">Type</label><div class="f-sel"><select class="f-field"><option>Tractor unit</option><option>Rigid truck</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="f-label">Color</label><input class="f-field" value="White"></div>
+        <div><label class="f-label">Mileage (km)</label><input class="f-field" value="458,300"></div>
+      </div>
+      <div><label class="f-label">VIN number</label><input class="f-field" value="XLRTE47MS0E123456"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="f-label">Assign driver</label><div class="f-sel"><select id="ed-driver" class="f-field">${DRIVERS.map(d=>`<option ${d===document.getElementById('b2-driver').textContent?'selected':''}>${d}</option>`).join('')}</select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+        <div><label class="f-label">Assign trailer</label><div class="f-sel"><select id="ed-trailer" class="f-field">${TRAILERS.map((t,i)=>`<option value="${i}">${t[0]} · ${t[1]}</option>`).join('')}</select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+      </div>
+    </div>`,
+    `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Cancel</button><button id="ed-save" class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Save changes</button>`));
+  document.addEventListener('click',e=>{
+    if(e.target&&e.target.id==='ed-save'){
+      document.getElementById('b2-driver').textContent=document.getElementById('ed-driver').value;
+      const tr=TRAILERS[+document.getElementById('ed-trailer').value];
+      document.getElementById('b2-trailer').textContent=tr[0]; document.getElementById('b2-trailerplate').textContent=tr[1];
+      closeSheet();
+    }
+  });
+
+  // ---- trip costs ----
+  let tripExp=[['Fuel',1200],['Tolls',180],['Meals',90]];
+  const TRIP={from:'Andijan',to:'Prague',pct:70,depDate:'10 Jun 2026, 08:30',arrDate:'15 Jun 2026',dist:'4,410 km',total:'6,300 km',revenue:8000};
+  const TRIP_EXP=[
+    {cat:'Топливо', note:'Заправка Польша, 400L', by:'Vali Rakhimov', date:'11 Jun, 14:22', amt:3200, icon:'fuel',      ic:'#16A34A', bg:'#ECFDF5'},
+    {cat:'Стоянка', note:'Truck stop Warsaw',      by:'Vali Rakhimov', date:'12 Jun, 08:05', amt:180,  icon:'map',       ic:'#2563EB', bg:'#EFF6FF'},
+    {cat:'Питание', note:'',                        by:'Vali Rakhimov', date:'12 Jun, 13:40', amt:95,   icon:'receipt',   ic:'#EA580C', bg:'#FFF7ED'},
+    {cat:'Мойка',   note:'Мойка на въезде в Германию', by:'Vali Rakhimov', date:'13 Jun, 09:15', amt:60, icon:'life-buoy',ic:'#0284C7', bg:'#F0F9FF'},
+    {cat:'Штраф',   note:'Превышение скорости',    by:'Диспетчер · Азиз', date:'13 Jun, 16:30', amt:240, icon:'alert-triangle', ic:'#DC2626', bg:'#FEF2F2'},
+    {cat:'Сервис/Мастер', note:'Замена колодок',   by:'Диспетчер · Азиз', date:'14 Jun, 11:00', amt:420, icon:'wrench',  ic:'#D97706', bg:'#FFFBEB'},
+  ];
+  function openTripCosts(){
+    const totalExp=TRIP_EXP.reduce((s,e)=>s+e.amt,0);
+    const netProfit=TRIP.revenue-totalExp;
+    const expItems=TRIP_EXP.map((e,i)=>`
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;${i?'border-top:1px solid #F2F4F7':''}">
+        <span style="width:38px;height:38px;border-radius:12px;background:${e.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i data-icon="${e.icon}" style="width:18px;height:18px;color:${e.ic}"></i>
+        </span>
+        <div style="flex:1;min-width:0">
+          <p style="font-size:14px;font-weight:700;color:#0F0F37">${e.cat}${e.note?` <span style="font-weight:400;color:#667085">· ${e.note}</span>`:''}</p>
+          <p style="font-size:11px;color:#98A2B3;margin-top:2px;display:flex;align-items:center;gap:4px"><i data-icon="user" style="width:11px;height:11px"></i>${e.by} · ${e.date}</p>
+        </div>
+        <span style="font-size:14px;font-weight:800;color:#F04438;flex-shrink:0">-$${e.amt.toLocaleString('en-US')}</span>
+      </div>`).join('');
+    openSheet('Рейс: '+TRIP.from+' → '+TRIP.to,
+      `<div style="background:#F9FAFB;border-radius:14px;padding:14px 16px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <span style="font-size:13px;font-weight:700;color:#0F0F37;flex-shrink:0">${TRIP.from}</span>
+          <div style="flex:1;position:relative;height:6px;background:#EAECF0;border-radius:99px">
+            <div style="position:absolute;left:0;top:0;height:100%;width:${TRIP.pct}%;background:#FFCB00;border-radius:99px"></div>
+            <div style="position:absolute;left:${TRIP.pct}%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#FFCB00;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.25)"></div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#0F0F37;flex-shrink:0">${TRIP.to}</span>
+          <span style="font-size:14px;font-weight:800;color:#F97316;flex-shrink:0">${TRIP.pct}%</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding-top:12px;border-top:1px solid #EAECF0">
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Дата отправки</p><p style="font-size:11.5px;font-weight:700;color:#0F0F37">${TRIP.depDate}</p></div>
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Прибытие</p><p style="font-size:11.5px;font-weight:700;color:#0F0F37">${TRIP.arrDate}</p></div>
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Пройдено</p><p style="font-size:11.5px;font-weight:700;color:#0F0F37">${TRIP.dist} / ${TRIP.total}</p></div>
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Доход рейса</p><p style="font-size:11.5px;font-weight:700;color:#17B26A">$${TRIP.revenue.toLocaleString('en-US')}</p></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <p style="font-size:15px;font-weight:700;color:#0F0F37">Расходы рейса</p>
+        <p style="font-size:15px;font-weight:800;color:#F04438">-$${totalExp.toLocaleString('en-US')}</p>
+      </div>
+      ${expItems}
+      <div style="border-top:1px solid #EAECF0;margin-top:8px;padding-top:14px;display:flex;justify-content:space-between;align-items:center">
+        <p style="font-size:14px;color:#667085">Чистая прибыль рейса</p>
+        <p style="font-size:16px;font-weight:800;color:#17B26A">+$${netProfit.toLocaleString('en-US')}</p>
+      </div>`,
+      '', 'Расходы по рейсу · только просмотр');
+  }
+  document.getElementById('tripCostsBtn').addEventListener('click',openTripCosts);
+
+  // ---- monthly stats ----
+  const periods={
+    'This month':{rev:18500,exp:11200,trips:4,idle:8,repair:5,offline:5},
+    'Last month':{rev:16200,exp:10400,trips:3,idle:10,repair:2,offline:6},
+    '6 months':{rev:98400,exp:61300,trips:21,idle:34,repair:12,offline:18},
+    'Year':{rev:205000,exp:131000,trips:46,idle:70,repair:22,offline:35},
+  };
+  let curPeriod='This month';
+  function renderStats(){
+    const p=periods[curPeriod];
+    document.getElementById('st-rev').textContent=money(p.rev);
+    document.getElementById('st-exp').textContent=money(p.exp);
+    document.getElementById('st-prof').textContent=money(p.rev-p.exp);
+    document.getElementById('st-trips').textContent=p.trips;
+    document.getElementById('st-idle').textContent=p.idle;
+    document.getElementById('st-repair').textContent=p.repair;
+    document.getElementById('st-offline').textContent=p.offline;
+    document.getElementById('periodTabs').innerHTML=Object.keys(periods).map(k=>`<button class="seg-tab ${k===curPeriod?'on':''}" data-p="${k}">${k}</button>`).join('');
+    document.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>{curPeriod=b.dataset.p;renderStats();}));
+  }
+  renderStats();
+
+  // ---- expenses: categories + who added ----
+  const CATS=[['fuel','Fuel'],['salary','Salary'],['service','Service'],['insurance','Insurance'],['loan','Loan'],['fine','Fine'],['wash','Wash'],['meals','Meals'],['parking','Parking'],['other','Other']];
+  const CATICON={Fuel:'fuel',Salary:'users',Service:'settings',Insurance:'shield',Loan:'credit-card',Fine:'alert-triangle',Wash:'container',Meals:'receipt',Parking:'route',Other:'receipt'};
+  const TEAM=['Jamshid Turaev (You)','Dilnoza Usmanova','Rustam Nazarov','Shahzod Qodirov'];
+  const expenses=[
+    {cat:'Fuel',amount:1200,by:'Vali Rakhimov',date:'Today, 09:20'},
+    {cat:'Service',amount:850,by:'Rustam Nazarov',date:'Yesterday'},
+    {cat:'Insurance',amount:600,by:'Jamshid Turaev (You)',date:'06/14/2026'},
+  ];
+  function renderExpenses(){
+    document.getElementById('expList').innerHTML = expenses.length ? expenses.map((x,i)=>`
+      <div class="flex items-center gap-3 px-4 py-3 ${i?'border-t border-gray-100':''}">
+        <div class="w-9 h-9 rounded-lg bg-error-50 flex items-center justify-center shrink-0 text-error-600"><i data-icon="${CATICON[x.cat]||'receipt'}" class="w-4.5 h-4.5"></i></div>
+        <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${x.cat}</p><p class="text-[11px] text-gray-400 truncate">by ${x.by} · ${x.date}</p></div>
+        <span class="text-sm font-bold text-error-700 shrink-0">-${x.curr&&x.curr!=='USD'?Number(x.amount).toLocaleString('en-US')+' '+x.curr:money(x.amount)}</span>
+      </div>`).join('') : '<p class="px-4 py-6 text-center text-sm text-gray-400">No expenses yet</p>';
+    Panda.render();
+  }
+  renderExpenses();
+
+  const CHARGE_CATS=[
+    {key:'fuel',    label:'Топливо',   icon:'fuel',           color:'#16A34A',bg:'#ECFDF5'},
+    {key:'salary',  label:'Зарплата',  icon:'user',           color:'#4F46E5',bg:'#EEF2FF'},
+    {key:'parts',   label:'Запчасти',  icon:'settings',       color:'#EA580C',bg:'#FFF7ED'},
+    {key:'service', label:'Сервис',    icon:'wrench',         color:'#D97706',bg:'#FFFBEB'},
+    {key:'insurance',label:'Страховка',icon:'shield',         color:'#667085',bg:'#F9FAFB'},
+    {key:'credit',  label:'Кредит',    icon:'credit-card',    color:'#2563EB',bg:'#EFF6FF'},
+    {key:'fine',    label:'Штраф',     icon:'alert-triangle', color:'#DC2626',bg:'#FEF2F2'},
+    {key:'wash',    label:'Мойка',     icon:'life-buoy',      color:'#0284C7',bg:'#F0F9FF'},
+    {key:'meals',   label:'Питание',   icon:'receipt',        color:'#EA580C',bg:'#FFF7ED'},
+    {key:'parking', label:'Стоянка',   icon:'map',            color:'#2563EB',bg:'#EFF6FF'},
+    {key:'other',   label:'Другое',    icon:'box',            color:'#667085',bg:'#F9FAFB'},
+  ];
+
+  function catGrid(){
+    return `<p style="font-size:13px;color:#98A2B3;margin-top:-4px;margin-bottom:16px">Выберите категорию</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+        ${CHARGE_CATS.map(c=>`
+          <button class="charge-cat" data-key="${c.key}" style="display:flex;flex-direction:column;align-items:center;gap:7px;border-radius:16px;padding:14px 4px 10px;background:${c.bg};border:none;cursor:pointer">
+            <i data-icon="${c.icon}" style="width:26px;height:26px;color:${c.color}"></i>
+            <span style="font-size:10px;font-weight:700;color:${c.color};line-height:1.2;text-align:center">${c.label}</span>
+          </button>`).join('')}
+      </div>`;
+  }
+
+  function openCategoryPicker(){
+    openSheet('Добавить расход', catGrid(), '');
+    setTimeout(()=>{
+      document.querySelectorAll('.charge-cat').forEach(btn=>btn.addEventListener('click',()=>{
+        const cat=CHARGE_CATS.find(c=>c.key===btn.dataset.key); openAmountForm(cat);
+      }));
+    },30);
+  }
+
+  const CURRENCIES=[
+    {code:'USD',sym:'$'},{code:'EUR',sym:'€'},{code:'UZS',sym:'сум'},{code:'RUB',sym:'₽'},
+    {code:'KZT',sym:'₸'},{code:'CNY',sym:'¥'},{code:'GBP',sym:'£'},{code:'PLN',sym:'zł'},{code:'TRY',sym:'₺'},
+  ];
+
+  function openAmountForm(cat){
+    const ph={fuel:'Заправка на АЗС Lukoil, 120L',meals:'Кафе, обед',parking:'Стоянка у склада',wash:'Мойка на ул. Навои',fine:'Превышение скорости',other:'Добавьте комментарий'}[cat.key]||'Добавьте комментарий';
+    const currChips=CURRENCIES.map((c,i)=>`<button class="curr-chip" data-code="${c.code}" data-sym="${c.sym}" style="flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;border:2px solid ${i===0?'#FFCB00':'#EAECF0'};background:${i===0?'#FFCB00':'#F9FAFB'};color:${i===0?'#0F0F37':'#667085'};cursor:pointer;white-space:nowrap">${c.code} <span style="opacity:.7">${c.sym}</span></button>`).join('');
+    openSheet(cat.label,
+      `<p style="font-size:13px;color:#98A2B3;margin-top:-4px">Введите сумму расхода</p>
+      <button id="back-cats" style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#667085;background:none;border:none;cursor:pointer;margin:10px 0 16px"><i data-icon="arrow-left" style="width:15px;height:15px"></i>Назад к категориям</button>
+      <div style="background:#F9FAFB;border-radius:12px;padding:12px 16px;margin-bottom:16px"><p style="font-size:15px;font-weight:700;color:#0F0F37">${cat.label}</p></div>
+      <p style="font-size:11px;font-weight:600;color:#667085;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Валюта</p>
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:16px;scrollbar-width:none">${currChips}</div>
+      <p style="font-size:11px;font-weight:600;color:#667085;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Сумма</p>
+      <div style="position:relative;margin-bottom:16px">
+        <span id="curr-sym" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#98A2B3;font-weight:600;font-size:14px;pointer-events:none">$</span>
+        <input id="charge-amt" class="f-field" style="padding-left:30px" inputmode="decimal" placeholder="0.00">
+      </div>
+      <p style="font-size:11px;font-weight:600;color:#667085;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Комментарий <span style="font-weight:400;text-transform:none;letter-spacing:0">(опционально)</span></p>
+      <div style="position:relative">
+        <input id="charge-note" class="f-field" style="padding-right:44px" placeholder="${ph}">
+        <button id="mic-btn" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:#98A2B3;display:flex;align-items:center">
+          <i data-icon="mic" style="width:18px;height:18px"></i>
+        </button>
+      </div>
+      <p id="mic-status" style="display:none;font-size:11px;color:#F04438;margin-top:6px;font-weight:600">● Говорите...</p>`,
+      `<button id="charge-save" class="btn w-full h-12 rounded-xl font-black text-navy-800 text-[15px]" style="background:#FFCB00;border:2px solid #FFCB00">Сохранить расход</button>`);
+
+    let selCurr='USD';
+    setTimeout(()=>{
+      document.getElementById('back-cats').addEventListener('click', openCategoryPicker);
+
+      // Currency chips
+      document.querySelectorAll('.curr-chip').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          document.querySelectorAll('.curr-chip').forEach(b=>{b.style.background='#F9FAFB';b.style.borderColor='#EAECF0';b.style.color='#667085';});
+          btn.style.background='#FFCB00'; btn.style.borderColor='#FFCB00'; btn.style.color='#0F0F37';
+          document.getElementById('curr-sym').textContent=btn.dataset.sym;
+          selCurr=btn.dataset.code;
+        });
+      });
+
+      // Voice input
+      const micBtn=document.getElementById('mic-btn');
+      const micStatus=document.getElementById('mic-status');
+      micBtn.addEventListener('click',()=>{
+        const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+        if(!SR){alert('Голосовой ввод не поддерживается в этом браузере');return;}
+        const rec=new SR(); rec.lang='ru-RU'; rec.interimResults=false;
+        rec.onstart=()=>{micStatus.style.display='block';micBtn.style.color='#F04438';};
+        rec.onresult=e=>{document.getElementById('charge-note').value=e.results[0][0].transcript;};
+        rec.onend=()=>{micStatus.style.display='none';micBtn.style.color='#98A2B3';};
+        rec.onerror=()=>{micStatus.style.display='none';micBtn.style.color='#98A2B3';};
+        rec.start();
+      });
+
+      // Save
+      document.getElementById('charge-save').addEventListener('click',()=>{
+        const a=parseFloat(document.getElementById('charge-amt').value)||0;
+        if(a>0){expenses.unshift({cat:cat.label,amount:a,curr:selCurr,by:'Jamshid Turaev (You)',date:'Just now'});periods[curPeriod].exp+=a;renderStats();renderExpenses();}
+        closeSheet();
+      });
+    },30);
+  }
+
+  document.getElementById('addExpenseBtn').addEventListener('click', openCategoryPicker);
+  document.querySelectorAll('.quick-charge').forEach(btn=>btn.addEventListener('click',()=>{
+    const cat=CHARGE_CATS.find(c=>c.label===btn.dataset.cat)||CHARGE_CATS[CHARGE_CATS.length-1];
+    openAmountForm(cat);
+  }));
+
+  // ---- trip history ----
+  const trips=[
+    {from:'Tashkent',to:'Andijan',date:'06/01/2026',km:'390 km',cargo:'Juice',status:'done',
+      incomes:[{cat:'Фрахт',note:'Оплата за рейс',by:'Диспетчер · Азиз',date:'02 Jun, 09:00',amt:4000,icon:'receipt',ic:'#16A34A',bg:'#ECFDF5'}],
+      expenses:[
+        {cat:'Топливо',note:'Заправка 100L',by:'Vali Rakhimov',date:'01 Jun, 08:30',amt:820,icon:'fuel',ic:'#16A34A',bg:'#ECFDF5',cancelled:false},
+        {cat:'Питание',note:'',by:'Vali Rakhimov',date:'01 Jun, 13:20',amt:45,icon:'navigation',ic:'#F97316',bg:'#FFF7ED',cancelled:false},
+        {cat:'Стоянка',note:'',by:'Vali Rakhimov',date:'01 Jun, 20:15',amt:30,icon:null,ic:'#2563EB',bg:'#EFF6FF',cancelled:true},
+        {cat:'Мойка',note:'Мойка перед сдачей',by:'Vali Rakhimov',date:'02 Jun, 07:45',amt:25,icon:'life-buoy',ic:'#0284C7',bg:'#F0F9FF',cancelled:false},
+      ]},
+    {from:'Andijan',to:'Almaty',date:'05/24/2026',km:'920 km',cargo:'Textile',status:'done',
+      incomes:[{cat:'Фрахт',note:'Транзит через Казахстан',by:'Диспетчер · Азиз',date:'25 May, 10:00',amt:6200,icon:'receipt',ic:'#16A34A',bg:'#ECFDF5'}],
+      expenses:[
+        {cat:'Топливо',note:'АЗС Казмунай, 200L',by:'Vali Rakhimov',date:'24 May, 09:15',amt:1700,icon:'fuel',ic:'#16A34A',bg:'#ECFDF5',cancelled:false},
+        {cat:'Стоянка',note:'Алматы ТЛЦ',by:'Vali Rakhimov',date:'24 May, 22:00',amt:80,icon:null,ic:'#2563EB',bg:'#EFF6FF',cancelled:false},
+        {cat:'Питание',note:'',by:'Vali Rakhimov',date:'25 May, 12:30',amt:40,icon:'navigation',ic:'#F97316',bg:'#FFF7ED',cancelled:false},
+        {cat:'Штраф',note:'Нарушение на таможне',by:'Диспетчер · Азиз',date:'25 May, 16:00',amt:500,icon:'alert-triangle',ic:'#DC2626',bg:'#FEF2F2',cancelled:false},
+      ]},
+    {from:'Samarkand',to:'Moscow',date:'05/12/2026',km:'3,400 km',cargo:'Fruit',status:'done',
+      incomes:[{cat:'Фрахт',note:'Международный рейс',by:'Диспетчер · Азиз',date:'13 May, 08:00',amt:9800,icon:'receipt',ic:'#16A34A',bg:'#ECFDF5'}],
+      expenses:[
+        {cat:'Топливо',note:'Несколько заправок',by:'Vali Rakhimov',date:'12 May, 07:00',amt:4200,icon:'fuel',ic:'#16A34A',bg:'#ECFDF5',cancelled:false},
+        {cat:'Стоянка',note:'Трасса M4',by:'Vali Rakhimov',date:'13 May, 20:00',amt:120,icon:null,ic:'#2563EB',bg:'#EFF6FF',cancelled:false},
+        {cat:'Сервис',note:'Замена масла',by:'Vali Rakhimov',date:'14 May, 10:00',amt:300,icon:'wrench',ic:'#D97706',bg:'#FFFBEB',cancelled:false},
+        {cat:'Мойка',note:'',by:'Vali Rakhimov',date:'15 May, 08:30',amt:60,icon:'life-buoy',ic:'#0284C7',bg:'#F0F9FF',cancelled:false},
+      ]},
+  ];
+
+  function tripIconHTML(exp){
+    if(exp.icon) return `<i data-icon="${exp.icon}" style="width:18px;height:18px;color:${exp.ic}"></i>`;
+    return `<span style="font-size:14px;font-weight:900;color:${exp.ic};line-height:1">P</span>`;
+  }
+
+  function tripDetail(t){
+    const totalInc=t.incomes.reduce((s,e)=>s+e.amt,0);
+    const totalExp=t.expenses.filter(e=>!e.cancelled).reduce((s,e)=>s+e.amt,0);
+    const profit=totalInc-totalExp;
+    const statusLabel=t.status==='done'?'Завершён':'В рейсе';
+    const statusStyle=t.status==='done'?'background:#ECFDF5;color:#16A34A':'background:#ECFDF5;color:#17B26A';
+
+    const incomeRows=t.incomes.map((e,i)=>`
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 0;${i?'border-top:1px solid #F2F4F7':''}">
+        <span style="width:38px;height:38px;border-radius:12px;background:${e.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i data-icon="${e.icon}" style="width:18px;height:18px;color:${e.ic}"></i>
+        </span>
+        <div style="flex:1;min-width:0">
+          <p style="font-size:14px;font-weight:700;color:#0F0F37">${e.cat}${e.note?' <span style="font-weight:400;color:#667085">· '+e.note+'</span>':''}</p>
+          <p style="font-size:11px;color:#98A2B3;margin-top:2px;display:flex;align-items:center;gap:4px"><i data-icon="user" style="width:11px;height:11px"></i>${e.by} · ${e.date}</p>
+        </div>
+        <span style="font-size:14px;font-weight:800;color:#17B26A;flex-shrink:0">+$${e.amt.toLocaleString('en-US')}</span>
+        <span style="width:32px;height:32px;border-radius:10px;background:#FEF2F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer"><i data-icon="x" style="width:14px;height:14px;color:#F04438"></i></span>
+      </div>`).join('');
+
+    const expRows=t.expenses.map((e,i)=>`
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:14px 0;${i?'border-top:1px solid #F2F4F7':''}">
+        <span style="width:38px;height:38px;border-radius:12px;background:${e.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          ${tripIconHTML(e)}
+        </span>
+        <div style="flex:1;min-width:0">
+          <p style="font-size:14px;font-weight:700;color:${e.cancelled?'#98A2B3':'#0F0F37'}">
+            ${e.cancelled?'<span style="text-decoration:line-through">'+e.cat+'</span> <span style="font-size:10px;font-weight:700;color:#F04438;background:#FEF2F2;border-radius:6px;padding:1px 6px;vertical-align:middle">аннул.</span>':e.cat+' '}
+            ${(!e.cancelled&&e.note)?'<span style="font-weight:400;color:#667085">· '+e.note+'</span>':''}
+          </p>
+          <p style="font-size:11px;color:#98A2B3;margin-top:2px;display:flex;align-items:center;gap:4px"><i data-icon="user" style="width:11px;height:11px"></i>${e.by} · ${e.date}</p>
+        </div>
+        <span style="font-size:14px;font-weight:800;color:${e.cancelled?'#98A2B3':'#F04438'};flex-shrink:0;${e.cancelled?'text-decoration:line-through':''}">-$${e.amt.toLocaleString('en-US')}</span>
+        <span style="width:32px;height:32px;border-radius:10px;background:${e.cancelled?'#ECFDF5':'#FEF2F2'};display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer">
+          ${e.cancelled?'<i data-icon="rotate-ccw" style="width:14px;height:14px;color:#17B26A"></i>':'<i data-icon="x" style="width:14px;height:14px;color:#F04438"></i>'}
+        </span>
+      </div>`).join('');
+
+    openSheet(t.from+' → '+t.to,
+      `<div style="background:#F9FAFB;border-radius:14px;padding:14px 16px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <span style="font-size:13px;font-weight:700;color:#0F0F37;flex-shrink:0">${t.from}</span>
+          <div style="flex:1;position:relative;height:6px;background:#EAECF0;border-radius:99px">
+            <div style="position:absolute;left:0;top:0;height:100%;width:100%;background:#FFCB00;border-radius:99px"></div>
+            <div style="position:absolute;left:100%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#FFCB00;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.25)"></div>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#0F0F37;flex-shrink:0">${t.to}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding-top:12px;border-top:1px solid #EAECF0">
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Дата</p><p style="font-size:11.5px;font-weight:700;color:#0F0F37">${t.date}</p></div>
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Км</p><p style="font-size:11.5px;font-weight:700;color:#0F0F37">${t.km}</p></div>
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Груз</p><p style="font-size:11.5px;font-weight:700;color:#0F0F37">${t.cargo}</p></div>
+          <div><p style="font-size:10px;color:#98A2B3;margin-bottom:3px">Прибыль</p><p style="font-size:11.5px;font-weight:700;color:#17B26A">+$${profit.toLocaleString('en-US')}</p></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #EAECF0;border-radius:14px;overflow:hidden;margin-bottom:20px">
+        <div style="padding:12px;text-align:center;border-right:1px solid #EAECF0">
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">ДОХОД</p>
+          <p style="font-size:16px;font-weight:800;color:#17B26A">+$${totalInc.toLocaleString('en-US')}</p>
+        </div>
+        <div style="padding:12px;text-align:center;border-right:1px solid #EAECF0">
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">РАСХОД</p>
+          <p style="font-size:16px;font-weight:800;color:#F04438">-$${totalExp.toLocaleString('en-US')}</p>
+        </div>
+        <div style="padding:12px;text-align:center">
+          <p style="font-size:10px;font-weight:700;color:#667085;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">ИТОГ</p>
+          <p style="font-size:16px;font-weight:800;color:#17B26A">+$${profit.toLocaleString('en-US')}</p>
+        </div>
+      </div>
+      <p style="font-size:11px;font-weight:700;color:#98A2B3;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">ДОХОДЫ</p>
+      <div style="border-top:1px solid #F2F4F7">${incomeRows}</div>
+      <p style="font-size:11px;font-weight:700;color:#98A2B3;letter-spacing:.08em;text-transform:uppercase;margin-top:12px;margin-bottom:4px">РАСХОДЫ</p>
+      <div style="border-top:1px solid #F2F4F7">${expRows}</div>`,
+      '',null,
+      `<span style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;${statusStyle}">${statusLabel}</span>`);
+  }
+
+  document.getElementById('trips').innerHTML=trips.map((t,i)=>`
+    <button data-trip="${i}" class="w-full text-left flex items-center gap-3 px-4 py-3 ${i?'border-t border-gray-100':''} hover:bg-gray-50">
+      <div class="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center shrink-0 text-navy-700"><i data-icon="route" class="w-4.5 h-4.5"></i></div>
+      <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800 truncate">${t.from} → ${t.to}</p><p class="text-[11px] text-gray-400">${t.date} · ${t.km} · ${t.cargo}</p></div>
+      <span class="text-sm font-bold text-success-700">$${t.incomes.reduce((s,e)=>s+e.amt,0).toLocaleString('en-US')}</span>
+    </button>`).join('');
+  document.querySelectorAll('[data-trip]').forEach(b=>b.addEventListener('click',()=>{tripDetail(trips[+b.dataset.trip]);Panda.render();}));
+
+  const allTrips=trips.concat([
+    {from:'Bukhara',to:'Tashkent',date:'04/28/2026',km:'460 km',cargo:'Cotton',status:'done',
+      incomes:[{cat:'Фрахт',note:'',by:'Диспетчер · Азиз',date:'28 Apr, 09:00',amt:3800,icon:'receipt',ic:'#16A34A',bg:'#ECFDF5'}],
+      expenses:[{cat:'Топливо',note:'',by:'Vali Rakhimov',date:'28 Apr, 08:00',amt:1000,icon:'fuel',ic:'#16A34A',bg:'#ECFDF5',cancelled:false},{cat:'Стоянка',note:'',by:'Vali Rakhimov',date:'28 Apr, 21:00',amt:120,icon:null,ic:'#2563EB',bg:'#EFF6FF',cancelled:false}]},
+    {from:'Tashkent',to:'Bishkek',date:'04/15/2026',km:'680 km',cargo:'Electronics',status:'done',
+      incomes:[{cat:'Фрахт',note:'',by:'Диспетчер · Азиз',date:'16 Apr, 09:00',amt:5400,icon:'receipt',ic:'#16A34A',bg:'#ECFDF5'}],
+      expenses:[{cat:'Топливо',note:'',by:'Vali Rakhimov',date:'15 Apr, 07:30',amt:1400,icon:'fuel',ic:'#16A34A',bg:'#ECFDF5',cancelled:false},{cat:'Штраф',note:'Граница',by:'Vali Rakhimov',date:'15 Apr, 14:00',amt:200,icon:'alert-triangle',ic:'#DC2626',bg:'#FEF2F2',cancelled:false}]},
+  ]);
+  document.getElementById('seeAllTrips').addEventListener('click',()=>{
+    openSheet('Trip history',`<div style="padding-top:4px">${allTrips.map((t,i)=>`
+      <button data-allt="${i}" style="width:100%;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 0;${i?'border-top:1px solid #F2F4F7':''}background:none;border-left:none;border-right:none;border-bottom:none;cursor:pointer">
+        <span style="width:36px;height:36px;border-radius:10px;background:#F0F5FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-icon="route" style="width:18px;height:18px;color:#444CE7"></i></span>
+        <div style="flex:1;min-width:0"><p style="font-size:14px;font-weight:700;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.from} → ${t.to}</p><p style="font-size:11px;color:#98A2B3;margin-top:2px">${t.date} · ${t.km} · ${t.cargo}</p></div>
+        <span style="font-size:14px;font-weight:800;color:#17B26A;flex-shrink:0">$${t.incomes.reduce((s,e)=>s+e.amt,0).toLocaleString('en-US')}</span>
+      </button>`).join('')}</div>`,'');
+    setTimeout(()=>document.querySelectorAll('[data-allt]').forEach(b=>b.addEventListener('click',()=>{tripDetail(allTrips[+b.dataset.allt]);Panda.render();})),30);
+  });
+
+  // ---- assignment history tabs ----
+  const AH={
+    drivers:[['09/02/2026 — Now','Vali Rakhimov','+998 90 727 77 22'],['01/03/2026 — 09/02/2026','Ali Karimov','+998 90 727 77 22'],['05/10/2025 — 01/03/2026','Bek Nazarov','+998 91 100 22 33']],
+    trailers:[['04/01/2026 — Now','Kogel','60 H 545 AA'],['01/01/2026 — 04/01/2026','Kogel','60 H 457 AA'],['08/01/2025 — 01/01/2026','Krone','75 A 112 BC']],
+  };
+  function renderAH(tab){
+    document.getElementById('ah-list').innerHTML=AH[tab].map(([p,n,x])=>`
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="${tab==='drivers'?'user':'container'}" class="w-4.5 h-4.5"></i></div>
+        <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${n} <span class="text-xs text-gray-400 font-normal">${x}</span></p><p class="text-[11px] text-gray-400">${p}</p></div>
+      </div>`).join('');
+    document.querySelectorAll('.ah-tab').forEach(b=>{
+      const on=b.dataset.ah===tab;
+      b.className='ah-tab flex-1 text-center text-sm font-semibold py-2 rounded-md '+(on?'bg-white text-navy-800 shadow-xs':'text-gray-500');
+    });
+    Panda.render();
+  }
+  document.querySelectorAll('.ah-tab').forEach(b=>b.addEventListener('click',()=>renderAH(b.dataset.ah)));
+  renderAH('drivers');
+
+  // ---- documents ----
+  const DS={ok:{cls:'bg-success-50 text-success-700',label:'Активен',dot:'#17B26A'},soon:{cls:'bg-warning-50 text-warning-700',label:'Истекает',dot:'#F79009'},crit:{cls:'bg-error-50 text-error-700',label:'Критично',dot:'#F04438'}};
+  const docs=[
+    {name:'Техпаспорт',    status:'ok',   expiry:'2027-03-15', daysLeft:'240 дней', icon:'file-text',      photo:null},
+    {name:'Страховка',     status:'soon', expiry:'2026-07-22', daysLeft:'28 дней',  icon:'shield',         photo:null},
+    {name:'Путевой лист',  status:'crit', expiry:'2026-06-30', daysLeft:'6 дней',   icon:'clipboard-list', photo:null},
+  ];
+  function renderDocs(){
+    document.getElementById('docs').innerHTML=docs.map((d,i)=>{const s=DS[d.status];return `
+      <button data-doc="${i}" class="w-full text-left flex items-center gap-3 px-4 py-3.5 ${i?'border-t border-gray-100':''} hover:bg-gray-50">
+        <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="${d.icon}" class="w-4.5 h-4.5"></i></div>
+        <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${d.name}</p><p class="text-[11px] text-gray-400">${d.daysLeft} · до ${d.expiry}</p></div>
+        <span class="inline-flex items-center gap-1.5 ${s.cls} text-[11px] font-semibold px-2 py-1 rounded-full shrink-0"><span class="dot" style="background:${s.dot}"></span>${s.label}</span>
+        <i data-icon="chevron-right" class="w-4 h-4 text-gray-300 shrink-0"></i>
+      </button>`;}).join('');
+    Panda.render();
+    document.querySelectorAll('[data-doc]').forEach(b=>b.addEventListener('click',()=>openDocSheet(+b.dataset.doc)));
+  }
+  function openDocSheet(i){
+    const d=docs[i];
+    const photoPreview=d.photo?`<img id="doc-preview" src="${d.photo}" style="width:100%;height:160px;object-fit:cover;border-radius:14px;display:block">`:
+      `<div id="doc-preview-placeholder" style="width:100%;height:160px;border-radius:14px;background:#F9FAFB;border:2px dashed #EAECF0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+        <i data-icon="image" style="width:32px;height:32px;color:#D0D5DD"></i>
+        <p style="font-size:13px;color:#98A2B3;font-weight:500">Фото не загружено</p>
+      </div>`;
+    openSheet(d.name,
+      `${photoPreview}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;margin-bottom:20px">
+        <label style="border:1.5px solid #EAECF0;border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;background:#FAFAFA">
+          <span style="width:40px;height:40px;border-radius:12px;background:#F0F5FF;display:flex;align-items:center;justify-content:center"><i data-icon="camera" style="width:20px;height:20px;color:#444CE7"></i></span>
+          <span style="font-size:13px;font-weight:600;color:#0F0F37;text-align:center">Сфотографировать</span>
+          <input id="doc-cam-${i}" type="file" accept="image/*" capture="environment" style="display:none">
+        </label>
+        <label style="border:1.5px solid #EAECF0;border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;background:#FAFAFA">
+          <span style="width:40px;height:40px;border-radius:12px;background:#F0F5FF;display:flex;align-items:center;justify-content:center"><i data-icon="upload" style="width:20px;height:20px;color:#444CE7"></i></span>
+          <span style="font-size:13px;font-weight:600;color:#0F0F37;text-align:center">Загрузить файл</span>
+          <input id="doc-file-${i}" type="file" accept="image/*,application/pdf" style="display:none">
+        </label>
+      </div>
+      <label style="font-size:11px;font-weight:600;color:#667085;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Дата истечения</label>
+      <input id="doc-expiry-${i}" type="date" class="f-field" value="${d.expiry}">`,
+      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Отмена</button><button id="doc-save-${i}" class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Сохранить</button>`);
+    setTimeout(()=>{
+      const handleFile=(file)=>{
+        if(!file)return;
+        const reader=new FileReader();
+        reader.onload=ev=>{
+          docs[i].photo=ev.target.result;
+          const ph=document.getElementById('doc-preview-placeholder');
+          const pr=document.getElementById('doc-preview');
+          if(ph){ph.outerHTML=`<img id="doc-preview" src="${ev.target.result}" style="width:100%;height:160px;object-fit:cover;border-radius:14px;display:block">`;}
+          else if(pr){pr.src=ev.target.result;}
+        };
+        reader.readAsDataURL(file);
+      };
+      document.getElementById('doc-cam-'+i).addEventListener('change',e=>handleFile(e.target.files[0]));
+      document.getElementById('doc-file-'+i).addEventListener('change',e=>handleFile(e.target.files[0]));
+      document.getElementById('doc-save-'+i).addEventListener('click',()=>{
+        const newExp=document.getElementById('doc-expiry-'+i).value;
+        if(newExp) docs[i].expiry=newExp;
+        renderDocs(); closeSheet();
+      });
+    },30);
+  }
+  renderDocs();
+
+  // ---- gallery dots ----
+  const gal=document.getElementById('gallery'), dots=document.getElementById('dots'), n=gal.children.length;
+  for(let i=0;i<n;i++){const d=document.createElement('span');d.className='rounded-full bg-white/60 transition-all';d.style.cssText='width:7px;height:7px';dots.appendChild(d);}
+  function setDot(){const i=Math.round(gal.scrollLeft/gal.clientWidth);[...dots.children].forEach((d,j)=>{d.style.width=j===i?'18px':'7px';d.style.background=j===i?'#fff':'rgba(255,255,255,.6)';});}
+  gal.addEventListener('scroll',setDot); setDot();
+
+  // ---- mini map: route with start & destination ----
+  const miniLine=[[40.78,72.34],[44,55],[48,40],[50.45,30.52],[50.07,14.43]];
+  const cur=[52.0,19.0];
+  const mini=L.map('mini',{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false}).setView(cur,4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(mini);
+  L.polyline(miniLine,{color:'#0F0F37',weight:3,opacity:.85,dashArray:'2 8',lineCap:'round'}).addTo(mini);
+  L.marker(miniLine[0],{icon:L.divIcon({className:'',iconSize:[14,14],iconAnchor:[7,7],html:'<div style="width:14px;height:14px;border-radius:50%;background:#fff;border:4px solid #17B26A;box-shadow:0 1px 3px rgba(16,24,40,.3)"></div>'})}).addTo(mini);
+  L.marker(miniLine[miniLine.length-1],{icon:L.divIcon({className:'',iconSize:[22,22],iconAnchor:[11,22],html:'<div style="width:20px;height:20px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#0F0F37;border:2px solid #fff;display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);font-size:10px">🏁</span></div>'})}).addTo(mini);
+  L.marker(cur,{icon:L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,26],html:`<div style="width:24px;height:24px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#FFCB00;border:2px solid #fff;box-shadow:0 0 0 4px rgba(255,203,0,.3);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="12" height="12" fill="#0F0F37" style="transform:rotate(45deg)">${window.PANDA_ICONS['truck']}</svg></div>`})}).addTo(mini);
+  mini.fitBounds(L.latLngBounds(miniLine).pad(0.15));
+
+  Panda.render();
+</script>
+</body>
+</html>

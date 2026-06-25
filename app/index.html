@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avtopakt Fura — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+<style>body{background:#0F0F37}</style>
+</head>
+<body>
+<div class="max-w-5xl mx-auto px-6 py-12 text-white">
+  <div class="flex items-center gap-3 mb-2">
+    <img src="assets/logo.svg" class="w-12 h-12 rounded-xl">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight">Avtopakt&nbsp;Fura</h1>
+      <p class="text-navy-200 text-sm">Prototype · Panda Icons · mobile app</p>
+    </div>
+  </div>
+  <p class="text-navy-200 text-sm mb-10 max-w-2xl">Fleet management for logistics. Tap any screen to open.</p>
+
+  <h2 class="text-xs uppercase tracking-wider text-navy-300 font-semibold mb-3">0 · Auth & Subscription</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10" id="auth"></div>
+
+  <h2 class="text-xs uppercase tracking-wider text-navy-300 font-semibold mb-3">Core modules</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10" id="main"></div>
+
+  <h2 class="text-xs uppercase tracking-wider text-navy-300 font-semibold mb-3">Garage · details</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10" id="detail"></div>
+
+  <h2 class="text-xs uppercase tracking-wider text-navy-300 font-semibold mb-3">Profile · sections</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="profile"></div>
+</div>
+<script>
+  const groups={
+    auth:[['login.html','Sign in','arrow-right'],['otp.html','OTP verify','shield-check'],['create-company.html','Create company','building-2'],['plans.html','Choose plan','badge-check'],['payment.html','Payment','credit-card'],['subscription-expired.html','Expired','lock']],
+    main:[['fleet.html','Fleet','truck'],['map.html','Map','map'],['analytics.html','Analytics','bar-chart-3'],['garage-trucks.html','Garage','warehouse'],['profile.html','Profile','user']],
+    detail:[['garage-trucks.html','Trucks','truck'],['garage-drivers.html','Drivers','users'],['garage-trailers.html','Trailers','container'],['truck-detail.html','Truck card','file-text'],['driver-detail.html','Driver card','id-card'],['trailer-detail.html','Trailer card','container']],
+    profile:[['profile.html','Profile','user'],['subscription.html','Subscription','star'],['plans.html','Plans','layers'],['billing.html','Billing','receipt'],['team.html','Team','users-round'],['settings.html','Settings','settings']],
+  };
+  for(const [id,items] of Object.entries(groups)){
+    document.getElementById(id).innerHTML = items.map(([href,label,icon])=>`
+      <a href="${href}" class="group rounded-2xl bg-white/5 ring-1 ring-white/10 p-4 hover:ring-primary-500 hover:bg-white/10 transition">
+        <div class="w-10 h-10 rounded-lg bg-primary-500/15 flex items-center justify-center mb-3 text-primary-500"><i data-icon="${icon}" class="w-5 h-5"></i></div>
+        <div class="text-sm font-semibold text-white">${label}</div>
+        <div class="text-xs text-navy-300 mt-0.5">${href}</div>
+      </a>`).join('');
+  }
+  Panda.render();
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+</head>
+<body>
+<div class="app">
+  <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
+    <a href="profile.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
+    <h1 class="text-base font-semibold text-navy-800">Security</h1>
+  </div>
+
+  <div class="app-scroll bg-gray-50 px-4 py-5 space-y-5">
+    <div>
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-1">Sign-in</p>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+        <button data-act="password" class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 text-left">
+          <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="lock" class="w-4.5 h-4.5"></i></div>
+          <span class="flex-1 text-sm font-semibold text-navy-800">Change password</span>
+          <i data-icon="chevron-right" class="w-4.5 h-4.5 text-gray-300"></i>
+        </button>
+        <div class="border-t border-gray-100"></div>
+        <div class="flex items-center gap-3 px-4 py-3.5">
+          <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="shield-check" class="w-4.5 h-4.5"></i></div>
+          <div class="flex-1"><p class="text-sm font-semibold text-navy-800">Two-factor auth</p><p class="text-[11px] text-gray-400">Extra layer of protection</p></div>
+          <button id="twofa" class="w-11 h-6 rounded-full bg-primary-500 relative transition-colors"><span class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow transition-all"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-1">Activity</p>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
+        <button data-act="history" class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 text-left">
+          <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="history" class="w-4.5 h-4.5"></i></div>
+          <span class="flex-1 text-sm font-semibold text-navy-800">Login history</span>
+          <i data-icon="chevron-right" class="w-4.5 h-4.5 text-gray-300"></i>
+        </button>
+        <div class="border-t border-gray-100"></div>
+        <button data-act="devices" class="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 text-left">
+          <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="monitor-smartphone" class="w-4.5 h-4.5"></i></div>
+          <span class="flex-1 text-sm font-semibold text-navy-800">Active devices</span>
+          <span class="text-sm text-gray-400 mr-1">3</span>
+          <i data-icon="chevron-right" class="w-4.5 h-4.5 text-gray-300"></i>
+        </button>
+      </div>
+    </div>
+
+    <button class="btn w-full h-12 rounded-lg bg-white border border-gray-200 text-error-600 text-sm font-semibold flex items-center justify-center gap-2"><i data-icon="log-out" class="w-4 h-4"></i>Log out of all devices</button>
+  </div>
+
+  <div id="sheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 id="s-title" class="text-lg font-bold text-navy-800">—</h2>
+        <button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
+      </div>
+      <div class="sheet-body" id="s-body"></div>
+      <div class="sheet-foot" id="s-foot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ov=document.getElementById('sheet');
+  const body=document.getElementById('s-body'), foot=document.getElementById('s-foot'), title=document.getElementById('s-title');
+  function open(t,b,f){title.textContent=t;body.innerHTML=b;foot.innerHTML=f||'';Panda.render();ov.classList.add('open');
+    foot.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));}
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
+  ov.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+
+  const acts={
+    password:()=>open('Change password',
+      `<div class="space-y-4">
+        <div><label class="f-label">Current password</label><input type="password" class="f-field" placeholder="••••••••"></div>
+        <div><label class="f-label">New password</label><input type="password" class="f-field" placeholder="At least 8 characters"></div>
+        <div><label class="f-label">Confirm new password</label><input type="password" class="f-field" placeholder="Repeat new password"></div>
+      </div>`,
+      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold hover:bg-gray-50">Cancel</button>
+       <button data-close class="btn flex-1 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold">Update</button>`),
+    history:()=>{
+      const rows=[
+        ['Tashkent, UZ','iPhone 15 Pro · Safari','Today, 09:41',true],
+        ['Tashkent, UZ','MacBook Pro · Chrome','Yesterday, 18:22',false],
+        ['Samarkand, UZ','iPhone 15 Pro · App','06/14/2026, 11:05',false],
+        ['Tashkent, UZ','Windows PC · Chrome','06/12/2026, 08:50',false],
+      ];
+      open('Login history', rows.map(r=>`
+        <div class="flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
+          <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="monitor-smartphone" class="w-4.5 h-4.5"></i></div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-navy-800">${r[1]}</p>
+            <p class="text-[12px] text-gray-500">${r[0]} · ${r[2]}</p>
+          </div>
+          ${r[3]?'<span class="text-[10px] font-semibold text-success-700 bg-success-50 px-2 py-0.5 rounded-full">Current</span>':''}
+        </div>`).join(''),
+        `<button data-close class="btn w-full h-12 rounded-lg bg-navy-800 text-white font-bold">Close</button>`);
+    },
+    devices:()=>{
+      const rows=[
+        ['iPhone 15 Pro','Tashkent · this device',true],
+        ['MacBook Pro','Tashkent · 2 days ago',false],
+        ['Windows PC','Tashkent · 5 days ago',false],
+      ];
+      open('Active devices', rows.map((r,i)=>`
+        <div class="flex items-center gap-3 py-3 border-b border-gray-100 last:border-0">
+          <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-600"><i data-icon="monitor-smartphone" class="w-4.5 h-4.5"></i></div>
+          <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${r[0]}</p><p class="text-[12px] text-gray-500">${r[1]}</p></div>
+          ${r[2]?'<span class="text-[10px] font-semibold text-success-700 bg-success-50 px-2 py-0.5 rounded-full">Active</span>':'<button class="text-xs font-semibold text-error-600 px-2 py-1 rounded-lg hover:bg-error-50">Log out</button>'}
+        </div>`).join(''),
+        `<button data-close class="btn w-full h-12 rounded-lg bg-navy-800 text-white font-bold">Close</button>`);
+    },
+  };
+  document.querySelectorAll('[data-act]').forEach(b=>b.addEventListener('click',()=>acts[b.dataset.act]()));
+
+  document.getElementById('twofa').addEventListener('click',function(){
+    const on=this.classList.toggle('bg-primary-500'); this.classList.toggle('bg-gray-200',!on);
+    this.querySelector('span').classList.toggle('right-0.5',on); this.querySelector('span').classList.toggle('left-0.5',!on);
+  });
+
+  Panda.render();
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Map — Avtopakt Fura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="assets/tw.js?v=23"></script>
+<link rel="stylesheet" href="assets/styles.css?v=23">
+<script src="assets/panda.js?v=23"></script>
+<style>
+  .truck-popup .leaflet-popup-content-wrapper{position:relative;border-radius:15px;padding:0;box-shadow:0 10px 24px -8px rgba(15,15,55,.4);overflow:hidden;}
+  .truck-popup .leaflet-popup-content{margin:0;width:176px!important;}
+  .truck-popup .leaflet-popup-tip{background:#fff;width:11px;height:11px;}
+  .tp-img{width:100%;height:80px;object-fit:cover;display:block;}
+  .tp-body{padding:7px 9px 9px;}
+  .tp-type{font-size:9.5px;color:#98A2B3;}
+  .tp-name{font-size:13.5px;font-weight:800;color:#0F0F37;margin-top:0;}
+  .tp-status{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:999px;margin-top:5px;}
+  .tp-row{font-size:10.5px;color:#667085;margin-top:4px;}
+  .tp-row b{color:#0F0F37;font-weight:700;}
+  .tp-prog{height:5px;border-radius:999px;background:#EAECF0;margin-top:6px;overflow:hidden;}
+  .tp-prog-bar{height:100%;border-radius:999px;background:#17B26A;}
+  .tp-close{position:absolute;top:6px;right:6px;z-index:1000;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 2px 5px rgba(16,24,40,.2);display:flex;align-items:center;justify-content:center;font-size:15px;color:#475467;line-height:1;border:0;cursor:pointer;}
+  .cluster-pin{width:36px;height:36px;border-radius:50%;background:#FFCB00;border:3px solid #fff;box-shadow:0 4px 12px rgba(16,24,40,.35);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0F0F37;font-family:'Inter',sans-serif;}
+  .cluster-pin.big{width:44px;height:44px;font-size:15px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="relative" style="height:100vh">
+    <div id="map" class="absolute inset-0 z-0"></div>
+
+    <!-- title + status tabs -->
+    <div class="absolute top-4 left-0 right-0 px-4 z-[400]">
+      <h1 class="text-2xl font-bold text-navy-800 tracking-tight mb-3 drop-shadow-sm">Map</h1>
+      <div class="flex gap-2 overflow-x-auto hide-scroll" data-tabs>
+        <button class="seg-tab on shadow-md">All 48</button>
+        <button class="seg-tab shadow-md">On trip 12</button>
+        <button class="seg-tab shadow-md">Idle 18</button>
+        <button class="seg-tab shadow-md">Repair 4</button>
+        <button class="seg-tab shadow-md">No signal 2</button>
+      </div>
+    </div>
+
+    <div id="hint" class="absolute left-4 right-4 bottom-[28px] z-[300] text-center text-[13px] font-medium text-gray-600 bg-white/90 backdrop-blur rounded-full py-2.5 shadow-md">
+      Tap a truck marker to view details
+    </div>
+  </div>
+</div>
+
+<script>
+  const ST={
+    trip:{label:'On trip',color:'#17B26A',cls:'bg-success-50 text-success-700'},
+    idle:{label:'Idle',color:'#2E90FA',cls:'bg-blue-50 text-blue-700'},
+    repair:{label:'Repair',color:'#F79009',cls:'bg-warning-50 text-warning-700'},
+    nosignal:{label:'No signal',color:'#667085',cls:'bg-gray-100 text-gray-600'},
+    done:{label:'Shift ended',color:'#475467',cls:'bg-gray-100 text-gray-700'},
+  };
+  const RB=[[40.78,72.34],[41.31,69.24],[39.65,66.96],[43.0,59.0],[46.0,48.0],[48.7,44.5],[51.5,39.2],[52.5,31.0],[50.45,30.52],[49.8,24.0],[50.07,14.43]];
+  const trucks=[
+    {name:'Volvo FH16',type:'Tractor · 2019',driver:'Alisher Karimov',mileage:'312,400 km',st:'trip',prog:74,img:'truck1',pos:[52.0,21.0],zoom:5,line:RB},
+    {name:'DAF XF 105',type:'Tractor · 2018',driver:'Vali Rakhimov',mileage:'458,300 km',st:'trip',prog:37,img:'truck4',pos:[42.8,73.5],zoom:6,line:[[41.31,69.24],[42.0,71.0],[42.8,73.5],[43.24,76.95]]},
+    {name:'Scania R500',type:'Tractor · 2021',driver:'Bakhtiyor Yuldashev',mileage:'401,900 km',st:'nosignal',img:'truck2',pos:[43.24,76.95],zoom:8,line:[[43.05,76.6],[43.24,76.95]]},
+    {name:'MAN TGX',type:'Tractor · 2020',driver:'No driver',mileage:'620,000 km',st:'repair',img:'truck3',pos:[39.65,66.96],zoom:8,line:[[39.5,66.7],[39.65,66.96]]},
+    {name:'Mercedes Actros',type:'Tractor · 2023',driver:'Sardor Kholmatov',mileage:'280,100 km',st:'idle',img:'truck5',pos:[55.75,37.62],zoom:7,line:[[55.6,37.4],[55.75,37.62]]},
+    {name:'Renault T High',type:'Tractor · 2019',driver:'Jasur Ergashev',mileage:'510,000 km',st:'done',img:'truck6',pos:[50.07,14.43],zoom:7,line:[[49.9,14.2],[50.07,14.43]]},
+  ];
+
+  const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([47,55],4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
+  L.control.attribution({position:'bottomleft',prefix:false}).addAttribution('© OpenStreetMap, © CARTO').addTo(map);
+  const routeLayer=L.layerGroup().addTo(map);
+
+  function truckPin(color,sel){const sz=sel?38:30,ic=sel?20:15;const ring=sel?`box-shadow:0 0 0 6px ${color}33,0 6px 14px rgba(16,24,40,.35);`:`box-shadow:0 4px 10px rgba(16,24,40,.3);`;
+    return L.divIcon({className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz],html:`<div style="width:${sz}px;height:${sz}px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${color};border:2px solid #fff;${ring}display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="${ic}" height="${ic}" fill="#fff" style="transform:rotate(45deg)">${window.PANDA_ICONS['truck']}</svg></div>`});}
+  function dot(color){return L.divIcon({className:'',iconSize:[16,16],iconAnchor:[8,8],html:`<div style="width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid ${color};box-shadow:0 1px 4px rgba(16,24,40,.3)"></div>`});}
+  function flagPin(){return L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,26],html:`<div style="width:24px;height:24px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#0F0F37;border:2px solid #fff;box-shadow:0 4px 10px rgba(16,24,40,.3);display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);color:#FFCB00;font-size:12px">🏁</span></div>`});}
+
+  const popup=L.popup({className:'truck-popup',closeButton:false,maxWidth:176,minWidth:176,autoPan:true,autoPanPadding:[24,90],offset:[0,2]});
+  function cardHTML(t,s){
+    return `<button class="tp-close" data-close>&times;</button>`+
+      `<a href="truck-detail.html" style="display:block;color:inherit;text-decoration:none">`+
+        `<img class="tp-img" src="assets/img/trucks/${t.img}.jpg">`+
+        `<div class="tp-body">`+
+          `<p class="tp-type">${t.type}</p>`+
+          `<h3 class="tp-name">${t.name}</h3>`+
+          `<span class="tp-status ${s.cls}"><span style="width:7px;height:7px;border-radius:50%;background:${s.color};display:inline-block"></span>${s.label}</span>`+
+          `<p class="tp-row">Driver: <b>${t.driver}</b></p>`+
+          `<p class="tp-row">Mileage: <b>${t.mileage}</b></p>`+
+          (t.st==='trip'&&t.prog!=null ? `<p class="tp-row" style="display:flex;justify-content:space-between"><span>Trip progress</span><b>${t.prog}%</b></p><div class="tp-prog"><div class="tp-prog-bar" style="width:${t.prog}%"></div></div>` : '')+
+        `</div>`+
+      `</a>`;
+  }
+
+  const clusterGroup=L.markerClusterGroup({
+    disableClusteringAtZoom:7,
+    spiderfyOnMaxZoom:false,
+    showCoverageOnHover:false,
+    iconCreateFunction:function(c){
+      const n=c.getChildCount();
+      const big=n>=10;
+      return L.divIcon({className:'',iconSize:big?[44,44]:[36,36],iconAnchor:big?[22,22]:[18,18],html:`<div class="cluster-pin${big?' big':''}">${n}</div>`});
+    }
+  });
+  const markers=trucks.map((t,i)=>{const m=L.marker(t.pos,{icon:truckPin(ST[t.st].color,false)});m.on('click',()=>focus(i));clusterGroup.addLayer(m);return m;});
+  // extra ghost markers to demonstrate clustering (real 48-truck fleet)
+  const ghostPos=[[41.45,69.1],[41.2,69.4],[41.6,69.6],[40.9,69.0],[43.5,77.2],[43.0,76.5],[55.9,37.4],[56.1,38.0],[50.1,14.6],[49.9,14.2],[52.3,21.2]];
+  const ghostSt=['trip','idle','trip','nosignal','trip','repair','idle','trip','done','trip','idle'];
+  ghostPos.forEach((p,i)=>{clusterGroup.addLayer(L.marker(p,{icon:truckPin(ST[ghostSt[i]].color,false)}));});
+  map.addLayer(clusterGroup);
+
+  function focus(i){
+    const t=trucks[i],s=ST[t.st];
+    markers.forEach((m,j)=>m.setIcon(truckPin(ST[trucks[j].st].color,j===i)));
+    routeLayer.clearLayers();
+    if(t.st==='trip'){
+      L.polyline(t.line,{color:'#0F0F37',weight:4,opacity:.85,dashArray:'2 10',lineCap:'round'}).addTo(routeLayer);
+      L.marker(t.line[0],{icon:dot('#17B26A')}).addTo(routeLayer);
+      L.marker(t.line[t.line.length-1],{icon:flagPin()}).addTo(routeLayer);
+    }
+    map.flyTo(t.pos,t.zoom,{duration:.7});
+    popup.setLatLng(t.pos).setContent(cardHTML(t,s)).openOn(map);
+    document.getElementById('hint').style.opacity='0';
+    setTimeout(()=>{const c=document.querySelector('.tp-close'); if(c) c.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();deselect();});},30);
+  }
+  function deselect(){
+    markers.forEach((m,j)=>m.setIcon(truckPin(ST[trucks[j].st].color,false)));
+    routeLayer.clearLayers(); map.closePopup(popup);
+    document.getElementById('hint').style.opacity='1';
+  }
+  map.on('click',deselect);
+  map.on('popupclose',()=>{routeLayer.clearLayers();markers.forEach((m,j)=>m.setIcon(truckPin(ST[trucks[j].st].color,false)));document.getElementById('hint').style.opacity='1';});
+  map.fitBounds(L.latLngBounds(trucks.map(t=>t.pos)).pad(0.2));
+
+  Panda.mountNav('map');
+  Panda.render();
+</script>
+</body>
+</html>
