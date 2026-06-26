@@ -26,68 +26,6 @@
       </a>
     </div>
 
-    <!-- Trip request alert banner -->
-    <button id="tripDoneAlert" onclick="openTripDone()" class="w-full mb-3 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
-      <div class="flex items-center gap-3 px-3.5 py-3">
-        <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:#FFCB00">🚛</span>
-        <div class="flex-1 min-w-0">
-          <p class="text-[13px] font-bold text-navy-800 leading-tight">Запрос рейса · Алишер Каримов</p>
-          <p class="text-[11px] text-gray-500 mt-0.5">VOLVO FH 12 · Ташкент → Самарканд · только что</p>
-        </div>
-        <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
-      </div>
-      <div style="height:3px;background:rgba(255,203,0,.25)">
-        <div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div>
-      </div>
-    </button>
-    <!-- Show all pending toggle -->
-    <button onclick="togglePendingList()" class="w-full flex items-center justify-between mb-2 px-1" style="background:none;border:none;cursor:pointer;padding-top:0">
-      <span style="font-size:12px;color:#667085">Ожидают подтверждения</span>
-      <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#0F0F37">
-        <span id="pending-toggle-label">Показать все</span>
-        <span id="pending-badge" style="background:#FFCB00;color:#0F0F37;font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px">3</span>
-      </span>
-    </button>
-    <!-- Expandable pending list -->
-    <div id="pending-list" style="display:none;margin-bottom:10px">
-      <button id="pl-0" onclick="openPendingSheet(0)" class="w-full mb-2 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
-        <div class="flex items-center gap-3 px-3.5 py-3">
-          <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:#FFCB00">🚛</span>
-          <div class="flex-1 min-w-0">
-            <p class="text-[13px] font-bold text-navy-800 leading-tight">Запрос рейса · Алишер Каримов</p>
-            <p class="text-[11px] text-gray-500 mt-0.5">VOLVO FH 12 · Ташкент → Самарканд · только что</p>
-          </div>
-          <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
-        </div>
-        <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
-      </button>
-      <button id="pl-1" onclick="openPendingSheet(1)" class="w-full mb-2 rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
-        <div class="flex items-center gap-3 px-3.5 py-3">
-          <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center" style="background:#17B26A"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5L7 13L14.5 5.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <div class="flex-1 min-w-0">
-            <p class="text-[13px] font-bold text-navy-800 leading-tight">Завершение рейса · Jasur Ergashev</p>
-            <p class="text-[11px] text-gray-500 mt-0.5">Renault T High · Tashkent → Prague · $2 820</p>
-          </div>
-          <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
-        </div>
-        <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
-      </button>
-      <button id="pl-2" onclick="openPendingSheet(2)" class="w-full rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.15)">
-        <div class="flex items-center gap-3 px-3.5 py-3">
-          <span class="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:#FFCB00">📦</span>
-          <div class="flex-1 min-w-0">
-            <p class="text-[13px] font-bold text-navy-800 leading-tight">Подтверждение заказа · B. Yuldashev</p>
-            <p class="text-[11px] text-gray-500 mt-0.5">Scania R500 · Samarkand → Almaty · 860 км</p>
-          </div>
-          <span class="shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full" style="background:#FFCB00;color:#0F0F37">Требует ответа</span>
-        </div>
-        <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
-      </button>
-    </div>
-    <style>
-      @keyframes prog-pulse{0%,100%{opacity:.6}50%{opacity:1}}
-      @keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.8);opacity:0}}
-    </style>
 
     <div class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3.5 h-11 shadow-xs">
       <i data-icon="search" class="w-5 h-5 text-gray-400"></i>
