@@ -301,68 +301,6 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
         </div>
       </div>
 
-      <!-- Trip request banner -->
-      <div id="admin-trip-banner" class="shrink-0 px-6 py-3 bg-white" style="border-bottom:1px solid #FEF3C7">
-        <button onclick="openAdminTripModal()" class="w-full rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.12)">
-          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
-            <span style="width:36px;height:36px;border-radius:50%;background:#FFCB00;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🚛</span>
-            <div style="flex:1;min-width:0">
-              <p style="font-size:13px;font-weight:700;color:#0F0F37;line-height:1.3">Запрос рейса · Алишер Каримов</p>
-              <p style="font-size:11px;color:#667085;margin-top:2px">VOLVO FH 12 · Ташкент → Самарканд · только что</p>
-            </div>
-            <span style="flex-shrink:0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;background:#FFCB00;color:#0F0F37;white-space:nowrap">Требует ответа</span>
-          </div>
-          <div style="height:3px;background:rgba(255,203,0,.25)">
-            <div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div>
-          </div>
-        </button>
-      </div>
-
-      <!-- Show all pending toggle -->
-      <div class="shrink-0 px-6 pb-2 bg-white flex items-center justify-between" style="margin-top:-4px">
-        <span style="font-size:12px;color:#98A2B3">Ожидают подтверждения</span>
-        <button onclick="toggleAdminPending()" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-size:12px;font-weight:700;color:#0F0F37;font-family:inherit">
-          <span id="admin-pending-label">Показать все</span>
-          <span id="admin-pending-badge" style="background:#FFCB00;color:#0F0F37;font-size:11px;font-weight:800;padding:1px 8px;border-radius:99px">3</span>
-        </button>
-      </div>
-      <!-- Expandable list -->
-      <div id="admin-pending-list" style="display:none;padding:0 24px 12px;background:#fff">
-        <button id="adm-pc-1" onclick="openAdminTripModal()" class="w-full rounded-xl overflow-hidden text-left mb-2" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.12)">
-          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
-            <span style="width:36px;height:36px;border-radius:50%;background:#FFCB00;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🚛</span>
-            <div style="flex:1;min-width:0">
-              <p style="font-size:13px;font-weight:700;color:#0F0F37;line-height:1.3">Запрос рейса · Алишер Каримов</p>
-              <p style="font-size:11px;color:#667085;margin-top:2px">VOLVO FH 12 · Ташкент → Самарканд · только что</p>
-            </div>
-            <span style="flex-shrink:0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;background:#FFCB00;color:#0F0F37;white-space:nowrap">Требует ответа</span>
-          </div>
-          <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
-        </button>
-        <button id="adm-pc-2" onclick="openAdminTripModal()" class="w-full rounded-xl overflow-hidden text-left mb-2" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.12)">
-          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
-            <span style="width:36px;height:36px;border-radius:50%;background:#17B26A;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9.5L7 13L14.5 5.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div style="flex:1;min-width:0">
-              <p style="font-size:13px;font-weight:700;color:#0F0F37;line-height:1.3">Завершение рейса · Jasur Ergashev</p>
-              <p style="font-size:11px;color:#667085;margin-top:2px">Renault T High · Tashkent → Prague · $2 820</p>
-            </div>
-            <span style="flex-shrink:0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;background:#FFCB00;color:#0F0F37;white-space:nowrap">Требует ответа</span>
-          </div>
-          <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
-        </button>
-        <button id="adm-pc-3" onclick="openAdminTripModal()" class="w-full rounded-xl overflow-hidden text-left" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1.5px solid #FFCB00;box-shadow:0 0 0 3px rgba(255,203,0,.12)">
-          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
-            <span style="width:36px;height:36px;border-radius:50%;background:#FFCB00;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📦</span>
-            <div style="flex:1;min-width:0">
-              <p style="font-size:13px;font-weight:700;color:#0F0F37;line-height:1.3">Подтверждение заказа · B. Yuldashev</p>
-              <p style="font-size:11px;color:#667085;margin-top:2px">Scania R500 · Samarkand → Almaty · 860 км</p>
-            </div>
-            <span style="flex-shrink:0;font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;background:#FFCB00;color:#0F0F37;white-space:nowrap">Требует ответа</span>
-          </div>
-          <div style="height:3px;background:rgba(255,203,0,.25)"><div style="height:100%;width:100%;background:#FFCB00;animation:prog-pulse 2s ease-in-out infinite"></div></div>
-        </button>
-      </div>
-
       <!-- Filters + toolbar -->
       <div class="shrink-0 px-6 py-3 bg-white flex items-center gap-2 overflow-x-auto" style="border-bottom:1px solid #EAECF0">
         <button class="seg-tab on" data-filter="all" onclick="setFilter(this)">All <span class="c">48</span></button>
@@ -2284,21 +2222,17 @@ function truckCard(t, idx) {
         <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">${t.trailerType}</span>
       </div>`
     : `<span style="font-size:12px;color:#D0D5DD;font-style:italic">No trailer</span>`;
-  return `<div style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;border-radius:12px;cursor:pointer;transition:box-shadow .25s ease,background .25s ease" onclick="openTruckOnMap(${idx})" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" data-truck="${t.statusKey}" data-name="${t.name.toLowerCase()}" data-plate="${t.plate.toLowerCase()}" data-driver="${(t.driver||'').toLowerCase()}">
-    <img src="${t.img}" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:2px">
+  return `<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s ease,background .2s ease" onclick="openTruckOnMap(${idx})" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" data-truck="${t.statusKey}" data-name="${t.name.toLowerCase()}" data-plate="${t.plate.toLowerCase()}" data-driver="${(t.driver||'').toLowerCase()}">
+    <img src="${t.img}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0">
     <div style="flex:1;min-width:0">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
         <div style="min-width:0">
-          <div style="font-size:15px;font-weight:700;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px">${t.name}</div>
-          <div style="font-size:12px;color:#667085;margin-bottom:5px">${driverLine} <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">${t.mileage}</span></div>
-          <span class="plate"><span class="uz">UZ</span><span class="num">${t.plate}</span></span>
+          <div style="font-size:13px;font-weight:700;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name}</div>
+          <div style="font-size:11px;color:#667085;margin-top:1px">${driverLine} <span style="color:#D0D5DD">·</span> <span class="plate" style="font-size:10px"><span class="uz">UZ</span><span class="num">${t.plate}</span></span></div>
         </div>
-        <div style="flex-shrink:0">${badge}</div>
+        <div style="flex-shrink:0;display:flex;align-items:center;gap:6px">${badge}${routeBottomRight}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
-        <div style="flex:1;min-width:0;overflow:hidden">${trailerSection}</div>
-        ${routeBottomRight}
-      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:4px">${trailerSection}</div>
     </div>
   </div>`;
 }
