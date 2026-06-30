@@ -1,0 +1,2592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>Гараж — Driver App</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:#111;display:flex;justify-content:center;align-items:center;min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;}
+
+.phone{width:393px;height:852px;background:#f5f5f5;border-radius:54px;overflow:hidden;
+  position:relative;
+  box-shadow:0 40px 120px rgba(0,0,0,.85),inset 0 0 0 2px #2a2a2a,inset 0 0 0 3.5px #555;}
+.phone-inner{width:100%;height:100%;overflow:hidden;position:relative;background:#f5f5f5;}
+
+/* ── SCREEN NAVIGATION ─────────────────────── */
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  overflow:hidden;background:#f5f5f5;z-index:0;
+  transform:translateX(100%);
+  transition:transform .38s cubic-bezier(.32,.72,0,1);
+  will-change:transform;
+}
+.screen.active{z-index:2;}
+.screen.behind{z-index:1;}
+.screen.active{transform:translateX(0);}
+.screen.behind{transform:translateX(-28%);}
+.screen-scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+.screen-scroll::-webkit-scrollbar{display:none;}
+
+/* ── STATUS BAR ────────────────────────────── */
+.sbar{height:52px;background:#f5f5f5;display:flex;align-items:flex-end;
+  justify-content:space-between;padding:0 26px 8px;flex-shrink:0;}
+.sbar-time{font-size:15px;font-weight:600;color:#0F0F37;}
+.sbar-icons{display:flex;gap:5px;align-items:center;font-size:13px;color:#0F0F37;}
+
+/* ── HEADER ────────────────────────────────── */
+.hdr{height:50px;display:flex;align-items:center;justify-content:center;
+  position:relative;background:#f5f5f5;flex-shrink:0;}
+.hdr-back{position:absolute;left:14px;width:34px;height:34px;border-radius:17px;background:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.hdr-title{font-size:18px;font-weight:700;color:#0F0F37;}
+.hdr-action{position:absolute;right:14px;font-size:13px;font-weight:600;color:#4a90d9;cursor:pointer;}
+
+/* ── TAB BAR ───────────────────────────────── */
+.tab-bar{background:rgba(245,245,245,.96);backdrop-filter:blur(20px);
+  border-top:1px solid #e8e8e8;display:flex;padding:8px 0 20px;flex-shrink:0;}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;padding:4px 0;border:none;background:none;font-family:inherit;}
+.tab-icon{font-size:22px;}
+.tab-label{font-size:10px;font-weight:500;}
+.tab-item.active .tab-label{color:#0F0F37;font-weight:700;}
+.tab-item:not(.active) .tab-label{color:#bbb;}
+.tab-item:not(.active) .tab-icon{filter:grayscale(1) opacity(.35);}
+
+/* ══ SCREEN 1: GARAGE LIST ══════════════════ */
+.g-top{padding:4px 20px 12px;flex-shrink:0;}
+.g-title{font-size:28px;font-weight:800;color:#0F0F37;}
+.g-sub{font-size:13px;color:#aaa;font-weight:500;margin-top:2px;}
+.g-pad{padding:0 16px;display:flex;flex-direction:column;gap:14px;padding-bottom:24px;}
+
+/* Garage segment tabs */
+.g-tabs{display:flex;gap:0;background:#e8e8e8;border-radius:14px;padding:3px;
+  margin:0 16px 10px;flex-shrink:0;}
+.g-tab{flex:1;padding:9px 6px;border:none;border-radius:11px;font-size:13px;font-weight:600;
+  background:transparent;color:#aaa;cursor:pointer;font-family:inherit;transition:all .2s;}
+.g-tab.active{background:#fff;color:#0F0F37;box-shadow:0 2px 8px rgba(0,0,0,.10);}
+.g-panel{display:none;}
+.g-panel.show{display:block;}
+
+/* Work truck empty state */
+.work-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 24px;gap:14px;text-align:center;}
+.work-empty-icon{font-size:52px;}
+.work-empty-title{font-size:17px;font-weight:700;color:#0F0F37;}
+.work-empty-sub{font-size:13px;color:#aaa;line-height:1.5;}
+.work-truck-card{background:#fff;border-radius:24px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.10);margin-bottom:14px;}
+.wtc-badge{background:#e8f9f0;border-radius:10px;padding:3px 10px;
+  font-size:11px;font-weight:700;color:#1a8c52;display:inline-flex;align-items:center;gap:5px;}
+.wtc-owner{font-size:12px;color:#aaa;margin-top:4px;}
+
+.gc-card{background:#fff;border-radius:24px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.10);cursor:pointer;transition:transform .12s;}
+.gc-card:active{transform:scale(.99);}
+.gc-photo-wrap{position:relative;height:185px;}
+.gc-photo-img{width:100%;height:100%;object-fit:cover;display:block;}
+.gc-overlay-top{position:absolute;top:0;left:0;right:0;padding:12px 12px;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(0,0,0,.52) 0%,transparent 100%);}
+.gc-brand-row{display:flex;align-items:center;gap:10px;}
+.gc-logo{width:40px;height:40px;border-radius:20px;background:rgba(255,255,255,.96);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);overflow:hidden;flex-shrink:0;}
+.gc-name{font-size:16px;font-weight:800;color:#fff;}
+.gc-subname{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px;}
+.gc-status-chip{display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.95);border-radius:30px;padding:4px 10px;
+  font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+.gc-plate-row{position:absolute;bottom:10px;left:10px;right:10px;
+  display:flex;align-items:center;justify-content:space-between;}
+.gc-edit-btn{width:34px;height:34px;border-radius:17px;
+  background:rgba(255,255,255,.88);border:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;cursor:pointer;flex-shrink:0;backdrop-filter:blur(6px);}
+.gc-driver-row{display:flex;align-items:center;gap:10px;padding:11px 14px;}
+.gc-driver-av{width:34px;height:34px;border-radius:17px;overflow:hidden;
+  border:2px solid #FAE436;flex-shrink:0;}
+.gc-driver-av img{width:100%;height:100%;object-fit:cover;}
+.gc-driver-name{font-size:13px;font-weight:700;color:#0F0F37;}
+.gc-driver-info{font-size:11px;color:#aaa;margin-top:1px;}
+
+.add-truck-btn{width:100%;background:#FAE436;border:none;border-radius:18px;
+  padding:15px;font-size:15px;font-weight:700;color:#0F0F37;
+  cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .15s;}
+.add-truck-btn:active{opacity:.85;}
+
+/* ── Plate ─────────────────────────────────── */
+.plate{display:flex;align-items:center;gap:6px;
+  background:rgba(10,10,10,.82);border-radius:9px;padding:5px 9px;
+  border:1.5px solid rgba(255,255,255,.18);backdrop-filter:blur(6px);}
+.plate-reg{background:#fff;border-radius:3px;padding:1px 6px;font-size:11px;font-weight:800;color:#000;}
+.plate-num{font-size:13px;font-weight:700;color:#fff;letter-spacing:1.2px;}
+.plate-flag{font-size:14px;}
+
+/* ══ SCREEN 2: ORDERS / TRIPS ════════════════ */
+.hdr-action{width:36px;height:36px;border:none;background:#f4f4f4;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:#0F0F37;flex-shrink:0;}
+.hdr-action:active{background:#e8e8e8;}
+.otb{background:#fff;margin:4px 16px 2px;border-radius:18px;padding:11px 14px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);flex-shrink:0;
+  border:none;width:calc(100% - 32px);text-align:left;font-family:inherit;
+  transition:background .12s;}
+.otb:active{background:#f8f8f8;}
+.otb-logo{width:38px;height:38px;border-radius:19px;overflow:hidden;flex-shrink:0;}
+.otb-name{font-size:14px;font-weight:700;color:#0F0F37;}
+.otb-status{font-size:11px;color:#aaa;margin-top:2px;display:flex;align-items:center;gap:5px;}
+.otb-dot{width:7px;height:7px;border-radius:50%;}
+.otb-arrow{font-size:20px;color:#ddd;margin-left:auto;flex-shrink:0;}
+
+.orders-pad{padding:8px 16px 30px;display:flex;flex-direction:column;gap:12px;}
+.orders-section-title{font-size:16px;font-weight:700;color:#0F0F37;}
+
+/* Active trip card */
+.trip-card{background:#fff;border-radius:20px;padding:16px;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);display:none;}
+.trip-card.show{display:block;}
+.trip-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.trip-lbl{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;}
+.trip-route{font-size:17px;font-weight:800;color:#0F0F37;margin-bottom:3px;}
+.trip-cargo{font-size:13px;color:#888;margin-bottom:12px;}
+.trip-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.trip-chip{display:flex;align-items:center;gap:4px;background:#f7f7f7;
+  border-radius:10px;padding:5px 10px;font-size:12px;font-weight:600;color:#555;}
+.trip-progress{margin-bottom:14px;}
+.tp-prog-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px;}
+.tp-prog-lbl{font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.tp-prog-km{font-size:16px;font-weight:800;color:#0F0F37;}
+.tp-prog-km.muted{color:#bbb;}
+.tp-prog-pct{font-size:11px;font-weight:700;color:#0F0F37;text-align:center;margin-bottom:4px;}
+.tp-prog-track{height:10px;background:#f0f0f0;border-radius:5px;overflow:visible;
+  margin-bottom:6px;position:relative;}
+.tp-prog-fill{height:100%;background:#FAE436;border-radius:5px;
+  transition:width .8s cubic-bezier(.4,0,.2,1);position:relative;}
+.tp-prog-truck{position:absolute;right:-8px;top:-7px;font-size:16px;line-height:1;}
+.tp-prog-meta{font-size:11px;color:#aaa;text-align:center;font-weight:500;}
+.finish-btn{background:#FAE436;border:none;border-radius:14px;padding:13px;
+  color:#0F0F37;font-size:15px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;
+  transition:opacity .15s;}
+.finish-btn:hover{opacity:.87;}
+.stepper{display:flex;align-items:center;margin-bottom:14px;}
+.step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.step-circle{width:28px;height:28px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;transition:all .3s;}
+.step-lbl{font-size:9px;font-weight:600;text-align:center;line-height:1.2;}
+.step-line{height:2px;flex:1;transition:background .3s;margin-top:-14px;}
+
+/* Trip done */
+.trip-done{background:#EFEFEF;border-radius:20px;padding:18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.07);border:1.5px solid #E2E2E2;display:none;}
+.trip-done.show{display:block;}
+.td-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.td-icon{width:40px;height:40px;border-radius:20px;background:rgba(45,189,113,.15);
+  display:flex;align-items:center;justify-content:center;font-size:20px;}
+.td-title{font-size:16px;font-weight:800;color:#0F0F37;}
+.td-sub{font-size:12px;color:#999;margin-top:2px;}
+.td-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.td-stat{background:#fff;border-radius:12px;padding:10px 12px;border:1px solid #E8E8E8;}
+.td-stat-l{font-size:10px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+.td-stat-v{font-size:15px;font-weight:800;color:#0F0F37;}
+.btn-exp-trip{background:#FAE436;border:none;border-radius:14px;padding:13px;color:#0F0F37;
+  font-size:15px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;}
+.btn-exp-trip:hover{opacity:.9;}
+
+/* Mini map */
+.mini-map{background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.07);display:none;}
+.mini-map.show{display:block;}
+.mm-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;}
+.mm-title{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;}
+.mm-eta{font-size:12px;font-weight:700;color:#0F0F37;}
+.mm-svg-wrap{padding:0 14px 14px;}
+.mm-cities{display:flex;justify-content:space-between;padding:0 14px 10px;}
+.mm-city{font-size:12px;font-weight:700;color:#0F0F37;}
+.mm-city.right{text-align:right;color:#bbb;}
+
+/* Trip history list */
+.trip-item{background:#fff;border-radius:18px;padding:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer;transition:transform .12s;}
+.trip-item:active{transform:scale(.99);}
+.ti-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.ti-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;}
+.ti-badge.done{background:#f0f0f0;color:#888;}
+.ti-badge.cancelled{background:#ffeaea;color:#cc1c1c;}
+.ti-date{font-size:11px;color:#bbb;font-weight:500;}
+.ti-route{font-size:15px;font-weight:800;color:#0F0F37;margin-bottom:3px;}
+.ti-cargo{font-size:12px;color:#999;margin-bottom:10px;}
+.ti-footer{display:flex;align-items:center;justify-content:space-between;}
+.ti-dist{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:#888;}
+.ti-profit{font-size:14px;font-weight:800;color:#0F0F37;}
+.ti-profit.green{color:#2dbd71;}
+.ti-mini-prog{height:4px;background:#f0f0f0;border-radius:2px;margin:8px 0 4px;overflow:hidden;}
+.ti-mini-fill{height:100%;background:#FAE436;border-radius:2px;}
+
+/* Start trip button */
+.start-trip-btn{display:flex;align-items:center;justify-content:center;gap:10px;
+  background:#FAE436;border:none;border-radius:16px;padding:15px;width:100%;
+  color:#0F0F37;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;
+  transition:opacity .15s,transform .1s;}
+.start-trip-btn:hover{opacity:.88;}
+.start-trip-btn:active{transform:scale(.99);}
+.start-trip-btn.hidden{display:none;}
+
+/* ══ SCREEN 3: TRUCK DETAIL ══════════════════ */
+.scroll{padding:8px 16px 40px;display:flex;flex-direction:column;gap:14px;}
+
+.truck-card{background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.tc-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;}
+.tc-brand-row{display:flex;align-items:center;gap:10px;}
+.tc-logo{width:44px;height:44px;border-radius:22px;background:#f0f0f0;border:1.5px solid #e8e8e8;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.tc-brand{font-size:17px;font-weight:800;color:#0F0F37;}
+.tc-model{font-size:13px;color:#aaa;margin-top:1px;}
+.tc-edit{width:36px;height:36px;border-radius:18px;background:#f2f2f2;border:none;
+  display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;}
+.tc-photo{width:100%;height:280px;position:relative;overflow:hidden;background:#c8d4de;}
+.tc-photo img{width:100%;height:100%;object-fit:cover;}
+.plate-abs{position:absolute;bottom:12px;left:12px;}
+.tc-driver{display:flex;align-items:center;gap:12px;padding:14px;border-top:1px solid #f3f3f3;}
+.tc-driver-avatar{width:52px;height:52px;border-radius:26px;overflow:hidden;flex-shrink:0;
+  background:#e8e8e8;border:2px solid #FAE436;}
+.tc-driver-avatar img{width:100%;height:100%;object-fit:cover;}
+.tc-driver-name{font-size:15px;font-weight:800;color:#0F0F37;margin-bottom:3px;}
+.tc-driver-badge{display:flex;gap:6px;flex-wrap:wrap;}
+.tc-driver-pill{background:#f4f4f4;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;color:#555;}
+.tc-driver-pill.yellow{background:rgba(250,228,54,.18);color:#0F0F37;}
+
+.trailer-card{background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.tc-info{padding:10px 14px 4px;border-top:1px solid #f3f3f3;}
+.tc-row{display:flex;align-items:center;gap:8px;padding:6px 0;}
+.tc-row:not(:last-child){border-bottom:1px solid #f7f7f7;}
+.tc-ico{font-size:15px;width:26px;text-align:center;flex-shrink:0;}
+.tc-lbl{font-size:12px;color:#aaa;font-weight:500;width:90px;flex-shrink:0;}
+.tc-val{font-size:13px;font-weight:600;color:#0F0F37;}
+
+/* Driver status card */
+.driver-status-card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.ds-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.ds-title{font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;}
+.ds-change{font-size:12px;font-weight:700;color:#0F0F37;cursor:pointer;padding:5px 12px;background:#f4f4f4;border-radius:20px;border:none;letter-spacing:.2px;}
+.status-badge{display:inline-flex;align-items:center;gap:7px;border-radius:100px;padding:8px 16px;
+  cursor:pointer;transition:transform .12s,box-shadow .12s;border:none;font-family:inherit;}
+.status-badge:hover{transform:scale(1.03);box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.status-badge:active{transform:scale(.97);}
+.sb-dot{width:9px;height:9px;border-radius:50%;}
+.sb-icon{font-size:15px;}
+.sb-text{font-size:15px;font-weight:700;}
+.s-driving{background:#e8f9f0;}.s-driving .sb-dot{background:#2dbd71;}.s-driving .sb-text{color:#1a8c52;}
+.s-parked{background:#fff8e6;}.s-parked .sb-dot{background:#f5a623;}.s-parked .sb-text{color:#c07a00;}
+.s-free{background:#ffeaea;}.s-free .sb-dot{background:#ff4b4b;}.s-free .sb-text{color:#cc1c1c;}
+.s-repair{background:#fff3e0;}.s-repair .sb-text{color:#c06000;}
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.status-option{display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:16px;
+  cursor:pointer;border:2px solid transparent;transition:all .15s;background:#f8f8f8;}
+.status-option:hover{background:#f0f0f0;}
+.so-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.so-text{font-size:13px;font-weight:700;}
+
+/* Odometer */
+.odo-btn{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;
+  gap:12px;box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer;border:none;width:100%;
+  text-align:left;font-family:inherit;transition:opacity .15s;}
+.odo-btn:active{opacity:.8;}
+.odo-ico{width:44px;height:44px;border-radius:22px;background:#f2f2f2;
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.odo-info{flex:1;}
+.odo-title{font-size:15px;font-weight:700;color:#0F0F37;}
+.odo-sub{font-size:12px;color:#aaa;margin-top:2px;}
+.odo-ch{font-size:22px;color:#ccc;font-weight:300;}
+
+/* Finance */
+.sec-title{font-size:18px;font-weight:700;color:#0F0F37;margin-bottom:14px;}
+.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stat-card{background:#fff;border-radius:20px;padding:16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:7px;}
+.stat-ic{width:46px;height:46px;border-radius:23px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.stat-l{font-size:12px;color:#aaa;font-weight:500;}
+.stat-a{font-size:15px;font-weight:700;}
+.act-card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.05);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  min-height:108px;cursor:pointer;border:none;transition:transform .12s;font-family:inherit;}
+.act-card:hover{transform:translateY(-1px);}
+.act-card:active{transform:scale(.97);}
+.add-c{width:52px;height:52px;border-radius:26px;display:flex;align-items:center;justify-content:center;}
+.act-l{font-size:13px;font-weight:500;color:#333;text-align:center;}
+.net-row{grid-column:1/-1;background:#fff;border-radius:16px;padding:14px 18px;
+  display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.net-l{font-size:14px;color:#666;font-weight:500;}
+.net-a{font-size:17px;font-weight:700;}
+
+/* ── MODALS ────────────────────────────────── */
+.modal{position:absolute;inset:0;background:rgba(0,0,0,.52);display:flex;align-items:flex-end;
+  z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal.show{opacity:1;pointer-events:all;}
+.msheet{background:#fff;border-radius:32px 32px 0 0;padding:12px 20px 44px;width:100%;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);
+  max-height:94%;overflow-y:auto;}
+.msheet::-webkit-scrollbar{display:none;}
+.modal.show .msheet{transform:translateY(0);}
+.mhandle{width:40px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 20px;}
+.mtitle{font-size:22px;font-weight:800;color:#0F0F37;text-align:center;margin-bottom:6px;}
+.msub{font-size:14px;color:#888;text-align:center;margin-bottom:20px;line-height:1.5;}
+.field{margin-bottom:14px;}
+.field-label{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;
+  letter-spacing:.6px;margin-bottom:6px;}
+.field-input{width:100%;background:#f7f7f7;border:none;border-radius:14px;padding:14px 16px;
+  font-size:15px;color:#0F0F37;font-family:inherit;outline:none;transition:background .15s;}
+.field-input:focus{background:#f0f0f0;}
+.field-input.big{font-size:22px;font-weight:700;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.route-arrow{text-align:center;font-size:20px;color:#ccc;margin:-4px 0 10px;}
+.trip-preview{background:#f7f7f7;border-radius:16px;padding:14px;margin-bottom:18px;}
+.tp-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;}
+.tp-lbl{font-size:12px;color:#aaa;font-weight:500;}
+.tp-v{font-size:13px;font-weight:700;color:#0F0F37;}
+.cat-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.chip{display:flex;align-items:center;gap:5px;padding:8px 13px;border-radius:20px;
+  border:1.5px solid #eee;background:#fafafa;cursor:pointer;font-size:13px;
+  font-weight:600;color:#444;font-family:inherit;transition:all .15s;}
+.chip.sel-e{background:#ff4b4b;border-color:#ff4b4b;color:#fff;}
+.chip.sel-i{background:#2dbd71;border-color:#2dbd71;color:#fff;}
+.exp-cat-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  padding:12px 6px;border-radius:14px;border:1.5px solid #e8e8e8;background:#fff;
+  font-size:11px;font-weight:700;color:#444;cursor:pointer;transition:all .15s;line-height:1.2;
+  text-align:center;}
+.exp-cat-btn span:first-child{font-size:22px;}
+.exp-cat-btn.active{background:#0F0F37;border-color:#0F0F37;color:#FAE436;}
+.exp-cur-btn{flex:1;padding:8px 4px;border-radius:10px;border:1.5px solid #e0e0e0;
+  background:#fff;color:#888;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;}
+.exp-cur-btn.active{background:#FAE436;border-color:#FAE436;color:#0F0F37;}
+.note-inp{width:100%;background:#f7f7f7;border:none;border-radius:14px;padding:14px;
+  font-size:14px;color:#333;min-height:60px;margin-bottom:18px;resize:none;
+  font-family:inherit;outline:none;}
+.amt-inp{width:100%;font-size:36px;font-weight:700;text-align:center;color:#0F0F37;
+  border:none;border-bottom:2px solid #eee;padding-bottom:10px;margin-bottom:22px;
+  background:transparent;font-family:inherit;outline:none;}
+.btn{border:none;border-radius:18px;padding:15px;font-size:16px;font-weight:700;
+  cursor:pointer;width:100%;font-family:inherit;transition:opacity .15s;margin-bottom:10px;}
+.btn:hover{opacity:.9;}
+.btn:active{transform:scale(.99);}
+.btn-green{background:#FAE436;color:#0F0F37;}
+.btn-red{background:#FAE436;color:#0F0F37;}
+.btn-dark{background:#FAE436;color:#0F0F37;}
+.btn-ghost-r{background:#ffeaea;color:#ff4b4b;margin-bottom:0;}
+.btn-cancel{background:none;border:none;padding:12px;color:#aaa;font-size:15px;
+  cursor:pointer;width:100%;font-family:inherit;margin-bottom:0;}
+.toast{position:absolute;bottom:86px;left:16px;right:16px;background:#0F0F37;color:#fff;
+  border-radius:14px;padding:14px 16px;font-size:13px;font-weight:600;text-align:center;
+  z-index:300;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.4)}}
+@keyframes mapPulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(3.5);opacity:0}}
+@keyframes navPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(4);opacity:0}}
+.map-pulse-dot{animation:mapPulse 2s ease-out infinite;transform-box:fill-box;transform-origin:center;}
+.nav-pulse-dot{animation:navPulse 2s ease-out infinite;transform-box:fill-box;transform-origin:center;}
+.hint{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+  background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:9px 18px;color:rgba(255,255,255,.5);font-size:12px;white-space:nowrap;}
+@media(max-width:500px){body{background:#f5f5f5;align-items:flex-start;}
+  .phone{width:100%;height:auto;min-height:100vh;border-radius:0;box-shadow:none;}
+  .hint{display:none;}}
+
+/* ── Trip detail screen ───────────────────── */
+.td-info-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.td-trip-stat{font-size:12px;color:#999;margin-bottom:14px;}
+.td-card{background:#fff;border-radius:20px;padding:16px;margin:0 16px 12px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.td-sect{font-size:11px;font-weight:700;color:#aaa;letter-spacing:.8px;margin:0 16px 8px;text-transform:uppercase;}
+.td-route-big{font-size:18px;font-weight:800;color:#0F0F37;margin-bottom:4px;}
+.td-cargo{font-size:13px;color:#888;margin-bottom:4px;}
+.fin-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;}
+.fin-row:last-child{border-bottom:none;font-weight:700;}
+.fin-lbl{font-size:14px;color:#333;}
+.fin-val{font-size:14px;font-weight:600;}
+.fin-bar{height:5px;border-radius:3px;background:#e8e8e8;margin-top:10px;overflow:hidden;}
+.fin-bar-fill{height:100%;border-radius:3px;background:#FAE436;}
+.exp-row{padding:10px 0;border-bottom:1px solid #f5f5f5;}
+.exp-row:last-child{border-bottom:none;}
+.exp-row-main{display:flex;justify-content:space-between;align-items:center;}
+.exp-lbl{font-size:14px;color:#333;}
+.exp-amt{font-size:14px;font-weight:600;color:#ff4b4b;}
+.oc-wrap{margin-top:8px;display:flex;gap:8px;align-items:flex-start;}
+.oc-av{width:28px;height:28px;border-radius:50%;background:#0F0F37;color:#FAE436;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.oc-body{flex:1;}
+.oc-name{font-size:10px;color:#aaa;margin-bottom:4px;}
+.oc-text{background:#f0f0f0;border-radius:12px 12px 12px 3px;padding:8px 11px;font-size:13px;color:#333;line-height:1.4;}
+.vm-bubble{background:#0F0F37;border-radius:12px 12px 12px 3px;padding:9px 12px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;}
+.vm-play{width:28px;height:28px;border-radius:50%;background:#FAE436;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.vm-wave{display:flex;align-items:center;gap:2px;height:20px;}
+.vm-bar{width:3px;border-radius:2px;background:rgba(255,255,255,.5);}
+.vm-bar.played{background:#FAE436;}
+.vm-dur{font-size:11px;color:rgba(255,255,255,.6);min-width:28px;}
+.td-active-prog{margin:12px 0;}
+.td-prog-track{height:7px;background:#e8e8e8;border-radius:4px;overflow:hidden;}
+.td-prog-fill{height:100%;background:#FAE436;border-radius:4px;transition:width .5s;}
+.td-prog-stats{display:flex;justify-content:space-between;margin-top:6px;}
+.td-prog-stat{font-size:12px;color:#999;}
+.td-prog-stat b{color:#0F0F37;font-weight:700;}
+.td-finish-btn{margin:4px 16px 0;width:calc(100% - 32px);padding:16px;background:#FAE436;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:18px;cursor:pointer;font-family:inherit;}
+.td-finish-btn:active{opacity:.85;}
+
+/* ── Truck detail tabs ─────────────────────── */
+.tc-tab{flex:1;padding:9px 6px;border:none;border-radius:11px;font-size:13px;font-weight:600;
+  background:transparent;color:#aaa;cursor:pointer;font-family:inherit;transition:all .2s;}
+.tc-tab.active{background:#fff;color:#0F0F37;box-shadow:0 2px 8px rgba(0,0,0,.10);}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="phone-inner" id="phoneInner">
+
+<!-- ══════════════════════════════════════════
+     SCREEN 1 — GARAGE LIST
+══════════════════════════════════════════ -->
+<div class="screen active" id="screenGarage">
+
+  <div class="sbar">
+    <span class="sbar-time" id="clk">10:56</span>
+    <div class="sbar-icons"><span>4G</span><span>▪▪▪</span><span>🔋 80</span></div>
+  </div>
+
+  <div class="g-top">
+    <div class="g-title">Гараж</div>
+    <div class="g-sub" id="gSub">3 грузовика</div>
+  </div>
+
+  <div class="g-tabs">
+    <button class="g-tab active" onclick="switchGTab(this,'panelOwn')">Свой грузовик</button>
+    <button class="g-tab" onclick="switchGTab(this,'panelWork')">Рабочий грузовик</button>
+  </div>
+
+  <div class="screen-scroll">
+
+  <!-- TAB: Свой грузовик -->
+  <div class="g-panel show" id="panelOwn">
+  <div class="g-pad">
+
+    <!-- VOLVO -->
+    <div class="gc-card" onclick="goToOrders(0,'info')">
+      <div class="gc-photo-wrap">
+        <img class="gc-photo-img" src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85" alt=""/>
+        <div class="gc-overlay-top">
+          <div class="gc-brand-row">
+            <div class="gc-logo">
+              <svg viewBox="0 0 100 100" style="width:34px;height:34px"><circle cx="50" cy="50" r="48" fill="#003057"/><text x="50" y="63" text-anchor="middle" font-size="44" font-weight="900" fill="#fff" font-family="sans-serif">V</text></svg>
+            </div>
+            <div><div class="gc-name">VOLVO</div><div class="gc-subname">FH 12 · 2021</div></div>
+          </div>
+          <div class="gc-status-chip">
+            <div class="sb-dot" style="background:#2dbd71"></div>
+            <span style="color:#1a8c52">В пути</span>
+          </div>
+        </div>
+        <div class="gc-plate-row">
+          <div class="plate"><div class="plate-reg">01</div><div class="plate-num">A 234 DG</div><div class="plate-flag">🇺🇿</div></div>
+          <button class="gc-edit-btn" onclick="event.stopPropagation();toast('Редактировать VOLVO FH 12')">✏</button>
+        </div>
+      </div>
+      <div class="gc-driver-row">
+        <div class="gc-driver-av"><img src="https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=100&h=100&fit=crop&q=80" alt=""/></div>
+        <div><div class="gc-driver-name">Алексей Иванов</div><div class="gc-driver-info">Кат. C, CE · Стаж 8 лет</div></div>
+        <div style="margin-left:auto;font-size:20px;color:#ddd">›</div>
+      </div>
+    </div>
+
+    <!-- SCANIA -->
+    <div class="gc-card" onclick="goToOrders(1,'info')">
+      <div class="gc-photo-wrap">
+        <img class="gc-photo-img" src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=700&h=420&fit=crop&q=85" alt=""/>
+        <div class="gc-overlay-top">
+          <div class="gc-brand-row">
+            <div class="gc-logo">
+              <svg viewBox="0 0 100 100" style="width:34px;height:34px"><circle cx="50" cy="50" r="48" fill="#CE1126"/><text x="50" y="63" text-anchor="middle" font-size="42" font-weight="900" fill="#fff" font-family="sans-serif">S</text></svg>
+            </div>
+            <div><div class="gc-name">SCANIA</div><div class="gc-subname">R450 · 2020</div></div>
+          </div>
+          <div class="gc-status-chip">
+            <div class="sb-dot" style="background:#ff4b4b"></div>
+            <span style="color:#cc1c1c">Свободен</span>
+          </div>
+        </div>
+        <div class="gc-plate-row">
+          <div class="plate"><div class="plate-reg">01</div><div class="plate-num">B 778 KL</div><div class="plate-flag">🇺🇿</div></div>
+          <button class="gc-edit-btn" onclick="event.stopPropagation();toast('Редактировать SCANIA R450')">✏</button>
+        </div>
+      </div>
+      <div class="gc-driver-row">
+        <div class="gc-driver-av"><img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=100&h=100&fit=crop&q=80" alt=""/></div>
+        <div><div class="gc-driver-name">Дмитрий Козлов</div><div class="gc-driver-info">Кат. CE · Стаж 5 лет</div></div>
+        <div style="margin-left:auto;font-size:20px;color:#ddd">›</div>
+      </div>
+    </div>
+
+    <!-- MAN -->
+    <div class="gc-card" onclick="goToOrders(2,'info')">
+      <div class="gc-photo-wrap">
+        <img class="gc-photo-img" src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=700&h=420&fit=crop&q=85" alt=""/>
+        <div class="gc-overlay-top">
+          <div class="gc-brand-row">
+            <div class="gc-logo">
+              <svg viewBox="0 0 100 100" style="width:34px;height:34px"><circle cx="50" cy="50" r="48" fill="#E2001A"/><text x="50" y="65" text-anchor="middle" font-size="40" font-weight="900" fill="#fff" font-family="sans-serif">M</text></svg>
+            </div>
+            <div><div class="gc-name">MAN</div><div class="gc-subname">TGX 18 · 2019</div></div>
+          </div>
+          <div class="gc-status-chip">
+            <div class="sb-dot" style="background:#f5a623"></div>
+            <span style="color:#c07a00">Стоянка</span>
+          </div>
+        </div>
+        <div class="gc-plate-row">
+          <div class="plate"><div class="plate-reg">01</div><div class="plate-num">C 112 PP</div><div class="plate-flag">🇺🇿</div></div>
+          <button class="gc-edit-btn" onclick="event.stopPropagation();toast('Редактировать MAN TGX 18')">✏</button>
+        </div>
+      </div>
+      <div class="gc-driver-row">
+        <div class="gc-driver-av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&q=80" alt=""/></div>
+        <div><div class="gc-driver-name">Сергей Попов</div><div class="gc-driver-info">Кат. C · Стаж 3 года</div></div>
+        <div style="margin-left:auto;font-size:20px;color:#ddd">›</div>
+      </div>
+    </div>
+
+    <button class="add-truck-btn" onclick="toast('Добавить новый грузовик')">
+      <span style="font-size:20px;font-weight:300;line-height:1">+</span>
+      <span>Добавить грузовик</span>
+    </button>
+
+  </div>
+  </div><!-- /panelOwn -->
+
+  <!-- TAB: Рабочий грузовик -->
+  <div class="g-panel" id="panelWork">
+  <div class="g-pad">
+
+    <!-- Assigned truck from employer -->
+    <div class="work-truck-card">
+      <div class="gc-photo-wrap">
+        <img class="gc-photo-img" src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85" alt=""/>
+        <div class="gc-overlay-top">
+          <div class="gc-brand-row">
+            <div class="gc-logo">
+              <svg viewBox="0 0 100 100" style="width:34px;height:34px"><circle cx="50" cy="50" r="48" fill="#003057"/><text x="50" y="63" text-anchor="middle" font-size="44" font-weight="900" fill="#fff" font-family="sans-serif">V</text></svg>
+            </div>
+            <div><div class="gc-name">VOLVO</div><div class="gc-subname">FH 12 · 2021</div></div>
+          </div>
+          <div class="gc-status-chip">
+            <div class="sb-dot" style="background:#2dbd71"></div>
+            <span style="color:#1a8c52">В пути</span>
+          </div>
+        </div>
+        <div class="gc-plate-row">
+          <div class="plate"><div class="plate-reg">01</div><div class="plate-num">A 234 DG</div><div class="plate-flag">🇺🇿</div></div>
+        </div>
+      </div>
+      <div style="padding:12px 14px 14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span class="wtc-badge">✓ Назначен</span>
+          <span class="wtc-owner">от Иван Петров</span>
+        </div>
+        <div style="font-size:13px;color:#888">🔗 Прицеп: 01 B 123 RT · Рефрижератор · 20т</div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="goToOrders(0,'info')" style="flex:1;padding:12px;border-radius:14px;border:1.5px solid #e0e0e0;background:#f7f7f7;font-size:14px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;">Инфо</button>
+          <button onclick="goToOrders(0,'orders')" style="flex:1;padding:12px;border-radius:14px;border:none;background:#FAE436;font-size:14px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;">Заказы</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="add-truck-btn" style="background:#f0f0f0;color:#aaa;font-weight:500;font-size:13px" onclick="openModal('inviteModal')">
+      Ожидать нового назначения
+    </button>
+
+  </div>
+  </div><!-- /panelWork -->
+
+  </div><!-- /screen-scroll -->
+
+  <div class="tab-bar">
+    <button class="tab-item"><span class="tab-icon">🏠</span><span class="tab-label">Главная</span></button>
+    <button class="tab-item active"><span class="tab-icon">🚛</span><span class="tab-label">Гараж</span></button>
+    <button class="tab-item"><span class="tab-icon">📦</span><span class="tab-label">Рейсы</span></button>
+    <button class="tab-item"><span class="tab-icon">💰</span><span class="tab-label">Финансы</span></button>
+    <button class="tab-item"><span class="tab-icon">👤</span><span class="tab-label">Профиль</span></button>
+  </div>
+
+</div><!-- /screenGarage -->
+
+
+<!-- ══════════════════════════════════════════
+     SCREEN 2 — ORDERS / TRIPS LIST
+══════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════
+     MODAL — TRIPS HISTORY (accessed from truck detail)
+══════════════════════════════════════════ -->
+<div class="modal" id="tripsModal">
+  <div class="msheet" style="padding:12px 20px 50px">
+    <div class="msheet-handle"></div>
+    <div style="font-size:17px;font-weight:800;color:#0F0F37;margin:8px 0 14px">Рейсы</div>
+
+    <!-- Active trip — tappable, opens screenTripDetail -->
+    <div class="trip-item" id="tripCard" style="display:none;border:2px solid #FAE436;background:#fffdf0;cursor:pointer;" onclick="openTripFromModal(openActiveTrip)">
+      <div class="ti-top">
+        <span class="ti-badge" style="background:#e8f9f0;color:#1a8c52;display:inline-flex;align-items:center;gap:5px">
+          <span style="width:7px;height:7px;border-radius:50%;background:#2dbd71;display:inline-block"></span>
+          В пути
+        </span>
+        <span class="ti-date" style="color:#aaa">Текущий рейс ›</span>
+      </div>
+      <div class="ti-route" id="tripRoute">Ташкент → Самарканд</div>
+      <div class="ti-cargo" id="tripCargo">Электроника · 12 тонн</div>
+      <div style="font-size:11px;color:#bbb;margin:3px 0 10px">
+        📍 <span id="tripDist">847 км</span>&nbsp;·&nbsp;⏱ <span id="tripTime">~9 часов</span>
+      </div>
+      <div class="ti-mini-prog">
+        <div class="ti-mini-fill" id="tripProgressBar" style="width:38%"></div>
+      </div>
+      <div class="ti-footer" style="margin-top:6px">
+        <span class="ti-dist"><span id="tripDriven">320</span> км · <span id="tripProgPct">38%</span></span>
+      </div>
+    </div>
+
+    <!-- Trip done card -->
+    <div class="trip-done" id="tripDone">
+      <div class="td-hdr">
+        <div class="td-icon">✅</div>
+        <div>
+          <div class="td-title">Рейс завершён</div>
+          <div class="td-sub" id="tdSub">Ташкент → Самарканд · 22 июня</div>
+        </div>
+      </div>
+      <div class="td-stats">
+        <div class="td-stat"><div class="td-stat-l">Пройдено</div><div class="td-stat-v" id="tdDist">847 км</div></div>
+        <div class="td-stat"><div class="td-stat-l">В пути</div><div class="td-stat-v">8ч 42м</div></div>
+        <div class="td-stat"><div class="td-stat-l">Заработано</div><div class="td-stat-v" id="tdProfit">1 500 000 UZS</div></div>
+        <div class="td-stat"><div class="td-stat-l">Статус</div><div class="td-stat-v" style="color:#2dbd71">Доставлен</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn-exp-trip" onclick="openModal('expModal',true)" style="flex:1;background:#fff0f0;color:#ff4b4b;border:1.5px solid #ffcdd2;">
+          <span style="font-size:18px">−</span><span>Расход</span>
+        </button>
+        <button class="btn-exp-trip" onclick="openModal('incModal',true)" style="flex:1;background:#f0fff5;color:#2dbd71;border:1.5px solid #b2dfdb;">
+          <span style="font-size:18px">+</span><span>Доход</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Start trip button (visible when free) -->
+    <button class="start-trip-btn hidden" id="startTripBtn" onclick="closeModal('tripsModal');openModal('newTripModal')">
+      <span style="font-size:18px">🚛</span><span>Начать рейс</span>
+    </button>
+    <button class="start-trip-btn hidden" id="ownerTripBtn" onclick="openModal('ownerTripModal')" style="background:#f0f4ff;color:#3d5afe;border:1.5px solid #c5cae9;margin-top:0;">
+      <span style="font-size:18px">👤</span><span>Рейс от владельца</span>
+    </button>
+
+    <!-- History -->
+    <div class="orders-section-title" style="margin-top:8px">История рейсов</div>
+
+    <div class="trip-item" style="cursor:pointer" onclick="openTripFromModal(()=>openHistoryTrip(0))">
+      <div class="ti-top"><span class="ti-badge done">✓ Завершён</span><span class="ti-date">18 июня 2026</span></div>
+      <div class="ti-route">Самарканд → Бухара</div>
+      <div class="ti-cargo">Стройматериалы · 18 тонн</div>
+      <div class="ti-mini-prog"><div class="ti-mini-fill" style="width:100%"></div></div>
+      <div class="ti-footer"><span class="ti-dist">📍 620 км · 7ч 15м</span><span class="ti-profit green">+980 000 UZS</span></div>
+    </div>
+
+    <div class="trip-item" style="cursor:pointer" onclick="openTripFromModal(()=>openHistoryTrip(1))">
+      <div class="ti-top"><span class="ti-badge done">✓ Завершён</span><span class="ti-date">12 июня 2026</span></div>
+      <div class="ti-route">Ташкент → Наманган</div>
+      <div class="ti-cargo">Электроника · 8 тонн</div>
+      <div class="ti-mini-prog"><div class="ti-mini-fill" style="width:100%"></div></div>
+      <div class="ti-footer"><span class="ti-dist">📍 310 км · 4ч 10м</span><span class="ti-profit green">+650 000 UZS</span></div>
+    </div>
+
+    <div class="trip-item" style="cursor:pointer" onclick="openTripFromModal(()=>openHistoryTrip(2))">
+      <div class="ti-top"><span class="ti-badge cancelled">✕ Отменён</span><span class="ti-date">5 июня 2026</span></div>
+      <div class="ti-route">Фергана → Андижан</div>
+      <div class="ti-cargo">Продукты питания · 15 тонн</div>
+      <div class="ti-mini-prog"><div class="ti-mini-fill" style="width:22%;background:#ff4b4b"></div></div>
+      <div class="ti-footer"><span class="ti-dist">📍 68 км из 305 км</span><span class="ti-profit" style="color:#ff4b4b">Отменён</span></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     SCREEN 3 — TRIP DETAIL
+══════════════════════════════════════════ -->
+<div class="screen" id="screenTripDetail">
+
+  <div class="sbar">
+    <span class="sbar-time" id="clk3">10:56</span>
+    <div class="sbar-icons"><span>4G</span><span>▪▪▪</span><span>🔋 80</span></div>
+  </div>
+
+  <div class="hdr">
+    <div class="hdr-back" onclick="goBack()">‹</div>
+    <span class="hdr-title" id="tdHdrTitle">Рейс</span>
+  </div>
+
+  <div class="screen-scroll" id="tdScroll">
+  <div style="padding:12px 0 80px">
+
+    <!-- Mini-map (active only) -->
+    <div class="mini-map" id="tdMiniMap" style="display:none;margin:0 16px 12px;">
+      <div class="mm-header">
+        <span class="mm-title">Маршрут</span>
+        <span class="mm-eta" id="tdMmEta">~6ч до прибытия</span>
+      </div>
+      <div class="mm-cities">
+        <span class="mm-city" id="tdMmFrom">📍 Ташкент</span>
+        <span class="mm-city right" id="tdMmTo">Самарканд 🏁</span>
+      </div>
+      <div class="mm-svg-wrap">
+        <svg viewBox="0 0 330 90" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <rect x="10" y="42" width="310" height="10" rx="5" fill="#e8e8e8"/>
+          <rect x="10" y="42" width="117" height="10" rx="5" fill="#FAE436" id="tdMmFill"/>
+          <circle cx="10" cy="47" r="7" fill="#2dbd71"/><circle cx="10" cy="47" r="3" fill="#fff"/>
+          <circle cx="320" cy="47" r="7" fill="#ddd"/><circle cx="320" cy="47" r="3" fill="#fff"/>
+          <text x="10" y="72" font-size="9" fill="#bbb" text-anchor="middle" font-family="sans-serif">0</text>
+          <text x="90" y="72" font-size="9" fill="#bbb" text-anchor="middle" font-family="sans-serif">250</text>
+          <text x="170" y="72" font-size="9" fill="#bbb" text-anchor="middle" font-family="sans-serif">500</text>
+          <text x="250" y="72" font-size="9" fill="#bbb" text-anchor="middle" font-family="sans-serif">750</text>
+          <text x="320" y="72" font-size="9" fill="#bbb" text-anchor="middle" font-family="sans-serif" id="tdMmMax">847</text>
+          <line x1="90" y1="52" x2="90" y2="58" stroke="#ddd" stroke-width="1"/>
+          <line x1="170" y1="52" x2="170" y2="58" stroke="#ddd" stroke-width="1"/>
+          <line x1="250" y1="52" x2="250" y2="58" stroke="#ddd" stroke-width="1"/>
+          <text x="127" y="38" font-size="18" text-anchor="middle" font-family="sans-serif" id="tdMmTruck">🚛</text>
+          <rect x="93" y="20" width="70" height="18" rx="9" fill="#0F0F37" id="tdMmBubble"/>
+          <text x="128" y="32" font-size="10" fill="#FAE436" text-anchor="middle" font-weight="700" font-family="sans-serif" id="tdMmText">320 км · 38%</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Trip info card -->
+    <div class="td-card">
+      <div class="td-info-row">
+        <span class="ti-badge" id="tdStatusBadge" style="background:#e8f9f0;color:#1a8c52;display:inline-flex;align-items:center;gap:5px">
+          <span style="width:7px;height:7px;border-radius:50%;background:#2dbd71;display:inline-block" id="tdStatusDot"></span>
+          <span id="tdStatusText">В пути</span>
+        </span>
+        <span style="font-size:12px;color:#bbb" id="tdDate">Текущий рейс</span>
+      </div>
+      <div class="td-route-big" id="tdRoute">Ташкент → Самарканд</div>
+      <div class="td-cargo" id="tdCargo">Электроника · 12 тонн</div>
+      <div class="td-trip-stat" id="tdStat">📍 847 км · ⏱ ~9 часов</div>
+
+      <!-- Active trip: progress bar -->
+      <div class="td-active-prog" id="tdProgWrap">
+        <div class="td-prog-track">
+          <div class="td-prog-fill" id="tdProgFill" style="width:38%"></div>
+        </div>
+        <div class="td-prog-stats">
+          <div class="td-prog-stat">Проехано <b id="tdDrivenLbl">320 км</b></div>
+          <div class="td-prog-stat"><b id="tdPctLbl">38%</b></div>
+          <div class="td-prog-stat">Осталось <b id="tdRemLbl">527 км</b></div>
+        </div>
+      </div>
+
+      <!-- Stepper (active only) -->
+      <div class="stepper" id="tdStepper" style="display:none;margin-top:14px;margin-bottom:0"></div>
+    </div>
+
+    <!-- Finish button (active only) -->
+    <button class="td-finish-btn" id="tdFinishBtn" onclick="finishTrip();goBack()">Завершить рейс</button>
+
+    <!-- Finance summary (history only) -->
+    <div id="tdFinanceWrap" style="display:none">
+      <div class="td-sect">Финансы</div>
+      <div class="td-card">
+        <div class="fin-row">
+          <span class="fin-lbl">Доход</span>
+          <span class="fin-val" style="color:#2dbd71" id="tdIncome">+980 000 UZS</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-lbl">Расходы</span>
+          <span class="fin-val" style="color:#ff4b4b" id="tdExpTotal">−280 000 UZS</span>
+        </div>
+        <div class="fin-row">
+          <span class="fin-lbl">Итого</span>
+          <span class="fin-val" id="tdNet">+700 000 UZS</span>
+        </div>
+        <div class="fin-bar"><div class="fin-bar-fill" id="tdFinBar" style="width:71%"></div></div>
+      </div>
+    </div>
+
+    <!-- Expense list (history only) -->
+    <div id="tdExpWrap" style="display:none">
+      <div class="td-sect">Расходы</div>
+      <div class="td-card" id="tdExpList"></div>
+    </div>
+
+    <!-- Owner comment (history only) -->
+    <div id="tdOwnerWrap" style="display:none">
+      <div class="td-sect">Комментарий владельца</div>
+      <div class="td-card" id="tdOwnerCard"></div>
+    </div>
+
+  </div>
+  </div>
+
+</div><!-- /screenTripDetail -->
+
+
+<!-- ══════════════════════════════════════════
+     SCREEN 4 — TRUCK DETAIL
+══════════════════════════════════════════ -->
+<div class="screen" id="screenTruck">
+
+  <div class="sbar">
+    <span class="sbar-time" id="clk4">10:56</span>
+    <div class="sbar-icons"><span>4G</span><span>▪▪▪</span><span>🔋 80</span></div>
+  </div>
+
+  <div class="hdr">
+    <div class="hdr-back" onclick="goBack()">‹</div>
+    <span class="hdr-title" id="truckHdrTitle">VOLVO FH 12</span>
+    <button class="hdr-action" onclick="openModal('tripsModal')" title="История рейсов">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="screen-scroll">
+  <div class="scroll">
+
+    <!-- Truck card -->
+    <div class="truck-card">
+      <div class="tc-photo">
+        <img id="tcPhoto" src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85" alt=""/>
+        <!-- gradient + name overlay at top -->
+        <div style="position:absolute;top:0;left:0;right:0;padding:14px 16px 40px;background:linear-gradient(to bottom,rgba(0,0,0,.7) 0%,rgba(0,0,0,0) 100%);pointer-events:none;display:flex;align-items:center;gap:12px;">
+          <div id="tcLogo" style="width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 100 100" style="width:34px;height:34px"><circle cx="50" cy="50" r="48" fill="#003057"/><text x="50" y="62" text-anchor="middle" font-size="40" font-weight="900" fill="#fff" font-family="sans-serif">V</text></svg>
+          </div>
+          <div>
+            <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:.5px;line-height:1.1" id="tcBrand">VOLVO</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-top:2px" id="tcModel">FH 12 · 2021</div>
+          </div>
+        </div>
+        <!-- edit button top-right -->
+        <button onclick="openModal('editModal')" style="position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:17px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);border:none;color:#fff;font-size:15px;cursor:pointer;">✏</button>
+        <!-- plate badge bottom-left -->
+        <div class="plate plate-abs">
+          <div class="plate-reg" id="tcPlateReg">01</div>
+          <div class="plate-num" id="tcPlateNum">A 234 DG</div>
+          <div class="plate-flag">🇺🇿</div>
+        </div>
+      </div>
+    </div>
+    <!-- hidden elements kept for JS compatibility -->
+    <span id="tcLogo" style="display:none"></span>
+    <span id="tcDriverPhoto" style="display:none"></span>
+    <span id="tcDriverName" style="display:none"></span>
+    <div id="tcDriverBadge" style="display:none"></div>
+
+    <div id="tcTabInfo">
+
+    <!-- Mini map (shown when tripActive) -->
+    <div id="tcMiniMapCard" style="display:none;background:#fff;border-radius:20px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);" onmousedown="startNavPress(event)" onmouseup="cancelNavPress()" onmouseleave="cancelNavPress()" ontouchstart="startNavPress(event)" ontouchend="cancelNavPress()">
+      <div style="position:relative;cursor:pointer;" onclick="openModal('navModal')">
+        <svg id="tcMapSvg" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+          <!-- sky/background -->
+          <rect width="360" height="160" fill="#e8e3d5"/>
+          <!-- Kazakhstan steppe (north) -->
+          <path d="M0,0 L360,0 L360,65 Q300,55 240,58 Q180,50 120,58 Q60,52 0,60Z" fill="#ddd8c9"/>
+          <!-- Kyzylkum desert -->
+          <path d="M30,60 Q80,70 140,65 Q180,68 220,70 Q200,100 160,110 Q100,115 50,100 Q20,90 30,60Z" fill="#e2dcc8"/>
+          <!-- Fergana valley (east) -->
+          <path d="M260,55 Q300,52 360,60 L360,100 Q330,95 300,85 Q275,78 260,55Z" fill="#d8d3c0"/>
+          <!-- Pamir mountains (south-east) -->
+          <path d="M230,100 L250,82 L268,96 L285,76 L305,90 L325,72 L345,86 L360,75 L360,160 L230,160Z" fill="#c8c2b0"/>
+          <path d="M235,100 L252,86 L267,98 L283,80 L302,93 L322,76 L342,89 L355,78" fill="none" stroke="#b8b2a0" stroke-width="1" opacity=".6"/>
+          <!-- Aral Sea remnant (north-west) -->
+          <ellipse cx="32" cy="42" rx="22" ry="14" fill="#b8cdd8" opacity=".8"/>
+          <!-- Amu Darya river -->
+          <path d="M90,105 Q110,90 125,75 Q140,62 155,58" fill="none" stroke="#b8cdd8" stroke-width="2.5" opacity=".6"/>
+          <!-- Country border hints -->
+          <path d="M0,78 Q60,72 120,78 Q180,72 240,80 Q300,74 360,80" fill="none" stroke="#ccc5b0" stroke-width=".8" stroke-dasharray="4,3" opacity=".6"/>
+          <!-- Labels -->
+          <text x="80" y="38" font-size="9" fill="#b0a898" font-family="sans-serif" font-weight="600" letter-spacing=".5">КАЗАХСТАН</text>
+          <text x="85" y="90" font-size="8.5" fill="#a09888" font-family="sans-serif" font-weight="600" letter-spacing=".4">УЗБЕКИСТАН</text>
+          <text x="270" y="118" font-size="8" fill="#a09888" font-family="sans-serif" font-weight="600" letter-spacing=".3">ТАДЖИКИСТАН</text>
+          <!-- Route dashed line: Tashkent→current position (38% = x≈255,y≈96) -->
+          <line x1="278" y1="85" x2="254" y2="96" stroke="#0F0F37" stroke-width="2.5" stroke-dasharray="5,3.5" stroke-linecap="round"/>
+          <!-- remaining route (faded) -->
+          <line x1="254" y1="96" x2="213" y2="108" stroke="#0F0F37" stroke-width="2" stroke-dasharray="4,4" stroke-linecap="round" opacity=".3"/>
+          <!-- Origin pin (Tashkent) -->
+          <circle cx="278" cy="85" r="5" fill="#555" stroke="#fff" stroke-width="1.5"/>
+          <text x="260" y="79" font-size="8.5" fill="#444" font-family="sans-serif" font-weight="700">Ташкент</text>
+          <!-- Destination pin (Samarkand) -->
+          <circle cx="213" cy="108" r="5" fill="#FAE436" stroke="#0F0F37" stroke-width="1.5"/>
+          <text x="190" y="123" font-size="8.5" fill="#444" font-family="sans-serif" font-weight="700">Самарканд</text>
+          <!-- Pulse ring (current truck position) -->
+          <circle class="map-pulse-dot" cx="254" cy="96" r="7" fill="#2dbd71" opacity=".4"/>
+          <!-- Truck dot -->
+          <circle cx="254" cy="96" r="5" fill="#2dbd71" stroke="#fff" stroke-width="2"/>
+          <!-- Speed / truck icon -->
+          <text x="263" y="93" font-size="9" fill="#1a8c52" font-family="sans-serif" font-weight="800" id="tcMapSpeedDot">72 км/ч</text>
+          <!-- Open map button -->
+          <rect x="238" y="7" width="115" height="26" rx="13" fill="rgba(255,255,255,.95)" filter="url(#ms)"/>
+          <text x="295" y="24" font-size="10.5" fill="#0F0F37" font-weight="700" text-anchor="middle" font-family="sans-serif">Открыть карту →</text>
+          <defs><filter id="ms" x="-10%" y="-20%" width="120%" height="160%"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity=".12"/></filter></defs>
+        </svg>
+      </div>
+      <!-- Stats row -->
+      <div style="display:flex;border-top:1px solid #f0f0f0;">
+        <div style="flex:1;padding:10px 12px;border-right:1px solid #f0f0f0;">
+          <div style="font-size:10px;color:#aaa;font-weight:600;margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px">Локация</div>
+          <div style="font-size:13px;font-weight:800;color:#0F0F37" id="tcMapLoc">Джизак</div>
+        </div>
+        <div style="flex:1;padding:10px 12px;border-right:1px solid #f0f0f0;">
+          <div style="font-size:10px;color:#aaa;font-weight:600;margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px">Скорость</div>
+          <div style="font-size:13px;font-weight:800;color:#0F0F37" id="tcMapSpeed">72 км/ч</div>
+        </div>
+        <div style="flex:1;padding:10px 12px;">
+          <div style="font-size:10px;color:#aaa;font-weight:600;margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px">Маршрут</div>
+          <div style="font-size:12px;font-weight:800;color:#0F0F37;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="tcMapRouteTxt">Ташкент→Самарканд</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current trip card (shown when В пути) -->
+    <div id="tcTripCard" style="display:none;background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);">
+      <!-- header row -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:11px;font-weight:700;color:#aaa;letter-spacing:.6px;text-transform:uppercase">Текущий рейс</span>
+        <span style="background:#e8f9f0;color:#1a8c52;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px">
+          <span style="width:7px;height:7px;border-radius:50%;background:#2dbd71;display:inline-block"></span>
+          В пути
+        </span>
+      </div>
+      <!-- route & cargo -->
+      <div id="tcTripRoute" style="font-size:20px;font-weight:800;color:#0F0F37;margin-bottom:4px">Ташкент → Самарканд</div>
+      <div id="tcTripCargo" style="font-size:13px;color:#666;margin-bottom:12px">Электроника · 12 тонн</div>
+      <!-- chips -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <span id="tcTripDate" style="background:#f4f4f4;border-radius:10px;padding:5px 10px;font-size:12px;color:#444">📅 22 июня 2026</span>
+        <span id="tcTripDistChip" style="background:#f4f4f4;border-radius:10px;padding:5px 10px;font-size:12px;color:#444">📍 847 км</span>
+        <span id="tcTripTimeChip" style="background:#f4f4f4;border-radius:10px;padding:5px 10px;font-size:12px;color:#444">⏱ ~9 часов</span>
+      </div>
+      <!-- progress labels -->
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+        <span style="font-size:10px;font-weight:700;color:#aaa;letter-spacing:.5px;text-transform:uppercase">Проехано</span>
+        <span style="font-size:10px;font-weight:700;color:#aaa;letter-spacing:.5px;text-transform:uppercase">Осталось</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+        <span id="tcTripProhKm" style="font-size:22px;font-weight:800;color:#0F0F37">320 км</span>
+        <span id="tcTripPct" style="font-size:14px;font-weight:700;color:#888">38%</span>
+        <span id="tcTripRemKm" style="font-size:22px;font-weight:800;color:#bbb">527 км</span>
+      </div>
+      <!-- progress bar -->
+      <div style="height:10px;background:#f0f0f0;border-radius:5px;overflow:visible;position:relative;margin-bottom:14px">
+        <div id="tcTripBar" style="height:100%;background:#FAE436;border-radius:5px;width:38%;position:relative;transition:width .4s">
+          <span style="position:absolute;right:-10px;top:-5px;font-size:18px;line-height:1">🚛</span>
+        </div>
+      </div>
+      <!-- stepper -->
+      <div id="tcStepper" class="stepper" style="margin-bottom:14px"></div>
+      <!-- dynamic status bottom -->
+      <div id="tcStatusBottom"></div>
+    </div>
+
+    <!-- Driver status -->
+    <div class="driver-status-card">
+      <div class="ds-header">
+        <span class="ds-title">Статус водителя</span>
+        <button class="ds-change" onclick="openModal('statusModal')">Изменить</button>
+      </div>
+      <button class="status-badge s-driving" id="statusBadge" onclick="openModal('statusModal')">
+        <div class="sb-dot" id="statusDot"></div>
+        <span class="sb-text" id="statusText">В пути</span>
+      </button>
+    </div>
+
+    <!-- Odometer photo -->
+    <button onclick="openModal('odoModal')" style="width:100%;background:#fff;border-radius:20px;padding:18px 20px;border:none;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:12px;text-align:left;">
+      <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#f7971e,#ffd200);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(247,151,30,.35);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:16px;font-weight:800;color:#0F0F37;margin-bottom:2px">Зафиксировать пробег</div>
+        <div style="font-size:13px;color:#aaa" id="odoSubText">Последний: 245 000 км</div>
+      </div>
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="#ccc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 7,7 1,13"/></svg>
+    </button>
+
+    <!-- Truck technical info -->
+    <div style="background:#fff;border-radius:20px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
+      <div style="padding:14px 16px 10px;border-bottom:1px solid #f0f0f0;">
+        <div style="font-size:12px;font-weight:700;color:#aaa;letter-spacing:.5px;text-transform:uppercase">Технические данные</div>
+      </div>
+      <div style="padding:4px 0">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+            </div>
+            <span style="font-size:14px;color:#667085">Двигатель</span>
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#0F0F37">D13K500 · Euro 6</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <span style="font-size:14px;color:#667085">Мощность</span>
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#0F0F37">500 л.с.</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4M7 2l4 4-4 4M17 22l-4-4 4-4M21 2l-4 4 4 4"/><line x1="7" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="17" y2="18"/></svg>
+            </div>
+            <span style="font-size:14px;color:#667085">Тип топлива</span>
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#0F0F37">Дизель</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <span style="font-size:14px;color:#667085">Грузоподъёмность</span>
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#0F0F37">25 тонн</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <span style="font-size:14px;color:#667085">Пробег</span>
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#0F0F37">245 000 км</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <span style="font-size:14px;color:#667085">Год выпуска</span>
+          </div>
+          <span style="font-size:14px;font-weight:700;color:#0F0F37">2021</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/></svg>
+            </div>
+            <span style="font-size:14px;color:#667085">VIN</span>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:#0F0F37;letter-spacing:.3px">YV2RT40A2MA123456</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trailer -->
+    <div class="trailer-card">
+      <div class="tc-hdr">
+        <div class="tc-brand-row">
+          <div class="tc-logo" style="background:#f0f0f0"><span style="font-size:22px">🔗</span></div>
+          <div><div class="tc-brand">Прицеп</div><div class="tc-model">01 B 123 RT · Рефрижератор</div></div>
+        </div>
+      </div>
+      <div class="tc-photo" style="height:155px">
+        <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=700&h=320&fit=crop&q=80" alt=""/>
+      </div>
+      <div class="tc-info">
+        <div class="tc-row"><span class="tc-ico">📦</span><span class="tc-lbl">Тип</span><span class="tc-val">Рефрижератор</span></div>
+        <div class="tc-row"><span class="tc-ico">⚖️</span><span class="tc-lbl">Грузоподъём.</span><span class="tc-val">20 тонн</span></div>
+        <div class="tc-row"><span class="tc-ico">📏</span><span class="tc-lbl">Длина</span><span class="tc-val">13.6 м</span></div>
+      </div>
+    </div>
+
+    </div><!-- /tcTabInfo -->
+
+    <div id="tcTabOrders" style="display:none;padding-bottom:20px">
+
+      <!-- Finance block -->
+      <div style="margin-bottom:4px">
+        <div class="sec-title">Финансы за месяц</div>
+        <div class="fin-grid">
+          <div class="stat-card">
+            <div class="stat-ic" style="background:#fff0f0"><span style="color:#ff4b4b">↗</span></div>
+            <div class="stat-l">Расходы</div>
+            <div class="stat-a" style="color:#ff4b4b" id="expDisp">0 UZS</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ic" style="background:#edfbf3"><span style="color:#2dbd71">↙</span></div>
+            <div class="stat-l">Доходы</div>
+            <div class="stat-a" style="color:#2dbd71" id="incDisp">1 500 000 UZS</div>
+          </div>
+          <button class="act-card" onclick="openModal('expModal',false)">
+            <div class="add-c" style="background:#fff0f0">
+              <span style="color:#ff4b4b;font-size:26px;font-weight:300;line-height:1">+</span>
+            </div>
+            <span class="act-l">Добавить расход</span>
+          </button>
+          <button class="act-card" onclick="openModal('incModal',false)">
+            <div class="add-c" style="background:#edfbf3">
+              <span style="color:#2dbd71;font-size:26px;font-weight:300;line-height:1">+</span>
+            </div>
+            <span class="act-l">Добавить доход</span>
+          </button>
+          <div class="net-row">
+            <span class="net-l">Чистая прибыль</span>
+            <span class="net-a" id="netDisp">+1 500 000 UZS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders/trips list -->
+      <div id="tcOrdersContent"></div>
+    </div>
+
+  </div>
+  </div><!-- /screen-scroll -->
+
+</div><!-- /screenTruck -->
+
+
+<!-- ══════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════ -->
+
+<div class="modal" id="statusModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">Статус водителя</div>
+    <div class="msub">Выберите ваш текущий статус</div>
+    <div class="status-grid">
+      <div class="status-option" data-key="driving" onclick="setStatus('driving')" style="color:#1a8c52;background:#e8f9f0;">
+        <div class="so-dot" style="background:#2dbd71"></div><span class="so-text" style="color:#1a8c52">В пути</span>
+      </div>
+      <div class="status-option" data-key="parked" onclick="setStatus('parked')" style="color:#c07a00;background:#fff8e6;">
+        <div class="so-dot" style="background:#f5a623"></div><span class="so-text" style="color:#c07a00">Стоянка</span>
+      </div>
+      <div class="status-option" data-key="free" onclick="setStatus('free')" style="color:#cc1c1c;background:#ffeaea;">
+        <div class="so-dot" style="background:#ff4b4b"></div><span class="so-text" style="color:#cc1c1c">Свободен</span>
+      </div>
+      <div class="status-option" data-key="repair" onclick="setStatus('repair')" style="color:#c06000;background:#fff3e0;">
+        <span style="font-size:14px">🔧</span><span class="so-text" style="color:#c06000">Ремонт</span>
+      </div>
+    </div>
+    <p style="font-size:12px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5">
+      Статус «В пути» устанавливается автоматически<br>при начале рейса
+    </p>
+  </div>
+</div>
+
+<div class="modal" id="newTripModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">Новый рейс</div>
+    <div class="msub">Заполните данные перед отправкой</div>
+    <div class="field"><div class="field-label">Откуда</div>
+      <input class="field-input" id="ntFrom" placeholder="Город отправления" oninput="updatePreview()"/></div>
+    <div class="route-arrow">↓</div>
+    <div class="field"><div class="field-label">Куда</div>
+      <input class="field-input" id="ntTo" placeholder="Город назначения" oninput="updatePreview()"/></div>
+    <div class="field-row">
+      <div class="field"><div class="field-label">Расстояние (км)</div>
+        <input class="field-input" id="ntDist" type="number" placeholder="847" oninput="updatePreview()"/></div>
+      <div class="field"><div class="field-label">Время в пути</div>
+        <input class="field-input" id="ntTime" placeholder="~9 часов" oninput="updatePreview()"/></div>
+    </div>
+    <div class="field"><div class="field-label">Груз</div>
+      <input class="field-input" id="ntCargo" placeholder="Описание груза, тип, вес" oninput="updatePreview()"/></div>
+    <div class="field"><div class="field-label">Ожидаемая прибыль (UZS)</div>
+      <input class="field-input big" id="ntProfit" type="number" placeholder="0" oninput="updatePreview()"/></div>
+    <div class="trip-preview" id="ntPreview" style="display:none">
+      <div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Предпросмотр</div>
+      <div class="tp-row"><span class="tp-lbl">Маршрут</span><span class="tp-v" id="prevRoute">—</span></div>
+      <div class="tp-row"><span class="tp-lbl">Груз</span><span class="tp-v" id="prevCargo">—</span></div>
+      <div class="tp-row"><span class="tp-lbl">Расстояние</span><span class="tp-v" id="prevDist">—</span></div>
+      <div class="tp-row"><span class="tp-lbl">Прибыль</span><span class="tp-v" style="color:#FAE436" id="prevProfit">—</span></div>
+    </div>
+    <button class="btn btn-dark" onclick="startTrip()">🚛 &nbsp;Начать рейс</button>
+    <button class="btn-cancel" onclick="closeModal('newTripModal')">Отмена</button>
+  </div>
+</div>
+
+<!-- Finish trip confirmation modal -->
+<div class="modal" id="finishConfirmModal">
+  <div class="msheet" style="padding:24px 20px 40px">
+    <div class="mhandle"></div>
+    <div style="text-align:center;margin-bottom:6px;font-size:36px">🏁</div>
+    <div class="mtitle">Завершить рейс?</div>
+    <div class="msub" style="margin-bottom:24px">После завершения вы сможете начать новый рейс</div>
+    <button class="btn btn-dark" onclick="finishTripConfirmed()">✓ &nbsp;Завершить рейс</button>
+    <button class="btn-cancel" onclick="closeModal('finishConfirmModal')">Отмена</button>
+  </div>
+</div>
+
+<!-- Owner assigns trip modal -->
+<div class="modal" id="ownerTripModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+      <div style="width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#3d5afe,#7b1fa2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">👤</div>
+      <div>
+        <div style="font-size:18px;font-weight:800;color:#0F0F37;line-height:1.2">Назначить рейс</div>
+        <div style="font-size:12px;color:#888;margin-top:1px">Иван Петров · Владелец</div>
+      </div>
+    </div>
+    <div class="msub" style="text-align:left;margin-bottom:18px">Рейс отправится водителю на подтверждение</div>
+    <div class="field"><div class="field-label">Откуда</div>
+      <input class="field-input" id="otFrom" placeholder="Город отправления" oninput="updateOwnerPreview()"/></div>
+    <div class="route-arrow">↓</div>
+    <div class="field"><div class="field-label">Куда</div>
+      <input class="field-input" id="otTo" placeholder="Город назначения" oninput="updateOwnerPreview()"/></div>
+    <div class="field-row">
+      <div class="field"><div class="field-label">Расстояние (км)</div>
+        <input class="field-input" id="otDist" type="number" placeholder="847" oninput="updateOwnerPreview()"/></div>
+      <div class="field"><div class="field-label">Время в пути</div>
+        <input class="field-input" id="otTime" placeholder="~9 часов" oninput="updateOwnerPreview()"/></div>
+    </div>
+    <div class="field"><div class="field-label">Груз</div>
+      <input class="field-input" id="otCargo" placeholder="Описание груза, тип, вес" oninput="updateOwnerPreview()"/></div>
+    <div class="field"><div class="field-label">Оплата водителю (UZS)</div>
+      <input class="field-input big" id="otProfit" type="number" placeholder="0" oninput="updateOwnerPreview()"/></div>
+    <div class="trip-preview" id="otPreview" style="display:none">
+      <div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Предпросмотр</div>
+      <div class="tp-row"><span class="tp-lbl">Маршрут</span><span class="tp-v" id="otPrevRoute">—</span></div>
+      <div class="tp-row"><span class="tp-lbl">Груз</span><span class="tp-v" id="otPrevCargo">—</span></div>
+      <div class="tp-row"><span class="tp-lbl">Расстояние</span><span class="tp-v" id="otPrevDist">—</span></div>
+      <div class="tp-row"><span class="tp-lbl">Оплата</span><span class="tp-v" style="color:#3d5afe" id="otPrevProfit">—</span></div>
+    </div>
+    <button class="btn" style="background:linear-gradient(135deg,#3d5afe,#7b1fa2);color:#fff;margin-top:8px" onclick="ownerAssignTrip()">📤 &nbsp;Отправить водителю</button>
+    <button class="btn-cancel" onclick="closeModal('ownerTripModal')">Отмена</button>
+  </div>
+</div>
+
+<!-- Owner trip notification (shown to driver) -->
+<div class="modal" id="ownerAssignNotifModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <!-- Header notification -->
+    <div id="oanHeaderBg" style="background:linear-gradient(135deg,#e8eaf6,#ede7f6);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <div id="oanHeaderIcon" style="width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#3d5afe,#7b1fa2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👤</div>
+      <div>
+        <div id="oanHeaderTitle" style="font-size:13px;font-weight:800;color:#3d5afe;letter-spacing:.1px">Новый рейс от владельца</div>
+        <div id="oanHeaderSub" style="font-size:12px;color:#7b1fa2;margin-top:2px">Иван Петров назначил вам рейс</div>
+      </div>
+    </div>
+    <!-- Trip detail card -->
+    <div id="ownerAssignCard" style="background:#f7f8ff;border-radius:18px;padding:16px;margin-bottom:20px;border:1.5px solid #e3e6ff"></div>
+    <!-- Pending state (shown when driver initiates) -->
+    <div id="oanPendingState" style="display:none;background:#f0fdf4;border-radius:14px;padding:14px 16px;margin-bottom:12px;display:none;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">⏳</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#15803d">Запрос отправлен</div>
+        <div style="font-size:12px;color:#16a34a;margin-top:2px">Ожидание ответа от Иван Петрова...</div>
+      </div>
+    </div>
+    <button id="oanAcceptBtn" class="btn btn-green" onclick="acceptOwnerTrip()">✓ &nbsp;Принять рейс</button>
+    <button id="oanDeclineBtn" class="btn btn-ghost-r" onclick="declineOwnerTrip()">Отклонить</button>
+  </div>
+</div>
+
+<div class="modal" id="expModal">
+  <div class="msheet" style="padding:16px 20px 48px">
+    <div class="msheet-handle"></div>
+    <div class="mtitle" style="color:#ff4b4b;margin-bottom:4px">Добавить расход</div>
+    <div style="font-size:12px;color:#aaa;text-align:center;margin-bottom:16px" id="expContext"></div>
+
+    <!-- Category grid -->
+    <div class="field-label" style="margin-bottom:10px">Категория</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px" id="expCatGrid">
+      <button class="exp-cat-btn" data-cat="fuel"    onclick="pickExpCat(this)"><span>⛽</span><span>Топливо</span></button>
+      <button class="exp-cat-btn" data-cat="food"    onclick="pickExpCat(this)"><span>🍽</span><span>Питание</span></button>
+      <button class="exp-cat-btn" data-cat="parking" onclick="pickExpCat(this)"><span>🅿</span><span>Стоянка</span></button>
+      <button class="exp-cat-btn" data-cat="parts"   onclick="pickExpCat(this)"><span>🔩</span><span>Запчасти</span></button>
+      <button class="exp-cat-btn" data-cat="service" onclick="pickExpCat(this)"><span>🔧</span><span>Сервис/Мастер</span></button>
+      <button class="exp-cat-btn" data-cat="wash"    onclick="pickExpCat(this)"><span>🚿</span><span>Мойка</span></button>
+      <button class="exp-cat-btn" data-cat="fine"    onclick="pickExpCat(this)"><span>📋</span><span>Штраф</span></button>
+      <button class="exp-cat-btn" data-cat="insure"  onclick="pickExpCat(this)"><span>🛡</span><span>Страховка</span></button>
+      <button class="exp-cat-btn" data-cat="other"   onclick="pickExpCat(this)"><span>📦</span><span>Другое</span></button>
+    </div>
+
+    <!-- Fuel sub-type (only for Топливо) -->
+    <div id="expFuelRow" style="display:none;margin-bottom:14px">
+      <div class="field-label" style="margin-bottom:8px">Тип топлива</div>
+      <div style="display:flex;gap:8px">
+        <button id="expFuelDiesel" onclick="pickFuelType('diesel')" style="flex:1;padding:10px;border-radius:12px;border:2px solid #0F0F37;background:#0F0F37;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">🛢 Салярка</button>
+        <button id="expFuelGas"    onclick="pickFuelType('gas')"    style="flex:1;padding:10px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">💨 Газ</button>
+      </div>
+    </div>
+
+    <!-- Quantity field (only for Топливо) -->
+    <div id="expQtyRow" style="display:none;margin-bottom:14px">
+      <div class="field-label" style="margin-bottom:8px">Количество</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input type="number" placeholder="0" id="expQty" style="flex:1;font-size:20px;font-weight:700;text-align:center;border:none;border-bottom:2px solid #e0e0e0;padding:8px 0;outline:none;color:#0F0F37;background:transparent"/>
+        <span id="expQtyUnit" style="font-size:16px;font-weight:700;color:#888;flex-shrink:0">Л</span>
+      </div>
+    </div>
+
+    <!-- Amount + currency -->
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="display:inline-flex;align-items:baseline;gap:6px;border-bottom:2px solid #eee;padding-bottom:8px">
+        <input type="number" placeholder="0" id="expAmt" style="font-size:42px;font-weight:700;color:#0F0F37;border:none;outline:none;background:transparent;width:140px;text-align:right;font-family:inherit"/>
+        <span id="expCurSymbol" style="font-size:15px;font-weight:600;color:#bbb;padding-bottom:4px">Sum</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:20px">
+      <button class="exp-cur-btn active" data-cur="UZS"   onclick="setExpCur('UZS')">Sum</button>
+      <button class="exp-cur-btn"        data-cur="USD"   onclick="setExpCur('USD')">$</button>
+      <button class="exp-cur-btn"        data-cur="RUB"   onclick="setExpCur('RUB')">Rub</button>
+      <button class="exp-cur-btn"        data-cur="KZT"   onclick="setExpCur('KZT')">Tenge</button>
+      <button class="exp-cur-btn"        data-cur="EUR"   onclick="setExpCur('EUR')">Euro</button>
+    </div>
+
+    <!-- Photo receipt (for categories that have it) -->
+    <div id="expPhotoRow" style="display:none;margin-bottom:14px">
+      <button onclick="mockPhotoReceipt()" style="width:100%;padding:12px;background:#f8f8f8;border:1.5px dashed #ccc;border-radius:14px;color:#555;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span id="expPhotoLabel">Фото чека (необязательно)</span>
+      </button>
+    </div>
+
+    <!-- Reason (only for Другое) -->
+    <div id="expReasonRow" style="display:none;margin-bottom:14px">
+      <div class="field-label" style="margin-bottom:8px">Причина</div>
+      <textarea class="note-inp" id="expReason" placeholder="Укажите причину расхода..."></textarea>
+    </div>
+
+    <!-- Comment (text / voice) -->
+    <div class="field-label" style="margin-bottom:10px;margin-top:6px">Комментарий <span style="font-weight:400;color:#bbb;font-size:11px">(необязательно)</span></div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button id="expCmtTabText"  onclick="switchExpCmt('text')"  style="flex:1;padding:9px;border-radius:12px;border:2px solid #0F0F37;background:#0F0F37;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">✏ Текст</button>
+      <button id="expCmtTabVoice" onclick="switchExpCmt('voice')" style="flex:1;padding:9px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">🎤 Голосовое</button>
+    </div>
+    <div id="expCmtText">
+      <textarea class="note-inp" id="expNote" placeholder="Заметка к расходу..."></textarea>
+    </div>
+    <div id="expCmtVoice" style="display:none;">
+      <div id="expVoiceIdle" style="background:#f4f4f4;border-radius:16px;padding:16px;text-align:center;">
+        <button onclick="startExpVoice()" style="width:60px;height:60px;border-radius:30px;background:#0F0F37;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm-1 19.93A8 8 0 0 1 4 13H2a10 10 0 0 0 9 9.93V24h2v-1.07A10 10 0 0 0 22 13h-2a8 8 0 0 1-7 7.93z"/></svg>
+        </button>
+        <div style="font-size:13px;color:#888">Нажмите чтобы записать</div>
+      </div>
+      <div id="expVoiceRecording" style="display:none;background:#0F0F37;border-radius:16px;padding:16px;text-align:center;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:3px;height:32px;margin-bottom:8px">
+          <div style="width:3px;background:#FAE436;border-radius:2px;animation:wave .8s ease-in-out infinite;height:8px"></div>
+          <div style="width:3px;background:#FAE436;border-radius:2px;animation:wave .8s ease-in-out .1s infinite;height:16px"></div>
+          <div style="width:3px;background:#FAE436;border-radius:2px;animation:wave .8s ease-in-out .2s infinite;height:24px"></div>
+          <div style="width:3px;background:#FAE436;border-radius:2px;animation:wave .8s ease-in-out .3s infinite;height:18px"></div>
+          <div style="width:3px;background:#FAE436;border-radius:2px;animation:wave .8s ease-in-out .15s infinite;height:28px"></div>
+          <div style="width:3px;background:#FAE436;border-radius:2px;animation:wave .8s ease-in-out .25s infinite;height:14px"></div>
+          <div style="width:3px;background:#FAE436;border-radius:2px;animation:wave .8s ease-in-out .05s infinite;height:20px"></div>
+        </div>
+        <div id="expVoiceTimer" style="font-size:16px;font-weight:800;color:#FAE436;margin-bottom:8px">0:00</div>
+        <button onclick="stopExpVoice()" style="padding:8px 24px;border-radius:20px;background:#ff4b4b;color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;">Остановить</button>
+      </div>
+      <div id="expVoiceDone" style="display:none;">
+        <div style="background:#1a1a3a;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+          <button onclick="toggleExpVoicePlay(this)" style="width:36px;height:36px;border-radius:18px;background:#FAE436;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg id="expVoicePlayIco" width="12" height="14" viewBox="0 0 12 14" fill="#0F0F37"><polygon points="0,0 12,7 0,14"/></svg>
+          </button>
+          <div style="flex:1;display:flex;align-items:center;gap:2px;height:24px">
+            <div style="width:3px;background:#FAE436;border-radius:2px;height:10px;opacity:.7"></div>
+            <div style="width:3px;background:#FAE436;border-radius:2px;height:18px;opacity:.7"></div>
+            <div style="width:3px;background:#FAE436;border-radius:2px;height:22px;opacity:.7"></div>
+            <div style="width:3px;background:#FAE436;border-radius:2px;height:14px;opacity:.7"></div>
+            <div style="width:3px;background:#FAE436;border-radius:2px;height:20px;opacity:.7"></div>
+          </div>
+          <span id="expVoiceDur" style="font-size:13px;color:#aaa;flex-shrink:0">0:00</span>
+        </div>
+        <button onclick="rerecordExpVoice()" style="width:100%;margin-top:8px;padding:8px;background:transparent;border:1px solid #e0e0e0;border-radius:10px;font-size:13px;color:#888;cursor:pointer;">Перезаписать</button>
+      </div>
+    </div>
+
+    <button class="btn btn-red" onclick="saveTx('exp')" style="margin-top:14px">Сохранить расход</button>
+    <button class="btn-cancel" onclick="closeModal('expModal')">Отмена</button>
+  </div>
+</div>
+
+<div class="modal" id="incModal">
+  <div class="msheet" style="padding:16px 20px 48px">
+    <div class="msheet-handle"></div>
+    <div class="mtitle" style="color:#2dbd71;margin-bottom:4px">Добавить доход</div>
+    <div style="font-size:12px;color:#aaa;text-align:center;margin-bottom:16px" id="incContext"></div>
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="display:inline-flex;align-items:baseline;gap:6px;border-bottom:2px solid #eee;padding-bottom:8px">
+        <input type="number" placeholder="0" id="incAmt" style="font-size:42px;font-weight:700;color:#0F0F37;border:none;outline:none;background:transparent;width:140px;text-align:right;font-family:inherit"/>
+        <span id="incCurSymbol" style="font-size:15px;font-weight:600;color:#bbb;padding-bottom:4px">Sum</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:20px">
+      <button class="exp-cur-btn active" data-cur="UZS" onclick="setIncCur('UZS')">Sum</button>
+      <button class="exp-cur-btn"        data-cur="USD" onclick="setIncCur('USD')">$</button>
+      <button class="exp-cur-btn"        data-cur="RUB" onclick="setIncCur('RUB')">Rub</button>
+      <button class="exp-cur-btn"        data-cur="KZT" onclick="setIncCur('KZT')">Tenge</button>
+      <button class="exp-cur-btn"        data-cur="EUR" onclick="setIncCur('EUR')">Euro</button>
+    </div>
+    <div class="field-label" style="margin-bottom:10px">Категория</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+      <button class="exp-cat-btn" data-cat="trip"  onclick="pickIncCat(this)"><span>💰</span><span>Оплата рейса</span></button>
+      <button class="exp-cat-btn" data-cat="bonus" onclick="pickIncCat(this)"><span>🎁</span><span>Бонус</span></button>
+      <button class="exp-cat-btn" data-cat="other" onclick="pickIncCat(this)"><span>📥</span><span>Другое</span></button>
+    </div>
+    <div class="field-label" style="margin-bottom:10px;margin-top:6px">Комментарий <span style="font-weight:400;color:#bbb;font-size:11px">(необязательно)</span></div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button id="incCmtTabText"  onclick="switchIncCmt('text')"  style="flex:1;padding:9px;border-radius:12px;border:2px solid #2dbd71;background:#2dbd71;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">✏ Текст</button>
+      <button id="incCmtTabVoice" onclick="switchIncCmt('voice')" style="flex:1;padding:9px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">🎤 Голосовое</button>
+    </div>
+    <div id="incCmtText">
+      <textarea class="note-inp" id="incNote" placeholder="Заметка к доходу..."></textarea>
+    </div>
+    <div id="incCmtVoice" style="display:none;">
+      <div id="incVoiceIdle" style="background:#f4f4f4;border-radius:16px;padding:16px;text-align:center;">
+        <button onclick="startIncVoice()" style="width:60px;height:60px;border-radius:30px;background:#2dbd71;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;margin-bottom:8px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm-1 19.93A8 8 0 0 1 4 13H2a10 10 0 0 0 9 9.93V24h2v-1.07A10 10 0 0 0 22 13h-2a8 8 0 0 1-7 7.93z"/></svg>
+        </button>
+        <div style="font-size:13px;color:#888">Нажмите чтобы записать</div>
+      </div>
+      <div id="incVoiceRecording" style="display:none;background:#1a3a2a;border-radius:16px;padding:16px;text-align:center;">
+        <div style="display:flex;align-items:center;justify-content:center;gap:3px;height:32px;margin-bottom:8px">
+          <div style="width:3px;background:#2dbd71;border-radius:2px;animation:wave .8s ease-in-out infinite;height:8px"></div>
+          <div style="width:3px;background:#2dbd71;border-radius:2px;animation:wave .8s ease-in-out .1s infinite;height:16px"></div>
+          <div style="width:3px;background:#2dbd71;border-radius:2px;animation:wave .8s ease-in-out .2s infinite;height:24px"></div>
+          <div style="width:3px;background:#2dbd71;border-radius:2px;animation:wave .8s ease-in-out .3s infinite;height:18px"></div>
+          <div style="width:3px;background:#2dbd71;border-radius:2px;animation:wave .8s ease-in-out .15s infinite;height:28px"></div>
+          <div style="width:3px;background:#2dbd71;border-radius:2px;animation:wave .8s ease-in-out .25s infinite;height:14px"></div>
+          <div style="width:3px;background:#2dbd71;border-radius:2px;animation:wave .8s ease-in-out .05s infinite;height:20px"></div>
+        </div>
+        <div id="incVoiceTimer" style="font-size:16px;font-weight:800;color:#2dbd71;margin-bottom:8px">0:00</div>
+        <button onclick="stopIncVoice()" style="padding:8px 24px;border-radius:20px;background:#ff4b4b;color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;">Остановить</button>
+      </div>
+      <div id="incVoiceDone" style="display:none;">
+        <div style="background:#1a3a2a;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+          <button onclick="toggleIncVoicePlay(this)" style="width:36px;height:36px;border-radius:18px;background:#2dbd71;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg id="incVoicePlayIco" width="12" height="14" viewBox="0 0 12 14" fill="#fff"><polygon points="0,0 12,7 0,14"/></svg>
+          </button>
+          <div style="flex:1;display:flex;align-items:center;gap:2px;height:24px">
+            <div style="width:3px;background:#2dbd71;border-radius:2px;height:10px;opacity:.7"></div>
+            <div style="width:3px;background:#2dbd71;border-radius:2px;height:18px;opacity:.7"></div>
+            <div style="width:3px;background:#2dbd71;border-radius:2px;height:22px;opacity:.7"></div>
+            <div style="width:3px;background:#2dbd71;border-radius:2px;height:14px;opacity:.7"></div>
+            <div style="width:3px;background:#2dbd71;border-radius:2px;height:20px;opacity:.7"></div>
+          </div>
+          <span id="incVoiceDur" style="font-size:13px;color:#aaa;flex-shrink:0">0:00</span>
+        </div>
+        <button onclick="rerecordIncVoice()" style="width:100%;margin-top:8px;padding:8px;background:transparent;border:1px solid #e0e0e0;border-radius:10px;font-size:13px;color:#888;cursor:pointer;">Перезаписать</button>
+      </div>
+    </div>
+    <button class="btn btn-green" onclick="saveTx('inc')" style="margin-top:14px">Сохранить доход</button>
+    <button class="btn-cancel" onclick="closeModal('incModal')">Отмена</button>
+  </div>
+</div>
+
+<div class="modal" id="odoModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">Зафиксировать пробег</div>
+    <div class="msub" id="odoSub">VOLVO FH 12 · 01 A 234 DG<br><span style="font-size:13px;color:#bbb">Последнее: 245 000 км</span></div>
+    <div style="height:110px;background:#f5f5f5;border-radius:18px;border:2px dashed #e0e0e0;
+      display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;
+      margin-bottom:18px;cursor:pointer;" onclick="toast('📷 Подключите react-native-image-picker')">
+      <span style="font-size:32px">📷</span>
+      <span style="font-size:13px;color:#aaa;font-weight:500">Сфотографировать панель приборов</span>
+    </div>
+    <div class="field-label" style="margin-bottom:8px">Текущие показания (км)</div>
+    <input class="field-input big" id="odoVal" type="number" placeholder="245 000"/>
+    <button class="btn btn-dark" style="margin-top:10px" onclick="saveOdo()">Сохранить пробег</button>
+    <button class="btn-cancel" onclick="closeModal('odoModal')">Отмена</button>
+  </div>
+</div>
+
+<div class="modal" id="editModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">Редактировать</div>
+    <div class="msub">Изменить данные грузовика или прицепа</div>
+    <button class="btn btn-dark" onclick="closeModal('editModal')">Готово</button>
+  </div>
+</div>
+
+<div class="modal" id="inviteModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle">Приглашение</div>
+    <div class="msub"><b style="color:#0F0F37">Иван Петров</b> назначает вас водителем</div>
+    <div style="background:#f7f7f7;border-radius:20px;overflow:hidden;margin-bottom:22px;">
+      <div style="width:100%;height:130px;overflow:hidden;">
+        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&h=200&fit=crop" style="width:100%;height:100%;object-fit:cover"/>
+      </div>
+      <div style="padding:12px 14px 14px">
+        <div style="font-size:17px;font-weight:700;color:#0F0F37">VOLVO FH 12 · 2021</div>
+        <div style="font-size:13px;color:#888;margin-top:2px">🇺🇿 01 A 234 DG</div>
+        <div style="font-size:12px;color:#aaa;margin-top:4px">🔗 Прицеп: 01 B 123 RT · Рефрижератор · 20т</div>
+      </div>
+    </div>
+    <button class="btn btn-green" onclick="closeModal('inviteModal')">✓ &nbsp;Принять</button>
+    <button class="btn btn-ghost-r" onclick="closeModal('inviteModal')">Отклонить</button>
+  </div>
+</div>
+
+</div><!-- /phone-inner -->
+</div><!-- /phone -->
+<div class="hint">Гараж → Рейсы → Детали грузовика</div>
+
+<script>
+/* ── Clock ───────────────────────────────────── */
+function tick(){
+  const d=new Date();
+  const t=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  ['clk','clk3','clk4'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
+}
+tick();setInterval(tick,10000);
+
+/* ── Truck data ──────────────────────────────── */
+const TRUCKS=[
+  {name:'VOLVO',model:'FH 12',year:'2021',plate:'A 234 DG',plateReg:'01',
+   photo:'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85',
+   driverName:'Алексей Иванов',
+   driverPhoto:'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=120&h=120&fit=crop&q=85',
+   pills:['Кат. C, CE','Стаж 8 лет','+998 90 123 45 67'],
+   status:'driving',logoColor:'#003057',logoLetter:'V',
+   statusDot:'#2dbd71',statusText:'В пути',statusCls:'s-driving'},
+  {name:'SCANIA',model:'R450',year:'2020',plate:'B 778 KL',plateReg:'01',
+   photo:'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=700&h=420&fit=crop&q=85',
+   driverName:'Дмитрий Козлов',
+   driverPhoto:'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=120&h=120&fit=crop&q=80',
+   pills:['Кат. CE','Стаж 5 лет','+998 93 456 78 90'],
+   status:'free',logoColor:'#CE1126',logoLetter:'S',
+   statusDot:'#ff4b4b',statusText:'Свободен',statusCls:'s-free'},
+  {name:'MAN',model:'TGX 18',year:'2019',plate:'C 112 PP',plateReg:'01',
+   photo:'https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=700&h=420&fit=crop&q=85',
+   driverName:'Сергей Попов',
+   driverPhoto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&q=80',
+   pills:['Кат. C','Стаж 3 года','+998 91 111 22 33'],
+   status:'parked',logoColor:'#E2001A',logoLetter:'M',
+   statusDot:'#f5a623',statusText:'Стоянка',statusCls:'s-parked'},
+];
+
+let activeTruckIdx=0;
+
+function openTripFromModal(fn){
+  closeModal('tripsModal');
+  setTimeout(fn, 340);
+}
+
+/* ── Garage tabs ─────────────────────────────── */
+function switchGTab(btn,panelId){
+  document.querySelectorAll('.g-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.g-panel').forEach(p=>p.classList.remove('show'));
+  document.getElementById(panelId).classList.add('show');
+  const sub=document.getElementById('gSub');
+  if(sub) sub.textContent=panelId==='panelOwn'?'3 грузовика':'Назначенный грузовик';
+}
+
+/* ── Navigation stack ────────────────────────── */
+const navStack=['screenGarage'];
+
+function navigate(screenId){
+  const cur=navStack[navStack.length-1];
+  document.getElementById(cur).classList.add('behind');
+  document.getElementById(cur).classList.remove('active');
+  document.getElementById(screenId).classList.add('active');
+  document.getElementById(screenId).classList.remove('behind');
+  navStack.push(screenId);
+  const sc=document.querySelector('#'+screenId+' .screen-scroll');
+  if(sc) sc.scrollTop=0;
+}
+
+function goBack(){
+  if(navStack.length<2) return;
+  const cur=navStack.pop();
+  const prev=navStack[navStack.length-1];
+  document.getElementById(cur).classList.remove('active');
+  document.getElementById(prev).classList.remove('behind');
+  document.getElementById(prev).classList.add('active');
+}
+
+/* ── Go to orders (truck → orders screen) ────── */
+function goToOrders(idx, tab){
+  activeTruckIdx=idx;
+  const t=TRUCKS[idx];
+
+
+
+  // Active trip: only for truck 0 (VOLVO, "В пути")
+  if(idx===0&&tripActive){
+    document.getElementById('tripCard').style.display='block';
+    document.getElementById('tripDone').classList.remove('show');
+    document.getElementById('startTripBtn').classList.add('hidden');
+    document.getElementById('ownerTripBtn').classList.add('hidden');
+  } else {
+    document.getElementById('tripCard').style.display='none';
+    document.getElementById('tripDone').classList.remove('show');
+    document.getElementById('startTripBtn').classList.toggle('hidden', t.status!=='free');
+    document.getElementById('ownerTripBtn').classList.toggle('hidden', t.status!=='free');
+  }
+
+  // Update truck detail screen
+  document.getElementById('truckHdrTitle').textContent=t.name+' '+t.model;
+  document.getElementById('tcBrand').textContent=t.name;
+  document.getElementById('tcModel').textContent=t.model+' · '+t.year;
+  document.getElementById('tcPhoto').src=t.photo;
+  document.getElementById('tcPlateReg').textContent=t.plateReg;
+  document.getElementById('tcPlateNum').textContent=t.plate;
+  document.getElementById('tcDriverPhoto').src=t.driverPhoto;
+  document.getElementById('tcDriverName').textContent=t.driverName;
+  document.getElementById('tcLogo').innerHTML='<svg viewBox="0 0 100 100" style="width:38px;height:38px"><circle cx="50" cy="50" r="48" fill="'+t.logoColor+'"/><text x="50" y="62" text-anchor="middle" font-size="40" font-weight="900" fill="#fff" font-family="sans-serif">'+t.logoLetter+'</text></svg>';
+  const badgeEl=document.getElementById('tcDriverBadge');
+  badgeEl.innerHTML='';
+  t.pills.forEach((p,i)=>{
+    const s=document.createElement('span');
+    s.className='tc-driver-pill'+(i===0?' yellow':'');
+    s.textContent=p;badgeEl.appendChild(s);
+  });
+  // Status badge in truck detail
+  applyStatus(idx===0?curStatus:t.status);
+
+  // Current trip card in truck detail
+  const tcCard=document.getElementById('tcTripCard');
+  if(idx===0&&tripActive){
+    const route=document.getElementById('tripRoute').textContent;
+    const cargo=document.getElementById('tripCargo').textContent;
+    const dist=parseInt(document.getElementById('tripDist').textContent)||847;
+    const driven=parseInt(document.getElementById('tripDriven').textContent)||0;
+    const pct=parseFloat(document.getElementById('tripProgressBar').style.width)||0;
+    const tripTime=document.getElementById('tripTime').textContent;
+    document.getElementById('tcTripRoute').textContent=route;
+    document.getElementById('tcTripCargo').textContent=cargo;
+    document.getElementById('tcTripBar').style.width=pct+'%';
+    document.getElementById('tcTripProhKm').textContent=driven+' км';
+    document.getElementById('tcTripPct').textContent=Math.round(pct)+'%';
+    document.getElementById('tcTripRemKm').textContent=(dist-driven)+' км';
+    document.getElementById('tcTripDistChip').textContent='📍 '+dist+' км';
+    document.getElementById('tcTripTimeChip').textContent='⏱ '+tripTime;
+    buildStepper('tcStepper');
+    // mini-map route label
+    const from2=route.split('→')[0].trim(),to2=route.split('→')[1]?.trim()||'';
+    const mmEl=document.getElementById('tcMiniMapCard');
+    if(mmEl){
+      mmEl.style.display=curStatus==='driving'?'block':'none';
+      document.getElementById('tcMapRouteTxt').textContent=from2+'→'+to2;
+      document.getElementById('tcMapLoc').textContent='Джизак';
+    }
+    tcCard.style.display='block';
+  } else {
+    tcCard.style.display='none';
+    const mmEl=document.getElementById('tcMiniMapCard');
+    if(mmEl) mmEl.style.display='none';
+  }
+
+  // Switch to requested tab
+  const showOrders = tab === 'orders';
+  document.getElementById('tcTabInfo').style.display = showOrders ? 'none' : 'block';
+  document.getElementById('tcTabOrders').style.display = showOrders ? 'block' : 'none';
+  renderOrdersTab(idx);
+
+  navigate('screenTruck');
+}
+
+/* ── Truck detail tabs ───────────────────────── */
+function switchTcTab(btn,panelId){
+  document.querySelectorAll('.tc-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tcTabInfo').style.display=panelId==='tcTabInfo'?'block':'none';
+  document.getElementById('tcTabOrders').style.display=panelId==='tcTabOrders'?'block':'none';
+}
+
+function renderOrdersTab(idx){
+  const el=document.getElementById('tcOrdersContent');
+  if(!el) return;
+  let html='';
+
+  // Start trip button only when truck is free (no active trip)
+  if(idx===0&&!tripActive){
+    html+=`
+      <button onclick="openModal('newTripModal')" style="width:100%;background:#FAE436;border:none;border-radius:16px;padding:15px;font-size:15px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px">
+        <span>🚛</span><span>Начать рейс</span>
+      </button>`;
+  }
+
+  html+='<div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px">История рейсов</div>';
+
+  const HIST=[
+    {i:0,route:'Самарканд → Бухара',cargo:'Стройматериалы · 18 тонн',date:'18 июня',dist:'620 км',time:'7ч 15м',profit:'+980 000 UZS',green:true,pct:100,done:true},
+    {i:1,route:'Ташкент → Наманган',cargo:'Электроника · 8 тонн',date:'12 июня',dist:'310 км',time:'4ч 10м',profit:'+650 000 UZS',green:true,pct:100,done:true},
+    {i:2,route:'Фергана → Андижан',cargo:'Продукты · 15 тонн',date:'5 июня',dist:'68 из 305 км',time:'—',profit:'Отменён',green:false,pct:22,done:false},
+  ];
+
+  HIST.forEach(t=>{
+    const badge=t.done
+      ?'<span style="background:#f0f0f0;color:#888;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✓ Завершён</span>'
+      :'<span style="background:#ffeaea;color:#cc1c1c;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✕ Отменён</span>';
+    html+=`
+      <div onclick="openHistoryTrip(${t.i})" style="background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:10px;cursor:pointer;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          ${badge}
+          <span style="font-size:11px;color:#bbb">${t.date}</span>
+        </div>
+        <div style="font-size:15px;font-weight:800;color:#0F0F37;margin-bottom:3px">${t.route}</div>
+        <div style="font-size:12px;color:#999;margin-bottom:10px">${t.cargo}</div>
+        <div style="height:4px;background:#f0f0f0;border-radius:2px;margin-bottom:8px;overflow:hidden">
+          <div style="height:100%;border-radius:2px;background:${t.done?'#FAE436':'#ff4b4b'};width:${t.pct}%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:12px;color:#888">📍 ${t.dist} · ⏱ ${t.time}</span>
+          <span style="font-size:14px;font-weight:800;color:${t.green?'#2dbd71':'#ff4b4b'}">${t.profit}</span>
+        </div>
+      </div>`;
+  });
+
+  el.innerHTML=html;
+}
+
+/* ── Status ──────────────────────────────────── */
+const STATUS={
+  driving:{cls:'s-driving',text:'В пути',  dot:'#2dbd71'},
+  parked: {cls:'s-parked', text:'Стоянка', dot:'#f5a623'},
+  free:   {cls:'s-free',   text:'Свободен',dot:'#ff4b4b'},
+  repair: {cls:'s-repair', text:'Ремонт',  dot:null,icon:'🔧'},
+};
+let curStatus='driving';
+let tripActive=true;
+
+// Status-based trip card bottom section
+function updateTcStatusBottom(key){
+  const el=document.getElementById('tcStatusBottom');
+  if(!el) return;
+  if(key==='driving'){
+    el.innerHTML='<button onclick="finishTrip()" style="width:100%;padding:14px;background:#FAE436;color:#0F0F37;font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;">Завершить рейс</button>';
+  } else if(key==='parked'){
+    el.innerHTML='<div style="background:#fff8e6;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:26px">🅿</span><div><div style="font-size:14px;font-weight:800;color:#c07a00">На стоянке</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">▶ Продолжить движение</button>';
+  } else if(key==='repair'){
+    el.innerHTML='<div style="background:#fff3e0;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:26px">🔧</span><div><div style="font-size:14px;font-weight:800;color:#c06000">На ремонте</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">✅ Завершить ремонт</button>';
+  } else {
+    el.innerHTML='';
+  }
+}
+
+function resumeTrip(){
+  applyStatus('driving');
+  toast('Движение возобновлено');
+}
+
+// Mini-map long press → nav modal
+let navPressTimer=null;
+function startNavPress(e){
+  if(e) e.preventDefault();
+  navPressTimer=setTimeout(()=>{ navPressTimer=null; openNavModal(); },600);
+}
+function cancelNavPress(){
+  if(navPressTimer){ clearTimeout(navPressTimer); navPressTimer=null; }
+}
+
+// Simulated speed fluctuation
+let navSpeedSim=72;
+function simSpeed(){
+  navSpeedSim=Math.round(navSpeedSim+(Math.random()*10-5));
+  navSpeedSim=Math.max(55,Math.min(90,navSpeedSim));
+  const s=navSpeedSim+' км/ч';
+  const el1=document.getElementById('tcMapSpeed');if(el1)el1.textContent=s;
+  const el2=document.getElementById('tcMapSpeedDot');if(el2)el2.textContent=navSpeedSim+' км/ч';
+  const el3=document.getElementById('navSpeed');if(el3)el3.textContent=navSpeedSim;
+  const el4=document.getElementById('navSpeedBot');if(el4)el4.textContent=s;
+}
+setInterval(simSpeed,3000);
+
+function openNavModal(){
+  const m=document.getElementById('navModal');
+  m.style.display='flex';
+  const route=document.getElementById('tripRoute');
+  if(route) document.getElementById('navRoute').textContent=route.textContent;
+}
+function closeNavModal(){
+  document.getElementById('navModal').style.display='none';
+}
+
+function applyStatus(key){
+  const s=STATUS[key];
+  const badge=document.getElementById('statusBadge');
+  badge.className='status-badge '+s.cls;
+  const dot=badge.querySelector('.sb-dot');if(dot)dot.remove();
+  const existIcon=badge.querySelector('.sb-icon');if(existIcon)existIcon.remove();
+  if(s.dot){
+    const d=document.createElement('div');d.className='sb-dot';d.style.background=s.dot;
+    badge.insertBefore(d,badge.firstChild);
+  } else {
+    const ico=document.createElement('span');ico.className='sb-icon';ico.textContent=s.icon;
+    badge.insertBefore(ico,badge.firstChild);
+  }
+  document.getElementById('statusText').textContent=s.text;
+  curStatus=key;
+  updateTcStatusBottom(key);
+  // show/hide mini map
+  const mm=document.getElementById('tcMiniMapCard');
+  if(mm) mm.style.display=(tripActive&&key==='driving')?'block':'none';
+}
+
+function setStatus(key){
+  if(key==='driving'&&!tripActive){
+    toast('Статус «В пути» устанавливается автоматически при начале рейса');return;
+  }
+  if(tripActive&&key==='free'){
+    toast('Завершите текущий рейс перед сменой статуса');closeModal('statusModal');return;
+  }
+  applyStatus(key);
+  document.querySelectorAll('.status-option').forEach(el=>{
+    el.style.border=el.dataset.key===key?'2px solid currentColor':'2px solid transparent';
+  });
+  closeModal('statusModal');
+  toast('Статус изменён: '+STATUS[key].text);
+}
+
+/* ── Stepper ─────────────────────────────────── */
+const STEPS=[{label:'Принят',color:'#4a90d9'},{label:'В пути',color:'#2dbd71'},{label:'Завершён',color:'#888'}];
+let stepIdx=1;
+
+function buildStepper(elId){
+  const el=document.getElementById(elId||'tdStepper');if(!el)return;
+  el.innerHTML='';
+  STEPS.forEach((s,i)=>{
+    if(i>0){const l=document.createElement('div');l.className='step-line';l.style.background=i<=stepIdx?'#FAE436':'#e0e0e0';el.appendChild(l);}
+    const step=document.createElement('div');step.className='step';
+    const done=i<stepIdx,active=i===stepIdx;
+    step.innerHTML=`<div class="step-circle" style="background:${done?'#FAE436':active?s.color:'#e8e8e8'};color:${done?'#0F0F37':active?'#fff':'#aaa'}">${done?'✓':i+1}</div>
+      <div class="step-lbl" style="color:${active||done?'#0F0F37':'#bbb'};font-weight:${active?700:500}">${s.label}</div>`;
+    el.appendChild(step);
+  });
+}
+
+/* ── Mini map ────────────────────────────────── */
+function updateTdMiniMap(drivenKm,totalKm,fromCity,toCity,eta){
+  const pct=totalKm>0?Math.min(drivenKm/totalKm,1):0;
+  const fillW=Math.round(pct*310);
+  const truckX=10+fillW;
+  const bubbleX=Math.max(45,Math.min(truckX,285));
+  const el=document.getElementById('tdMmFill');if(el)el.setAttribute('width',fillW);
+  const truck=document.getElementById('tdMmTruck');if(truck)truck.setAttribute('x',truckX);
+  const bubble=document.getElementById('tdMmBubble');
+  if(bubble){bubble.setAttribute('x',bubbleX-35);bubble.setAttribute('width',70);}
+  const txt=document.getElementById('tdMmText');
+  if(txt)txt.textContent=drivenKm+' км · '+Math.round(pct*100)+'%';
+  if(txt)txt.setAttribute('x',bubbleX);
+  if(fromCity)document.getElementById('tdMmFrom').textContent='📍 '+fromCity;
+  if(toCity)document.getElementById('tdMmTo').textContent=toCity+' 🏁';
+  if(eta)document.getElementById('tdMmEta').textContent=eta;
+  const maxEl=document.getElementById('tdMmMax');if(maxEl&&totalKm)maxEl.textContent=totalKm;
+}
+
+/* ── Trip profit ─────────────────────────────── */
+let currentTripProfit=1500000;
+
+/* ── Finance ─────────────────────────────────── */
+let exp=0,inc=1500000;
+function fmt(n){return n.toLocaleString('ru-RU')+' UZS';}
+function refreshFin(){
+  const net=inc-exp;
+  document.getElementById('expDisp').textContent=fmt(exp);
+  document.getElementById('incDisp').textContent=fmt(inc);
+  const el=document.getElementById('netDisp');
+  el.textContent=(net>=0?'+':'')+fmt(net);
+  el.style.color=net>=0?'#2dbd71':'#ff4b4b';
+}
+refreshFin();
+
+/* ── Start/Finish Trip ───────────────────────── */
+function updatePreview(){
+  const from=document.getElementById('ntFrom').value.trim();
+  const to=document.getElementById('ntTo').value.trim();
+  const dist=document.getElementById('ntDist').value;
+  const cargo=document.getElementById('ntCargo').value.trim();
+  const profit=parseFloat(document.getElementById('ntProfit').value)||0;
+  const prev=document.getElementById('ntPreview');
+  if(!from&&!to){prev.style.display='none';return;}
+  prev.style.display='block';
+  document.getElementById('prevRoute').textContent=(from||'…')+' → '+(to||'…');
+  document.getElementById('prevCargo').textContent=cargo||'—';
+  document.getElementById('prevDist').textContent=dist?dist+' км':'—';
+  document.getElementById('prevProfit').textContent=profit?fmt(profit):'—';
+}
+
+function startTrip(){
+  const from=document.getElementById('ntFrom').value.trim();
+  const to=document.getElementById('ntTo').value.trim();
+  const dist=document.getElementById('ntDist').value;
+  const cargo=document.getElementById('ntCargo').value.trim();
+  const profit=parseFloat(document.getElementById('ntProfit').value)||0;
+  const time=document.getElementById('ntTime').value.trim();
+  if(!from||!to){toast('Заполните откуда и куда');return;}
+
+  // Store trip data for owner confirmation
+  pendingOwnerTrip={from,to,dist,cargo,profit,time};
+
+  // Build trip detail card
+  const card=document.getElementById('ownerAssignCard');
+  card.innerHTML=`
+    <div style="font-size:17px;font-weight:800;color:#0F0F37;margin-bottom:12px">${from} <span style="color:#2dbd71">→</span> ${to}</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Груз</span><span style="color:#0F0F37;font-weight:600">${cargo||'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Расстояние</span><span style="color:#0F0F37;font-weight:600">${dist?dist+' км':'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Время в пути</span><span style="color:#0F0F37;font-weight:600">${time||'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px;padding-top:8px;border-top:1px solid #e0f2e9"><span style="color:#aaa">Ожидаемый доход</span><span style="color:#2dbd71;font-weight:800;font-size:15px">${profit?fmt(profit):'—'}</span></div>
+    </div>`;
+
+  // Update modal header: driver → owner direction
+  document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8f5e9,#f1f8e9)';
+  document.getElementById('oanHeaderIcon').textContent='📤';
+  document.getElementById('oanHeaderIcon').style.background='linear-gradient(135deg,#43a047,#66bb6a)';
+  document.getElementById('oanHeaderTitle').style.color='#2e7d32';
+  document.getElementById('oanHeaderTitle').textContent='Запрос отправлен владельцу';
+  document.getElementById('oanHeaderSub').style.color='#388e3c';
+  document.getElementById('oanHeaderSub').textContent='Иван Петров должен подтвердить рейс';
+  document.getElementById('oanAcceptBtn').style.display='none';
+  document.getElementById('oanPendingState').style.display='flex';
+  document.getElementById('oanDeclineBtn').textContent='Отменить запрос';
+
+  ['ntFrom','ntTo','ntDist','ntCargo','ntProfit','ntTime'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('ntPreview').style.display='none';
+  closeModal('newTripModal');
+  setTimeout(()=>openModal('ownerAssignNotifModal'),340);
+}
+
+function finishTrip(){
+  openModal('finishConfirmModal');
+}
+function finishTripConfirmed(){
+  closeModal('finishConfirmModal');
+  setTimeout(()=>{
+    const route=document.getElementById('tripRoute').textContent;
+    const dist=document.getElementById('tripDist').textContent;
+    const today=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
+    document.getElementById('tdSub').textContent=route+' · '+today;
+    document.getElementById('tdDist').textContent=dist;
+    document.getElementById('tdProfit').textContent=currentTripProfit?fmt(currentTripProfit):'—';
+    inc+=currentTripProfit||0;refreshFin();
+    document.getElementById('tripCard').style.display='none';
+    document.getElementById('tripDone').classList.add('show');
+    tripActive=false;
+    const tcCard=document.getElementById('tcTripCard');
+    if(tcCard) tcCard.style.display='none';
+    applyStatus('free');
+    document.getElementById('startTripBtn').classList.remove('hidden');
+    document.getElementById('ownerTripBtn').classList.remove('hidden');
+  },600);
+}
+
+
+/* ── Trip detail screen ─────────────────────── */
+const TRIP_HISTORY=[
+  {
+    route:'Самарканд → Бухара',cargo:'Стройматериалы · 18 тонн',
+    date:'18 июня 2026',stat:'📍 620 км · ⏱ 7ч 15м',
+    income:980000,
+    expenses:[
+      {label:'Топливо',amount:245000,comment:null},
+      {label:'Стоянка',amount:22000,comment:null},
+      {label:'Дорожный сбор',amount:35000,
+       comment:{type:'voice',duration:'0:32',from:'Иван Петров'}},
+    ],
+    ownerNote:{type:'text',from:'Иван Петров',
+      text:'Хорошая работа! Клиент остался очень доволен, груз доставлен точно в срок.'},
+    status:'done',
+  },
+  {
+    route:'Ташкент → Наманган',cargo:'Электроника · 8 тонн',
+    date:'12 июня 2026',stat:'📍 310 км · ⏱ 4ч 10м',
+    income:650000,
+    expenses:[
+      {label:'Топливо',amount:120000,comment:null},
+      {label:'Обед',amount:45000,
+       comment:{type:'text',from:'Иван Петров',
+         text:'В следующий раз прикладывай квитанцию к каждому расходу.'}},
+    ],
+    ownerNote:null,
+    status:'done',
+  },
+  {
+    route:'Фергана → Андижан',cargo:'Продукты питания · 15 тонн',
+    date:'5 июня 2026',stat:'📍 68 км из 305 км',
+    income:0,
+    expenses:[],
+    ownerNote:{type:'voice',from:'Иван Петров',duration:'1:15'},
+    status:'cancelled',
+  },
+];
+
+function waveHTML(played){
+  const h=[6,12,18,10,22,14,8,20,16,10,24,12,18,8,14,20,10,16,12,8];
+  return h.map((px,i)=>`<div class="vm-bar${i<played?' played':''}" style="height:${px}px"></div>`).join('');
+}
+
+function ownerCommentHTML(note){
+  if(!note) return '';
+  const initials=note.from.split(' ').map(w=>w[0]).join('').slice(0,2);
+  let body='';
+  if(note.type==='text'){
+    body=`<div class="oc-text">${note.text}</div>`;
+  } else {
+    body=`<div class="vm-bubble" onclick="playVoice(this)">
+      <button class="vm-play">▶</button>
+      <div class="vm-wave">${waveHTML(7)}</div>
+      <span class="vm-dur">${note.duration}</span>
+    </div>`;
+  }
+  return `<div class="oc-wrap">
+    <div class="oc-av">${initials}</div>
+    <div class="oc-body"><div class="oc-name">${note.from}</div>${body}</div>
+  </div>`;
+}
+
+function openActiveTrip(){
+  const el=id=>document.getElementById(id);
+  const from=el('tripRoute').textContent.split('→')[0].trim();
+  const to=el('tripRoute').textContent.split('→')[1].trim();
+  const dist=parseInt(el('tripDist').textContent)||847;
+  const driven=parseInt(el('tripDriven').textContent)||320;
+  const pct=parseFloat(el('tripProgressBar').style.width)||38;
+  el('tdHdrTitle').textContent=el('tripRoute').textContent;
+  el('tdRoute').textContent=el('tripRoute').textContent;
+  el('tdCargo').textContent=el('tripCargo').textContent;
+  el('tdDate').textContent='Текущий рейс';
+  el('tdStat').textContent='📍 '+el('tripDist').textContent+' · ⏱ '+el('tripTime').textContent;
+  el('tdStatusBadge').style.cssText='background:#e8f9f0;color:#1a8c52;display:inline-flex;align-items:center;gap:5px';
+  el('tdStatusDot').style.background='#2dbd71';
+  el('tdStatusText').textContent='В пути';
+  el('tdProgFill').style.width=pct+'%';
+  el('tdDrivenLbl').textContent=driven+' км';
+  el('tdPctLbl').textContent=Math.round(pct)+'%';
+  el('tdRemLbl').textContent=(dist-driven)+' км';
+  el('tdProgWrap').style.display='block';
+  el('tdStepper').style.display='flex';
+  buildStepper('tdStepper');
+  el('tdMiniMap').style.display='block';
+  updateTdMiniMap(driven,dist,from,to,'~'+(Math.round((dist-driven)/90))+'ч до прибытия');
+  el('tdFinishBtn').style.display='block';
+  el('tdFinanceWrap').style.display='none';
+  el('tdExpWrap').style.display='none';
+  el('tdOwnerWrap').style.display='none';
+  el('tdScroll').scrollTop=0;
+  navigate('screenTripDetail');
+}
+
+function openHistoryTrip(idx){
+  const t=TRIP_HISTORY[idx];
+  const el=id=>document.getElementById(id);
+  el('tdHdrTitle').textContent=t.route;
+  el('tdRoute').textContent=t.route;
+  el('tdCargo').textContent=t.cargo;
+  el('tdDate').textContent=t.date;
+  el('tdStat').textContent=t.stat;
+  if(t.status==='done'){
+    el('tdStatusBadge').style.cssText='background:#e8f9f0;color:#1a8c52;display:inline-flex;align-items:center;gap:5px';
+    el('tdStatusDot').style.background='#2dbd71';
+    el('tdStatusText').textContent='Завершён';
+  } else {
+    el('tdStatusBadge').style.cssText='background:#fff0f0;color:#c0392b;display:inline-flex;align-items:center;gap:5px';
+    el('tdStatusDot').style.background='#ff4b4b';
+    el('tdStatusText').textContent='Отменён';
+  }
+  el('tdProgWrap').style.display='none';
+  el('tdStepper').style.display='none';
+  el('tdMiniMap').style.display='none';
+  el('tdFinishBtn').style.display='none';
+  // Finance
+  if(t.income>0||t.expenses.length>0){
+    const expTotal=t.expenses.reduce((s,e)=>s+e.amount,0);
+    const net=t.income-expTotal;
+    const pct=t.income>0?Math.round((net/t.income)*100):0;
+    el('tdIncome').textContent='+'+t.income.toLocaleString('ru-RU')+' UZS';
+    el('tdExpTotal').textContent='−'+expTotal.toLocaleString('ru-RU')+' UZS';
+    el('tdNet').textContent=(net>=0?'+':'')+net.toLocaleString('ru-RU')+' UZS';
+    el('tdNet').style.color=net>=0?'#2dbd71':'#ff4b4b';
+    el('tdFinBar').style.width=Math.max(0,pct)+'%';
+    el('tdFinanceWrap').style.display='block';
+    // Expenses list
+    if(t.expenses.length>0){
+      el('tdExpList').innerHTML=t.expenses.map(e=>`
+        <div class="exp-row">
+          <div class="exp-row-main">
+            <span class="exp-lbl">${e.label}</span>
+            <span class="exp-amt">−${e.amount.toLocaleString('ru-RU')} UZS</span>
+          </div>
+          ${e.comment?ownerCommentHTML(e.comment):''}
+        </div>`).join('');
+      el('tdExpWrap').style.display='block';
+    } else {
+      el('tdExpWrap').style.display='none';
+    }
+  } else {
+    el('tdFinanceWrap').style.display='none';
+    el('tdExpWrap').style.display='none';
+  }
+  // Owner note
+  if(t.ownerNote){
+    el('tdOwnerCard').innerHTML=ownerCommentHTML(t.ownerNote);
+    el('tdOwnerWrap').style.display='block';
+  } else {
+    el('tdOwnerWrap').style.display='none';
+  }
+  el('tdScroll').scrollTop=0;
+  navigate('screenTripDetail');
+}
+
+let voicePlaying=null;
+function playVoice(el){
+  const playBtn=el.querySelector('.vm-play');
+  const bars=el.querySelectorAll('.vm-bar');
+  if(voicePlaying===el){
+    clearInterval(el._timer);
+    bars.forEach(b=>b.classList.remove('played'));
+    playBtn.textContent='▶';
+    voicePlaying=null;return;
+  }
+  if(voicePlaying){
+    clearInterval(voicePlaying._timer);
+    voicePlaying.querySelectorAll('.vm-bar').forEach(b=>b.classList.remove('played'));
+    voicePlaying.querySelector('.vm-play').textContent='▶';
+  }
+  voicePlaying=el;playBtn.textContent='⏸';
+  let i=0;
+  el._timer=setInterval(()=>{
+    if(i<bars.length)bars[i++].classList.add('played');
+    else{clearInterval(el._timer);playBtn.textContent='▶';
+      setTimeout(()=>bars.forEach(b=>b.classList.remove('played')),400);
+      voicePlaying=null;}
+  },100);
+}
+
+/* ── Modals ──────────────────────────────────── */
+// Expense category
+const EXP_CAT_META={
+  fuel:   {hasQty:true, hasSub:true,  hasPhoto:true,  hasReason:false},
+  food:   {hasQty:false,hasSub:false, hasPhoto:false, hasReason:false},
+  parking:{hasQty:false,hasSub:false, hasPhoto:false, hasReason:false},
+  parts:  {hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
+  service:{hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
+  wash:   {hasQty:false,hasSub:false, hasPhoto:false, hasReason:false},
+  fine:   {hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
+  insure: {hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
+  other:  {hasQty:false,hasSub:false, hasPhoto:false, hasReason:true },
+};
+let expSelectedCat=null, expFuelType='diesel';
+function pickExpCat(el){
+  document.querySelectorAll('.exp-cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  expSelectedCat=el.dataset.cat;
+  const m=EXP_CAT_META[expSelectedCat]||{};
+  document.getElementById('expFuelRow').style.display=m.hasSub?'block':'none';
+  document.getElementById('expQtyRow').style.display=m.hasQty?'block':'none';
+  document.getElementById('expPhotoRow').style.display=m.hasPhoto?'block':'none';
+  document.getElementById('expReasonRow').style.display=m.hasReason?'block':'none';
+}
+function pickFuelType(type){
+  expFuelType=type;
+  const isDiesel=type==='diesel';
+  document.getElementById('expFuelDiesel').style.cssText='flex:1;padding:10px;border-radius:12px;border:2px solid '+(isDiesel?'#0F0F37;background:#0F0F37;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
+  document.getElementById('expFuelGas').style.cssText='flex:1;padding:10px;border-radius:12px;border:2px solid '+(!isDiesel?'#0F0F37;background:#0F0F37;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
+  document.getElementById('expQtyUnit').textContent=isDiesel?'Л':'М³';
+}
+function mockPhotoReceipt(){
+  document.getElementById('expPhotoLabel').textContent='✓ Фото прикреплено';
+  toast('Фото чека добавлено');
+}
+
+// Expense currency
+let expCurrency='UZS';
+const EXP_CUR_LABEL={UZS:'Sum',USD:'$',RUB:'Rub',KZT:'Tenge',EUR:'Euro'};
+function setExpCur(cur){
+  expCurrency=cur;
+  document.querySelectorAll('.exp-cur-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.cur===cur);
+  });
+  const sym=document.getElementById('expCurSymbol');
+  if(sym) sym.textContent=EXP_CUR_LABEL[cur]||cur;
+}
+
+// Expense comment type toggle
+let expVoiceInterval=null, expVoiceSeconds=0, expVoiceRecorded=false;
+function switchExpCmt(type){
+  const isText=type==='text';
+  document.getElementById('expCmtTabText').style.cssText='flex:1;padding:9px;border-radius:12px;border:2px solid '+(isText?'#0F0F37;background:#0F0F37;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
+  document.getElementById('expCmtTabVoice').style.cssText='flex:1;padding:9px;border-radius:12px;border:2px solid '+(!isText?'#0F0F37;background:#0F0F37;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
+  document.getElementById('expCmtText').style.display=isText?'block':'none';
+  document.getElementById('expCmtVoice').style.display=isText?'none':'block';
+}
+function startExpVoice(){
+  expVoiceSeconds=0; expVoiceRecorded=false;
+  document.getElementById('expVoiceIdle').style.display='none';
+  document.getElementById('expVoiceRecording').style.display='block';
+  document.getElementById('expVoiceDone').style.display='none';
+  expVoiceInterval=setInterval(()=>{
+    expVoiceSeconds++;
+    const m=Math.floor(expVoiceSeconds/60),s=expVoiceSeconds%60;
+    document.getElementById('expVoiceTimer').textContent=m+':'+(s<10?'0':'')+s;
+  },1000);
+}
+function stopExpVoice(){
+  clearInterval(expVoiceInterval);
+  const m=Math.floor(expVoiceSeconds/60),s=expVoiceSeconds%60;
+  const dur=m+':'+(s<10?'0':'')+s;
+  expVoiceRecorded=true;
+  document.getElementById('expVoiceRecording').style.display='none';
+  document.getElementById('expVoiceDone').style.display='block';
+  document.getElementById('expVoiceDur').textContent=dur;
+}
+function rerecordExpVoice(){
+  expVoiceRecorded=false;
+  document.getElementById('expVoiceDone').style.display='none';
+  document.getElementById('expVoiceIdle').style.display='block';
+}
+function toggleExpVoicePlay(btn){
+  const ico=document.getElementById('expVoicePlayIco');
+  const playing=btn.dataset.playing==='1';
+  if(playing){
+    btn.dataset.playing='0';
+    ico.innerHTML='<polygon points="0,0 12,7 0,14"/>';
+  } else {
+    btn.dataset.playing='1';
+    ico.innerHTML='<rect x="0" y="0" width="4" height="14"/><rect x="8" y="0" width="4" height="14"/>';
+  }
+}
+
+// Income currency + category
+let incCurrency='UZS';
+function setIncCur(cur){
+  incCurrency=cur;
+  document.querySelectorAll('#incModal .exp-cur-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.cur===cur);
+  });
+  const sym=document.getElementById('incCurSymbol');
+  if(sym) sym.textContent=EXP_CUR_LABEL[cur]||cur;
+}
+function pickIncCat(el){
+  document.querySelectorAll('#incModal .exp-cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Income comment / voice
+let incVoiceInterval=null, incVoiceSeconds=0, incVoiceRecorded=false;
+function switchIncCmt(type){
+  const isText=type==='text';
+  document.getElementById('incCmtTabText').style.cssText='flex:1;padding:9px;border-radius:12px;border:2px solid '+(isText?'#2dbd71;background:#2dbd71;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
+  document.getElementById('incCmtTabVoice').style.cssText='flex:1;padding:9px;border-radius:12px;border:2px solid '+(!isText?'#2dbd71;background:#2dbd71;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
+  document.getElementById('incCmtText').style.display=isText?'block':'none';
+  document.getElementById('incCmtVoice').style.display=isText?'none':'block';
+}
+function startIncVoice(){
+  incVoiceSeconds=0; incVoiceRecorded=false;
+  document.getElementById('incVoiceIdle').style.display='none';
+  document.getElementById('incVoiceRecording').style.display='block';
+  document.getElementById('incVoiceDone').style.display='none';
+  incVoiceInterval=setInterval(()=>{
+    incVoiceSeconds++;
+    const m=Math.floor(incVoiceSeconds/60),s=incVoiceSeconds%60;
+    document.getElementById('incVoiceTimer').textContent=m+':'+(s<10?'0':'')+s;
+  },1000);
+}
+function stopIncVoice(){
+  clearInterval(incVoiceInterval);
+  const m=Math.floor(incVoiceSeconds/60),s=incVoiceSeconds%60;
+  incVoiceRecorded=true;
+  document.getElementById('incVoiceRecording').style.display='none';
+  document.getElementById('incVoiceDone').style.display='block';
+  document.getElementById('incVoiceDur').textContent=m+':'+(s<10?'0':'')+s;
+}
+function rerecordIncVoice(){
+  incVoiceRecorded=false;
+  document.getElementById('incVoiceDone').style.display='none';
+  document.getElementById('incVoiceIdle').style.display='block';
+}
+function toggleIncVoicePlay(btn){
+  const ico=document.getElementById('incVoicePlayIco');
+  const playing=btn.dataset.playing==='1';
+  if(playing){btn.dataset.playing='0';ico.innerHTML='<polygon points="0,0 12,7 0,14"/>';}
+  else{btn.dataset.playing='1';ico.innerHTML='<rect x="0" y="0" width="4" height="14"/><rect x="8" y="0" width="4" height="14"/>';}
+}
+
+function openModal(id,fromTrip){
+  if(id==='expModal'){
+    setExpCur('UZS');
+    switchExpCmt('text');
+    document.getElementById('expNote').value='';
+    document.getElementById('expAmt').value='';
+    document.getElementById('expVoiceIdle').style.display='block';
+    document.getElementById('expVoiceRecording').style.display='none';
+    document.getElementById('expVoiceDone').style.display='none';
+    expVoiceRecorded=false;
+    // reset category
+    document.querySelectorAll('.exp-cat-btn').forEach(b=>b.classList.remove('active'));
+    expSelectedCat=null;
+    document.getElementById('expFuelRow').style.display='none';
+    document.getElementById('expQtyRow').style.display='none';
+    document.getElementById('expPhotoRow').style.display='none';
+    document.getElementById('expReasonRow').style.display='none';
+    document.getElementById('expPhotoLabel').textContent='Фото чека (необязательно)';
+    document.getElementById('expContext').textContent=
+      fromTrip?'Рейс: '+document.getElementById('tripRoute').textContent:'';
+  }
+  if(id==='incModal'){
+    switchIncCmt('text');
+    setIncCur('UZS');
+    document.getElementById('incNote').value='';
+    document.getElementById('incAmt').value='';
+    document.getElementById('incVoiceIdle').style.display='block';
+    document.getElementById('incVoiceRecording').style.display='none';
+    document.getElementById('incVoiceDone').style.display='none';
+    incVoiceRecorded=false;
+    document.querySelectorAll('#incModal .exp-cat-btn').forEach(b=>b.classList.remove('active'));
+    const route=document.getElementById('tripRoute');
+    const ctx=document.getElementById('incContext');
+    if(fromTrip && route){
+      ctx.textContent='Рейс: '+route.textContent;
+      const tripBtn=document.querySelector('#incModal [data-cat="trip"]');
+      if(tripBtn) pickIncCat(tripBtn);
+    } else {
+      ctx.textContent='';
+    }
+  }
+  document.getElementById(id).classList.add('show');
+  setTimeout(()=>document.querySelector('#'+id+' .msheet').scrollTop=0,10);
+}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.modal').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('show');});
+});
+
+function pickCat(el,type){
+  el.closest('.cat-grid').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel-e','sel-i'));
+  el.classList.add(type==='e'?'sel-e':'sel-i');
+}
+function saveTx(type){
+  const id=type==='exp'?'expAmt':'incAmt';
+  const v=parseFloat(document.getElementById(id).value);
+  if(!v||v<=0){toast('Введите сумму');return;}
+  if(type==='exp')exp+=v;else inc+=v;
+  refreshFin();document.getElementById(id).value='';
+  closeModal(type==='exp'?'expModal':'incModal');
+  toast(type==='exp'?`−${v.toLocaleString('ru-RU')} UZS · Расход добавлен`:`+${v.toLocaleString('ru-RU')} UZS · Доход добавлен`);
+}
+function saveOdo(){
+  const v=document.getElementById('odoVal').value;
+  if(!v){toast('Введите показания');return;}
+  const km=parseInt(v),diff=km-245000;
+  closeModal('odoModal');document.getElementById('odoVal').value='';
+  toast(`Пробег ${km.toLocaleString('ru-RU')} км сохранён (+${Math.max(0,diff)} км)`);
+}
+
+/* ── Toast ───────────────────────────────────── */
+function toast(msg){
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.getElementById('phoneInner').appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+/* ── Owner trip assignment ───────────────────── */
+let pendingOwnerTrip=null;
+
+function updateOwnerPreview(){
+  const from=document.getElementById('otFrom').value.trim();
+  const to=document.getElementById('otTo').value.trim();
+  const dist=document.getElementById('otDist').value;
+  const cargo=document.getElementById('otCargo').value.trim();
+  const profit=parseFloat(document.getElementById('otProfit').value)||0;
+  const show=from||to||dist||cargo||profit;
+  const prev=document.getElementById('otPreview');
+  if(!prev) return;
+  prev.style.display=show?'block':'none';
+  document.getElementById('otPrevRoute').textContent=(from&&to)?from+' → '+to:(from||to||'—');
+  document.getElementById('otPrevCargo').textContent=cargo||'—';
+  document.getElementById('otPrevDist').textContent=dist?dist+' км':'—';
+  document.getElementById('otPrevProfit').textContent=profit?fmt(profit):'—';
+}
+
+function ownerAssignTrip(){
+  const from=document.getElementById('otFrom').value.trim();
+  const to=document.getElementById('otTo').value.trim();
+  const dist=document.getElementById('otDist').value;
+  const cargo=document.getElementById('otCargo').value.trim();
+  const profit=parseFloat(document.getElementById('otProfit').value)||0;
+  const time=document.getElementById('otTime').value.trim();
+  if(!from||!to){toast('Заполните откуда и куда');return;}
+  pendingOwnerTrip={from,to,dist,cargo,profit,time};
+  const card=document.getElementById('ownerAssignCard');
+  card.innerHTML=`
+    <div style="font-size:17px;font-weight:800;color:#0F0F37;margin-bottom:10px">${from} <span style="color:#3d5afe">→</span> ${to}</div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Груз</span><span style="color:#0F0F37;font-weight:600">${cargo||'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Расстояние</span><span style="color:#0F0F37;font-weight:600">${dist?dist+' км':'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Время в пути</span><span style="color:#0F0F37;font-weight:600">${time||'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px;padding-top:8px;border-top:1px solid #e3e6ff"><span style="color:#aaa">Оплата</span><span style="color:#2dbd71;font-weight:800;font-size:15px">${profit?fmt(profit):'—'}</span></div>
+    </div>`;
+  ['otFrom','otTo','otDist','otCargo','otProfit','otTime'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('otPreview').style.display='none';
+  closeModal('ownerTripModal');
+  setTimeout(()=>openModal('ownerAssignNotifModal'),340);
+}
+
+function acceptOwnerTrip(){
+  if(!pendingOwnerTrip) return;
+  const{from,to,dist,cargo,profit,time}=pendingOwnerTrip;
+  const today=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('tripRoute').textContent=from+' → '+to;
+  document.getElementById('tripCargo').textContent=cargo||'—';
+  document.getElementById('tripDist').textContent=dist?dist+' км':'—';
+  document.getElementById('tripTime').textContent=time||'—';
+  currentTripProfit=profit;
+  document.getElementById('tripDriven').textContent='0';
+  document.getElementById('tripProgressBar').style.width='0%';
+  document.getElementById('tripProgPct').textContent='0%';
+  tripActive=true;
+  document.getElementById('tripCard').style.display='block';
+  document.getElementById('tripDone').classList.remove('show');
+  document.getElementById('startTripBtn').classList.add('hidden');
+  document.getElementById('ownerTripBtn').classList.add('hidden');
+  const distN=parseInt(dist)||0;
+  document.getElementById('tcTripRoute').textContent=from+' → '+to;
+  document.getElementById('tcTripCargo').textContent=cargo||'—';
+  document.getElementById('tcTripBar').style.width='0%';
+  document.getElementById('tcTripProhKm').textContent='0 км';
+  document.getElementById('tcTripPct').textContent='0%';
+  document.getElementById('tcTripRemKm').textContent=distN+' км';
+  document.getElementById('tcTripDistChip').textContent='📍 '+(dist||'—')+' км';
+  document.getElementById('tcTripTimeChip').textContent='⏱ '+(time||'—');
+  document.getElementById('tcTripDate').textContent='📅 '+today;
+  buildStepper('tcStepper');
+  document.getElementById('tcTripCard').style.display='block';
+  pendingOwnerTrip=null;
+  // Reset modal header to owner-assigned defaults
+  document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8eaf6,#ede7f6)';
+  document.getElementById('oanHeaderIcon').textContent='👤';
+  document.getElementById('oanHeaderIcon').style.background='linear-gradient(135deg,#3d5afe,#7b1fa2)';
+  document.getElementById('oanHeaderTitle').style.color='#3d5afe';
+  document.getElementById('oanHeaderTitle').textContent='Новый рейс от владельца';
+  document.getElementById('oanHeaderSub').style.color='#7b1fa2';
+  document.getElementById('oanHeaderSub').textContent='Иван Петров назначил вам рейс';
+  document.getElementById('oanAcceptBtn').style.display='';
+  document.getElementById('oanAcceptBtn').innerHTML='✓ &nbsp;Принять рейс';
+  document.getElementById('oanPendingState').style.display='none';
+  document.getElementById('oanDeclineBtn').textContent='Отклонить';
+  closeModal('ownerAssignNotifModal');
+  applyStatus('driving');
+  toast('✅ Рейс подтверждён владельцем! Статус изменён на «В пути»');
+}
+
+function declineOwnerTrip(){
+  pendingOwnerTrip=null;
+  document.getElementById('oanAcceptBtn').style.display='';
+  document.getElementById('oanAcceptBtn').innerHTML='✓ &nbsp;Принять рейс';
+  document.getElementById('oanPendingState').style.display='none';
+  document.getElementById('oanDeclineBtn').textContent='Отклонить';
+  document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8eaf6,#ede7f6)';
+  document.getElementById('oanHeaderIcon').textContent='👤';
+  document.getElementById('oanHeaderIcon').style.background='linear-gradient(135deg,#3d5afe,#7b1fa2)';
+  document.getElementById('oanHeaderTitle').style.color='#3d5afe';
+  document.getElementById('oanHeaderTitle').textContent='Новый рейс от владельца';
+  document.getElementById('oanHeaderSub').style.color='#7b1fa2';
+  document.getElementById('oanHeaderSub').textContent='Иван Петров назначил вам рейс';
+  closeModal('ownerAssignNotifModal');
+  toast('Запрос отменён');
+}
+
+/* ── Init ────────────────────────────────────── */
+// Move trip elements into the Заказы tab on load
+(function(){
+  const ordersEl=document.getElementById('tcTabOrders');
+  const contentEl=document.getElementById('tcOrdersContent');
+  ['tcMiniMapCard','tcTripCard'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&ordersEl&&contentEl) ordersEl.insertBefore(el,contentEl);
+  });
+})();
+applyStatus('driving');
+updateTcStatusBottom('driving');
+setTimeout(()=>openModal('inviteModal'),800);
+</script>
+
+<!-- Navigation full-screen modal -->
+<div id="navModal" style="display:none;position:fixed;inset:0;z-index:500;background:#1a1a2e;flex-direction:column;">
+  <div style="position:relative;flex:1;overflow:hidden;">
+    <svg viewBox="0 0 393 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0">
+      <!-- Dark nav map background -->
+      <rect width="393" height="600" fill="#1c2333"/>
+      <!-- Roads grid (faint) -->
+      <line x1="0" y1="200" x2="393" y2="200" stroke="#2a3348" stroke-width="8"/>
+      <line x1="0" y1="350" x2="393" y2="350" stroke="#2a3348" stroke-width="5"/>
+      <line x1="130" y1="0" x2="130" y2="600" stroke="#2a3348" stroke-width="5"/>
+      <line x1="260" y1="0" x2="260" y2="600" stroke="#2a3348" stroke-width="8"/>
+      <!-- Minor roads -->
+      <line x1="0" y1="280" x2="393" y2="280" stroke="#232b3e" stroke-width="3"/>
+      <line x1="0" y1="420" x2="393" y2="420" stroke="#232b3e" stroke-width="3"/>
+      <line x1="65" y1="0" x2="65" y2="600" stroke="#232b3e" stroke-width="3"/>
+      <line x1="195" y1="0" x2="195" y2="600" stroke="#232b3e" stroke-width="3"/>
+      <line x1="325" y1="0" x2="325" y2="600" stroke="#232b3e" stroke-width="3"/>
+      <!-- Route highlight -->
+      <path d="M310,80 Q290,160 270,240 Q240,320 196,400 Q165,460 130,520" fill="none" stroke="#2563EB" stroke-width="12" stroke-linecap="round" opacity=".3"/>
+      <path d="M310,80 Q290,160 270,240 Q240,320 196,400 Q165,460 130,520" fill="none" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+      <!-- Animated truck position (current) -->
+      <circle class="nav-pulse-dot" cx="260" cy="300" r="14" fill="#2dbd71" opacity=".3"/>
+      <circle cx="260" cy="300" r="10" fill="#2dbd71" stroke="#fff" stroke-width="3"/>
+      <text x="260" y="304" text-anchor="middle" font-size="10" fill="#fff" font-family="sans-serif">🚛</text>
+      <!-- Origin marker -->
+      <circle cx="310" cy="80" r="7" fill="#666" stroke="#fff" stroke-width="2"/>
+      <!-- Destination marker -->
+      <circle cx="130" cy="520" r="10" fill="#FAE436" stroke="#0F0F37" stroke-width="2.5"/>
+      <text x="130" y="524" text-anchor="middle" font-size="10" fill="#0F0F37" font-weight="800" font-family="sans-serif">🏁</text>
+      <!-- Location labels -->
+      <text x="318" y="73" font-size="11" fill="#9ca3af" font-family="sans-serif" font-weight="600">Ташкент</text>
+      <text x="108" y="545" font-size="11" fill="#e5e7eb" font-family="sans-serif" font-weight="700">Самарканд</text>
+      <!-- Speed vector line -->
+      <line x1="260" y1="300" x2="253" y2="275" stroke="#2dbd71" stroke-width="2" stroke-dasharray="3,2" opacity=".6"/>
+    </svg>
+    <!-- Top bar -->
+    <div style="position:absolute;top:0;left:0;right:0;padding:16px;display:flex;justify-content:space-between;align-items:flex-start;">
+      <div style="background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border-radius:16px;padding:10px 16px;">
+        <div style="font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:2px">МАРШРУТ</div>
+        <div style="font-size:14px;font-weight:800;color:#fff" id="navRoute">Ташкент → Самарканд</div>
+      </div>
+      <button onclick="closeNavModal()" style="width:40px;height:40px;border-radius:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <!-- Speed display -->
+    <div style="position:absolute;bottom:130px;left:16px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border-radius:20px;padding:14px 20px;min-width:100px;text-align:center;">
+      <div style="font-size:36px;font-weight:900;color:#fff;line-height:1" id="navSpeed">72</div>
+      <div style="font-size:11px;color:#9ca3af;font-weight:600;margin-top:2px">КМ/Ч</div>
+    </div>
+    <!-- ETA -->
+    <div style="position:absolute;bottom:130px;right:16px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border-radius:20px;padding:14px 20px;text-align:center;">
+      <div style="font-size:11px;color:#9ca3af;font-weight:600;margin-bottom:4px">ПРИБЫТИЕ</div>
+      <div style="font-size:18px;font-weight:800;color:#FAE436" id="navEta">~6ч</div>
+      <div style="font-size:11px;color:#9ca3af;margin-top:2px">527 км осталось</div>
+    </div>
+  </div>
+  <!-- Bottom bar -->
+  <div style="background:#0f1523;padding:20px 20px 36px;display:flex;gap:12px;">
+    <div style="flex:1;text-align:center;">
+      <div style="font-size:10px;color:#6b7280;font-weight:600;margin-bottom:4px;text-transform:uppercase">Скорость</div>
+      <div style="font-size:15px;font-weight:800;color:#e5e7eb" id="navSpeedBot">72 км/ч</div>
+    </div>
+    <div style="width:1px;background:#2a3348;"></div>
+    <div style="flex:1;text-align:center;">
+      <div style="font-size:10px;color:#6b7280;font-weight:600;margin-bottom:4px;text-transform:uppercase">Локация</div>
+      <div style="font-size:15px;font-weight:800;color:#e5e7eb" id="navLoc">Джизак</div>
+    </div>
+    <div style="width:1px;background:#2a3348;"></div>
+    <div style="flex:1;text-align:center;">
+      <div style="font-size:10px;color:#6b7280;font-weight:600;margin-bottom:4px;text-transform:uppercase">Проехано</div>
+      <div style="font-size:15px;font-weight:800;color:#e5e7eb">320 км</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
