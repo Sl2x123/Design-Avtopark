@@ -20,7 +20,7 @@ window.NAV_FILLED={"truck":"<path d=\"M14 2.92V11.23C14 12.25 13.17 13.08 12.15 
       el.replaceWith(s);
     });
   }
-  var NAV=[['fleet','Fleet','truck','fleet.html'],['map','Map','map','map.html'],['analytics','Analytics','bar-chart-3','analytics.html'],['garage','Garage','warehouse','garage-trucks.html'],['profile','Profile','user','profile.html']];
+  var NAV=[['fleet','Рейсы','truck','fleet.html'],['map','Map','map','map.html'],['analytics','Analytics','bar-chart-3','analytics.html'],['garage','Garage','warehouse','garage-trucks.html'],['profile','Profile','user','profile.html']];
   function nav(active){
     return '<nav class="navbar">'+NAV.map(function(n){
       return '<a href="'+n[3]+'" class="'+(n[0]===active?'active':'')+'">'+fillSvg(NF[n[2]]||'')+'<span>'+n[1]+'</span></a>';
