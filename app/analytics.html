@@ -15,11 +15,70 @@
 <div class="app has-nav">
   <div class="sticky-head px-5 pt-5 pb-3 border-b border-gray-100">
     <h1 class="text-2xl font-bold text-navy-800 tracking-tight mb-3">Analytics</h1>
-    <div class="flex gap-2 overflow-x-auto hide-scroll" data-tabs>
-      <button class="seg-tab">Today</button>
-      <button class="seg-tab on">7 days</button>
-      <button class="seg-tab">This month</button>
-      <button class="seg-tab">Last month</button>
+    <div class="flex items-center gap-2">
+      <div class="flex gap-2 overflow-x-auto hide-scroll flex-1" data-tabs id="period-tabs">
+        <button class="seg-tab" onclick="setPeriod('today',this)">Today</button>
+        <button class="seg-tab on" onclick="setPeriod('7d',this)">7 days</button>
+        <button class="seg-tab" onclick="setPeriod('month',this)">This month</button>
+        <button class="seg-tab" onclick="setPeriod('last',this)">Last month</button>
+      </div>
+      <button id="cal-btn" onclick="openCalSheet()" class="shrink-0 w-9 h-9 rounded-xl border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:bg-gray-50 transition-colors">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Calendar sheet overlay -->
+  <div id="calOverlay" onclick="if(event.target===this)closeCalSheet()" style="display:none;position:fixed;inset:0;background:rgba(15,15,55,.35);z-index:100;align-items:flex-end">
+    <div id="calSheet" style="background:#fff;border-radius:24px 24px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom);transform:translateY(100%);transition:transform .3s cubic-bezier(.32,1,.5,1)">
+      <!-- Handle -->
+      <div style="display:flex;justify-content:center;padding:12px 0 4px"><div style="width:36px;height:4px;border-radius:999px;background:#E4E7EC"></div></div>
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 18px 14px">
+        <span style="font-size:17px;font-weight:800;color:#0F0F37">Выбрать период</span>
+        <button onclick="closeCalSheet()" style="width:32px;height:32px;border-radius:10px;background:#F4F5F7;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#667085">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick presets -->
+      <div style="padding:0 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px" id="presets"></div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:#F2F4F7;margin:0 16px 16px"></div>
+
+      <!-- Calendar nav -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 12px">
+        <button onclick="calNav(-1)" style="width:32px;height:32px;border-radius:10px;border:1px solid #E4E7EC;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#667085">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <span id="calMonthLabel" style="font-size:14px;font-weight:700;color:#0F0F37"></span>
+        <button onclick="calNav(1)" style="width:32px;height:32px;border-radius:10px;border:1px solid #E4E7EC;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#667085">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Day-of-week headers -->
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);padding:0 16px;margin-bottom:6px">
+        <div style="text-align:center;font-size:11px;font-weight:600;color:#98A2B3">Mo</div>
+        <div style="text-align:center;font-size:11px;font-weight:600;color:#98A2B3">Tu</div>
+        <div style="text-align:center;font-size:11px;font-weight:600;color:#98A2B3">We</div>
+        <div style="text-align:center;font-size:11px;font-weight:600;color:#98A2B3">Th</div>
+        <div style="text-align:center;font-size:11px;font-weight:600;color:#98A2B3">Fr</div>
+        <div style="text-align:center;font-size:11px;font-weight:600;color:#98A2B3">Sa</div>
+        <div style="text-align:center;font-size:11px;font-weight:600;color:#98A2B3">Su</div>
+      </div>
+
+      <!-- Calendar grid -->
+      <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);padding:0 16px;gap:2px 0"></div>
+
+      <!-- Selected range label -->
+      <div id="rangeLabel" style="text-align:center;font-size:12px;color:#667085;padding:10px 16px 4px;min-height:32px"></div>
+
+      <!-- Apply -->
+      <div style="padding:8px 16px 20px">
+        <button onclick="applyCalRange()" style="width:100%;height:48px;border-radius:14px;background:#FFCB00;border:none;font-size:15px;font-weight:800;color:#0F0F37;cursor:pointer;font-family:inherit">Применить</button>
+      </div>
     </div>
   </div>
 
@@ -154,6 +213,126 @@
 
   Panda.mountNav('analytics');
   Panda.render();
+
+  // ── Period tabs ──────────────────────────────────────────────
+  function setPeriod(key, btn) {
+    document.querySelectorAll('#period-tabs .seg-tab').forEach(b=>b.classList.remove('on'));
+    if(btn) btn.classList.add('on');
+    // update cal-btn highlight
+    document.getElementById('cal-btn').style.borderColor = '';
+    document.getElementById('cal-btn').style.background = '';
+    document.getElementById('cal-btn').style.color = '';
+  }
+
+  // ── Calendar sheet ───────────────────────────────────────────
+  var calYear, calMonth, rangeStart=null, rangeEnd=null;
+
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const PRESETS=[
+    {label:'Сегодня',     key:'today'},
+    {label:'7 дней',      key:'7d'},
+    {label:'30 дней',     key:'30d'},
+    {label:'Этот месяц',  key:'month'},
+    {label:'Прошлый мес.',key:'last'},
+    {label:'Этот год',    key:'year'},
+  ];
+
+  function openCalSheet(){
+    var now=new Date();
+    calYear=now.getFullYear(); calMonth=now.getMonth();
+    rangeStart=null; rangeEnd=null;
+    renderPresets(); renderCal(); updateRangeLabel();
+    var overlay=document.getElementById('calOverlay');
+    overlay.style.display='flex';
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        document.getElementById('calSheet').style.transform='translateY(0)';
+      });
+    });
+  }
+  function closeCalSheet(){
+    document.getElementById('calSheet').style.transform='translateY(100%)';
+    setTimeout(function(){ document.getElementById('calOverlay').style.display='none'; },300);
+  }
+
+  function renderPresets(){
+    document.getElementById('presets').innerHTML=PRESETS.map(function(p){
+      return '<button onclick="applyPreset(\''+p.key+'\')" style="height:38px;border-radius:12px;border:1.5px solid #E4E7EC;background:#F9FAFB;font-size:13px;font-weight:600;color:#344054;cursor:pointer;font-family:inherit;transition:all .15s">'+p.label+'</button>';
+    }).join('');
+  }
+
+  function applyPreset(key){
+    var now=new Date(); var y=now.getFullYear(),m=now.getMonth(),d=now.getDate();
+    if(key==='today'){ rangeStart=new Date(y,m,d); rangeEnd=new Date(y,m,d); }
+    else if(key==='7d'){ rangeEnd=new Date(y,m,d); rangeStart=new Date(y,m,d-6); }
+    else if(key==='30d'){ rangeEnd=new Date(y,m,d); rangeStart=new Date(y,m,d-29); }
+    else if(key==='month'){ rangeStart=new Date(y,m,1); rangeEnd=new Date(y,m+1,0); }
+    else if(key==='last'){ rangeStart=new Date(y,m-1,1); rangeEnd=new Date(y,m,0); }
+    else if(key==='year'){ rangeStart=new Date(y,0,1); rangeEnd=new Date(y,11,31); }
+    calYear=rangeStart.getFullYear(); calMonth=rangeStart.getMonth();
+    renderCal(); updateRangeLabel();
+  }
+
+  function calNav(dir){
+    calMonth+=dir;
+    if(calMonth>11){calMonth=0;calYear++;}
+    if(calMonth<0){calMonth=11;calYear--;}
+    renderCal();
+  }
+
+  function renderCal(){
+    document.getElementById('calMonthLabel').textContent=MONTHS[calMonth]+' '+calYear;
+    var first=new Date(calYear,calMonth,1);
+    var startDow=(first.getDay()+6)%7; // Mon=0
+    var daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+    var cells='';
+    for(var i=0;i<startDow;i++) cells+='<div></div>';
+    for(var day=1;day<=daysInMonth;day++){
+      var dt=new Date(calYear,calMonth,day);
+      var isStart=rangeStart&&sameDay(dt,rangeStart);
+      var isEnd=rangeEnd&&sameDay(dt,rangeEnd);
+      var inRange=rangeStart&&rangeEnd&&dt>=rangeStart&&dt<=rangeEnd;
+      var isToday=sameDay(dt,new Date());
+      var bg='transparent', color='#0F0F37', fw='500', br='10px', extraBg='';
+      if(isStart||isEnd){ bg='#FFCB00'; color='#0F0F37'; fw='800'; }
+      else if(inRange){ bg='#FEF3C7'; }
+      if(isToday&&!isStart&&!isEnd){ color='#D97706'; fw='700'; }
+      cells+='<div onclick="pickDay('+calYear+','+calMonth+','+day+')" style="display:flex;align-items:center;justify-content:center;height:36px;cursor:pointer;background:'+bg+';border-radius:'+br+';font-size:13px;font-weight:'+fw+';color:'+color+'">' +day+'</div>';
+    }
+    document.getElementById('calGrid').innerHTML=cells;
+  }
+
+  function sameDay(a,b){ return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+
+  function pickDay(y,m,d){
+    var dt=new Date(y,m,d);
+    if(!rangeStart||rangeEnd){
+      rangeStart=dt; rangeEnd=null;
+    } else {
+      if(dt<rangeStart){ rangeEnd=rangeStart; rangeStart=dt; }
+      else { rangeEnd=dt; }
+    }
+    renderCal(); updateRangeLabel();
+  }
+
+  function updateRangeLabel(){
+    var el=document.getElementById('rangeLabel');
+    if(!rangeStart){ el.textContent=''; return; }
+    var fmt=function(d){ return d.getDate()+'.'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'.'+d.getFullYear(); };
+    el.textContent = rangeEnd&&!sameDay(rangeStart,rangeEnd)
+      ? fmt(rangeStart)+' — '+fmt(rangeEnd)
+      : fmt(rangeStart);
+  }
+
+  function applyCalRange(){
+    if(!rangeStart) return closeCalSheet();
+    // highlight calendar button to show custom range is active
+    var btn=document.getElementById('cal-btn');
+    btn.style.borderColor='#FFCB00'; btn.style.background='#FFFBEB'; btn.style.color='#D97706';
+    // deselect all period tabs
+    document.querySelectorAll('#period-tabs .seg-tab').forEach(b=>b.classList.remove('on'));
+    closeCalSheet();
+  }
 </script>
 </body>
 </html>
