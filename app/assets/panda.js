@@ -66,36 +66,43 @@ window.NAV_FILLED={"truck":"<path d=\"M14 2.92V11.23C14 12.25 13.17 13.08 12.15 
       '</div></div>'):'';
     var routeInline='';
     if(t.route){
+      var rem=100-t.route.pct;
       routeInline=
-        '<div class="flex items-end justify-end gap-1.5 shrink-0">'+
-          '<span class="text-[11px] font-semibold text-navy-700">'+t.route.from+'</span>'+
-          '<div class="relative flex flex-col items-center" style="min-width:40px">'+
-            '<span class="text-[10px] font-bold mb-0.5 px-1 py-px rounded" style="background:#FEF3C7;color:#D97706;line-height:1.3">'+t.route.pct+'%</span>'+
-            '<div class="relative w-full flex items-center h-[2px]">'+
-              '<div class="w-full h-[2px] rounded-full" style="background:linear-gradient(90deg,#FBBF24,#F97316)"></div>'+
-              '<div class="absolute right-0 w-2 h-2 rounded-full border-2 border-white" style="background:#F97316;right:-4px"></div>'+
-            '</div>'+
+        '<div class="shrink-0 flex flex-col items-end gap-0.5" style="min-width:80px">'+
+          '<span class="text-[11px] font-bold text-navy-800 truncate max-w-full">'+t.route.from+'</span>'+
+          '<div class="flex items-center gap-1">'+
+            '<svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" stroke-linecap="round" width="10" height="10"><path d="M12 5v14M6 14l6 6 6-6"/></svg>'+
+            '<span style="font-size:10px;font-weight:700;padding:1px 5px;border-radius:6px;background:#FEF3C7;color:#D97706;line-height:1.4">'+t.route.pct+'%</span>'+
           '</div>'+
-          '<span class="text-[11px] font-semibold text-navy-700">'+t.route.to+'</span>'+
+          '<span class="text-[11px] font-bold text-navy-800 truncate max-w-full">'+t.route.to+'</span>'+
+          '<div class="relative w-full mt-0.5" style="height:3px">'+
+            '<div class="absolute inset-0 rounded-full" style="background:#F2F4F7"></div>'+
+            '<div class="absolute inset-y-0 left-0 rounded-full" style="width:'+t.route.pct+'%;background:linear-gradient(90deg,#FFCB00,#F97316)"></div>'+
+            '<div class="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full border-2 border-white" style="left:calc('+t.route.pct+'% - 4px);background:#F97316"></div>'+
+          '</div>'+
+          '<span style="font-size:10px;color:#98A2B3;font-weight:600">'+rem+'% осталось</span>'+
         '</div>';
     }
     return '<a href="'+(t.href||'truck-detail.html')+'" class="card-press block rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">'+
-      '<div class="flex gap-2 p-2 items-stretch">'+
-        '<img src="'+t.img+'" class="w-[72px] self-stretch object-cover rounded-xl shrink-0">'+
-        '<div class="flex-1 min-w-0 py-0.5">'+
-          '<div class="flex items-start justify-between gap-2">'+
-            '<h3 class="text-[13px] font-bold text-navy-800 truncate">'+t.name+'</h3>'+
-            '<span class="shrink-0 inline-flex items-center gap-1 '+s.cls+' text-[10px] font-semibold px-2 py-0.5 rounded-full"><span class="dot" style="background:'+s.dot+';width:6px;height:6px"></span>'+s.label+'</span>'+
+      '<div class="relative w-full" style="height:140px;background:#F8F8F8">'+
+        '<img src="'+t.img+'" style="width:100%;height:100%;object-fit:cover;display:block">'+
+        '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.45) 100%)"></div>'+
+        '<div style="position:absolute;bottom:10px;left:12px;right:12px;display:flex;align-items:flex-end;justify-content:space-between">'+
+          '<div>'+
+            '<div style="font-size:15px;font-weight:800;color:white;text-shadow:0 1px 3px rgba(0,0,0,.4)">'+t.name+'</div>'+
+            '<span class="plate" style="height:18px;font-size:10px;margin-top:4px;display:inline-flex"><span class="uz">UZ</span><span class="num">'+t.plate+'</span></span>'+
           '</div>'+
-          '<div class="mt-0.5"><span class="plate" style="height:20px;font-size:11px"><span class="uz">UZ</span><span class="num">'+t.plate+'</span></span></div>'+
-          '<div class="mt-1 flex items-end gap-2">'+
-            '<div class="flex-1 min-w-0 space-y-0 text-[11px] text-gray-500 leading-tight">'+
-              line('Driver',t.driver,'No driver')+
-              line('Trailer',t.trailer,'No trailer')+
-              line('Type',t.trailerType,'—')+
-            '</div>'+
-            routeInline+
+          '<span class="inline-flex items-center gap-1 '+s.cls+' text-[10px] font-semibold px-2 py-0.5 rounded-full" style="backdrop-filter:blur(4px)"><span class="dot" style="background:'+s.dot+';width:6px;height:6px"></span>'+s.label+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="p-3">'+
+        '<div class="flex items-end gap-2">'+
+          '<div class="flex-1 min-w-0 space-y-0 text-[11px] text-gray-500 leading-tight">'+
+            line('Driver',t.driver,'No driver')+
+            line('Trailer',t.trailer,'No trailer')+
+            line('Type',t.trailerType,'—')+
           '</div>'+
+          routeInline+
         '</div>'+
       '</div>'+finance+'</a>';
   };

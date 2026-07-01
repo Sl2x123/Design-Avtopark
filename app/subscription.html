@@ -15,7 +15,7 @@
 <div class="app">
   <div class="sticky-head px-5 py-3 flex items-center gap-3 border-b border-gray-100">
     <a href="profile.html" class="w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50"><i data-icon="arrow-left" class="w-5 h-5"></i></a>
-    <h1 class="text-base font-semibold text-navy-800">Subscription</h1>
+    <h1 class="text-base font-semibold text-navy-800">Подписка</h1>
   </div>
 
   <div class="app-scroll bg-gray-50 px-4 py-4 space-y-4">
@@ -32,23 +32,31 @@
     </div>
 
     <div class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
-      <h3 class="text-sm font-semibold text-navy-800 mb-3">Plan usage</h3>
+      <h3 class="text-sm font-semibold text-navy-800 mb-3">Использование плана</h3>
       <div class="space-y-3" id="limits"></div>
     </div>
 
-    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs">
+    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
       <div class="flex items-center justify-between px-4 py-3.5">
-        <div><p class="text-sm font-semibold text-navy-800">Auto-renew</p><p class="text-xs text-gray-400">Billed every month</p></div>
-        <span class="w-11 h-6 rounded-full bg-primary-500 relative"><span class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow"></span></span>
+        <div>
+          <p class="text-sm font-semibold text-navy-800">Автопродление</p>
+          <p class="text-xs text-gray-400">Раз в месяц · следующее 06.01.2027</p>
+        </div>
+        <span class="w-11 h-6 rounded-full bg-primary-500 relative shrink-0"><span class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow"></span></span>
       </div>
-      <div class="border-t border-gray-100 flex items-center justify-between px-4 py-3.5">
-        <div class="flex items-center gap-2 text-gray-700"><i data-icon="credit-card" class="w-4.5 h-4.5 text-gray-500"></i><p class="text-sm font-semibold text-navy-800">•••• 9012</p></div>
-        <span class="text-xs text-navy-700 font-semibold">Change</span>
+      <div class="border-t border-gray-100 flex items-center gap-3 px-4 py-3.5">
+        <span class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+          <i data-icon="building-2" class="w-4 h-4 text-gray-500"></i>
+        </span>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-navy-800">Банковский перевод</p>
+          <p class="text-xs text-gray-400">Счёт выставляется на е-mail</p>
+        </div>
       </div>
     </div>
 
-    <a href="plans.html" class="btn h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm">Change plan</a>
-    <button class="btn w-full h-11 rounded-lg text-error-600 text-sm font-semibold">Cancel subscription</button>
+    <a href="plans.html" class="btn h-12 rounded-xl bg-primary-500 text-navy-800 font-bold flex items-center justify-center shadow-sm">Изменить тариф</a>
+    <button class="btn w-full h-11 rounded-xl text-error-600 text-sm font-semibold">Отменить подписку</button>
   </div>
 </div>
 <script>
