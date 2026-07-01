@@ -58,10 +58,10 @@ window.NAV_FILLED={"truck":"<path d=\"M14 2.92V11.23C14 12.25 13.17 13.08 12.15 
     var s=Panda.status(t.statusKey,t.days);
     var finance=t.finance?(
       '<div class="border-t border-gray-100">'+
-      '<div class="grid grid-cols-3 py-2">'+
-      '<div class="px-2 py-1 text-center border-r border-gray-100"><p class="text-[10px] font-semibold text-gray-800">Revenue</p><p class="text-[10px] text-gray-400 mb-0.5">this month</p><p class="text-[13px] font-bold text-success-600">'+money(t.rev)+'</p></div>'+
-      '<div class="px-2 py-1 text-center border-r border-gray-100"><p class="text-[10px] font-semibold text-gray-800">Expenses</p><p class="text-[10px] text-gray-400 mb-0.5">this month</p><p class="text-[13px] font-bold text-error-600">'+money(t.exp)+'</p></div>'+
-      '<div class="px-2 py-1 text-center"><p class="text-[10px] font-semibold text-gray-800">Profit</p><p class="text-[10px] text-gray-400 mb-0.5">this month</p><p class="text-[13px] font-bold text-success-600">'+money(t.prof)+'</p></div>'+
+      '<div class="grid grid-cols-3 py-1.5">'+
+      '<div class="px-2 py-0.5 text-center border-r border-gray-100"><p class="text-[10px] font-semibold text-gray-800">Revenue</p><p class="text-[9px] text-gray-400">this month</p><p class="text-[12px] font-bold text-success-600">'+money(t.rev)+'</p></div>'+
+      '<div class="px-2 py-0.5 text-center border-r border-gray-100"><p class="text-[10px] font-semibold text-gray-800">Expenses</p><p class="text-[9px] text-gray-400">this month</p><p class="text-[12px] font-bold text-error-600">'+money(t.exp)+'</p></div>'+
+      '<div class="px-2 py-0.5 text-center"><p class="text-[10px] font-semibold text-gray-800">Profit</p><p class="text-[9px] text-gray-400">this month</p><p class="text-[12px] font-bold text-success-600">'+money(t.prof)+'</p></div>'+
       '</div></div>'):'';
     var routeInline='';
     if(t.route){
@@ -74,21 +74,23 @@ window.NAV_FILLED={"truck":"<path d=\"M14 2.92V11.23C14 12.25 13.17 13.08 12.15 
           '<span style="font-size:11px;font-weight:700;color:#0F0F37;white-space:nowrap">'+t.route.to+'</span>'+
         '</div>';
     }
+    var trailerLine = t.trailer
+      ? (t.trailerType ? (t.trailer+' · '+t.trailerType) : t.trailer)
+      : (t.trailerType || '');
     return '<a href="'+(t.href||'truck-detail.html')+'" class="card-press block rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">'+
-      '<div class="flex gap-2 p-2 items-stretch">'+
-        '<img src="'+t.img+'" class="w-[72px] self-stretch object-cover rounded-xl shrink-0">'+
+      '<div class="flex gap-2 p-1.5 items-stretch">'+
+        '<img src="'+t.img+'" class="w-[64px] self-stretch object-cover rounded-xl shrink-0">'+
         '<div class="flex-1 min-w-0 py-0.5">'+
-          '<div class="flex items-start justify-between gap-2">'+
+          '<div class="flex items-center justify-between gap-2">'+
             '<h3 class="text-[13px] font-bold text-navy-800 truncate">'+t.name+'</h3>'+
-            '<span class="shrink-0 inline-flex items-center gap-1 '+s.cls+' text-[10px] font-semibold px-2 py-0.5 rounded-full"><span class="dot" style="background:'+s.dot+';width:6px;height:6px"></span>'+s.label+'</span>'+
+            '<span class="shrink-0 inline-flex items-center gap-1 '+s.cls+' text-[10px] font-semibold px-2 py-0.5 rounded-full"><span class="dot" style="background:'+s.dot+';width:5px;height:5px"></span>'+s.label+'</span>'+
           '</div>'+
-          '<div class="mt-0.5"><span class="plate" style="height:20px;font-size:11px"><span class="uz">UZ</span><span class="num">'+t.plate+'</span></span></div>'+
-          '<div class="mt-1 min-w-0 space-y-0 text-[11px] text-gray-500 leading-tight">'+
-            line('Driver',t.driver,'No driver')+
-            line('Trailer',t.trailer,'No trailer')+
-            line('Type',t.trailerType,'—')+
+          '<div class="mt-0.5"><span class="plate" style="height:18px;font-size:10px"><span class="uz">UZ</span><span class="num">'+t.plate+'</span></span></div>'+
+          '<div class="mt-0.5 min-w-0 text-[10.5px] text-gray-500 leading-snug">'+
+            (t.driver?'<p>Driver: <span class="text-gray-800 font-medium">'+t.driver+'</span></p>':'<p class="text-gray-400">No driver</p>')+
+            (trailerLine?'<p class="truncate"><span class="text-gray-800 font-medium">'+trailerLine+'</span></p>':'')+
           '</div>'+
-          (routeInline?'<div class="mt-1.5">'+routeInline+'</div>':'')+
+          (routeInline?'<div class="mt-1">'+routeInline+'</div>':'')+
         '</div>'+
       '</div>'+finance+'</a>';
   };
