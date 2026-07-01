@@ -994,246 +994,167 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
         <div class="rounded-2xl overflow-hidden" style="border:1px solid #EAECF0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
 
           <!-- Volvo FH16 — On trip -->
-          <div data-gcard="truck" data-status="trip" data-search="volvo fh16 01 a 123 bc alisher karimov" onclick="showGarageDetail(0)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:12px;padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
-            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg" style="width:88px;height:88px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-                <div style="min-width:0">
-                  <div style="font-size:13.5px;font-weight:700;color:#0F0F37;margin-bottom:2px">Volvo FH16</div>
-                  <div style="font-size:12px;color:#667085;margin-bottom:2px"><span style="font-weight:600;color:#344054">Alisher Karimov</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">312,400 km</span></div>
-                  <span class="plate"><span class="uz">UZ</span><span class="num">01 A 123 BC</span></span>
-                </div>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#ECFDF3;color:#079455"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A;flex-shrink:0"></span>On trip</span>
+          <div data-gcard="truck" data-status="trip" data-search="volvo fh16 01 a 123 bc alisher karimov" onclick="showGarageDetail(0)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:96px">
+            <div style="flex:1.6;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg" style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Volvo FH16</div>
+                <div style="font-size:11.5px;color:#667085;margin-bottom:4px">Alisher Karimov · 312,400 km</div>
+                <span class="plate" style="height:20px;font-size:10.5px"><span class="uz">UZ</span><span class="num">01 A 123 BC</span></span>
               </div>
-              <!-- Trailer + route -->
-              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
-                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Cargobull S.KO</span>
-                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Curtainsider</span>
-                </div>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0">
-                  <span style="font-size:10px;font-weight:600;color:#344054;line-height:1.3">Tashkent</span>
-                  <div style="display:flex;align-items:center;gap:4px">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" stroke-linecap="round" width="11" height="11" style="flex-shrink:0"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-                    <span style="font-size:10px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 6px;border-radius:999px;white-space:nowrap">72%</span>
-                  </div>
-                  <span style="font-size:10px;font-weight:600;color:#344054;line-height:1.3">London</span>
-                </div>
-              </div>
-              <!-- Monthly stats -->
-              <div style="display:flex;gap:14px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#1570EF">$8,500</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">$4,200</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#17B26A">$4,300</div>
-                </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Прицеп</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Cargobull S.KO</span>
+              <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;width:fit-content">Curtainsider</span>
+            </div>
+            <div style="flex:1.3;min-width:0;display:flex;align-items:center;justify-content:space-around;padding:12px 16px;border-left:1px solid #EAECF0">
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД</div><div style="font-size:13px;font-weight:800;color:#1570EF">$8,500</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД</div><div style="font-size:13px;font-weight:800;color:#F04438">$4,200</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ</div><div style="font-size:13px;font-weight:800;color:#17B26A">$4,300</div></div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#ECFDF3;color:#079455"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A;flex-shrink:0"></span>On trip</span>
+              <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
+                <span style="font-size:11px;font-weight:600;color:#344054">Tashkent</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" stroke-linecap="round" width="12" height="12" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <span style="font-size:11px;font-weight:600;color:#344054">London</span>
+                <span style="font-size:10px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 6px;border-radius:999px">72%</span>
               </div>
             </div>
           </div>
 
           <!-- Scania R500 — No signal -->
-          <div data-gcard="truck" data-status="offline" data-search="scania r500 70 b 456 da bakhtiyor yuldashev" onclick="showGarageDetail(1)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:12px;padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
-            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg" style="width:88px;height:88px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-                <div style="min-width:0">
-                  <div style="font-size:13.5px;font-weight:700;color:#0F0F37;margin-bottom:2px">Scania R500</div>
-                  <div style="font-size:12px;color:#667085;margin-bottom:2px"><span style="font-weight:600;color:#344054">Bakhtiyor Yuldashev</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">401,900 km</span></div>
-                  <span class="plate"><span class="uz">UZ</span><span class="num">70 B 456 DA</span></span>
-                </div>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#F2F4F7;color:#475467"><span style="width:6px;height:6px;border-radius:50%;background:#98A2B3;flex-shrink:0"></span>No signal</span>
+          <div data-gcard="truck" data-status="offline" data-search="scania r500 70 b 456 da bakhtiyor yuldashev" onclick="showGarageDetail(1)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:96px">
+            <div style="flex:1.6;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg" style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Scania R500</div>
+                <div style="font-size:11.5px;color:#667085;margin-bottom:4px">Bakhtiyor Yuldashev · 401,900 km</div>
+                <span class="plate" style="height:20px;font-size:10.5px"><span class="uz">UZ</span><span class="num">70 B 456 DA</span></span>
               </div>
-              <!-- Trailer + last location -->
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
-                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Cargo Coil</span>
-                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Refrigerator</span>
-                </div>
-                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Последний сигнал: London, UK</span>
-              </div>
-              <!-- Monthly stats -->
-              <div style="display:flex;gap:14px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#1570EF">$5,100</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">$3,300</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#17B26A">$1,800</div>
-                </div>
-              </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Прицеп</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Cargo Coil</span>
+              <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;width:fit-content">Refrigerator</span>
+            </div>
+            <div style="flex:1.3;min-width:0;display:flex;align-items:center;justify-content:space-around;padding:12px 16px;border-left:1px solid #EAECF0">
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД</div><div style="font-size:13px;font-weight:800;color:#1570EF">$5,100</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД</div><div style="font-size:13px;font-weight:800;color:#F04438">$3,300</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ</div><div style="font-size:13px;font-weight:800;color:#17B26A">$1,800</div></div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#F2F4F7;color:#475467"><span style="width:6px;height:6px;border-radius:50%;background:#98A2B3;flex-shrink:0"></span>No signal</span>
+              <span style="font-size:11px;color:#98A2B3;text-align:right;white-space:nowrap">Последний сигнал:<br>London, UK</span>
             </div>
           </div>
 
           <!-- MAN TGX — Repair 5d -->
-          <div data-gcard="truck" data-status="repair" data-search="man tgx 01 d 789 ac" onclick="showGarageDetail(2)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:12px;padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
-            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg" style="width:88px;height:88px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-                <div style="min-width:0">
-                  <div style="font-size:13.5px;font-weight:700;color:#0F0F37;margin-bottom:2px">MAN TGX</div>
-                  <div style="font-size:12px;color:#667085;margin-bottom:2px"><span style="color:#D0D5DD;font-style:italic">No driver</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">620,000 km</span></div>
-                  <span class="plate"><span class="uz">UZ</span><span class="num">01 D 789 AC</span></span>
-                </div>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#FFFAEB;color:#B54708"><span style="width:6px;height:6px;border-radius:50%;background:#F79009;flex-shrink:0"></span>Repair 5d</span>
+          <div data-gcard="truck" data-status="repair" data-search="man tgx 01 d 789 ac" onclick="showGarageDetail(2)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:96px">
+            <div style="flex:1.6;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg" style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">MAN TGX</div>
+                <div style="font-size:11.5px;color:#D0D5DD;font-style:italic;margin-bottom:4px">Нет водителя · 620,000 km</div>
+                <span class="plate" style="height:20px;font-size:10.5px"><span class="uz">UZ</span><span class="num">01 D 789 AC</span></span>
               </div>
-              <!-- Trailer + location -->
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
-                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Profi Liner</span>
-                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Flatbed</span>
-                </div>
-                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Tashkent, Uzbekistan</span>
-              </div>
-              <!-- Monthly stats -->
-              <div style="display:flex;gap:14px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#1570EF">$0</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">$1,200</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">-$1,200</div>
-                </div>
-              </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Прицеп</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Profi Liner</span>
+              <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;width:fit-content">Flatbed</span>
+            </div>
+            <div style="flex:1.3;min-width:0;display:flex;align-items:center;justify-content:space-around;padding:12px 16px;border-left:1px solid #EAECF0">
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД</div><div style="font-size:13px;font-weight:800;color:#1570EF">$0</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД</div><div style="font-size:13px;font-weight:800;color:#F04438">$1,200</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ</div><div style="font-size:13px;font-weight:800;color:#F04438">-$1,200</div></div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#FFFAEB;color:#B54708"><span style="width:6px;height:6px;border-radius:50%;background:#F79009;flex-shrink:0"></span>Repair 5d</span>
+              <span style="font-size:11px;color:#98A2B3;text-align:right;white-space:nowrap">Tashkent, Uzbekistan</span>
             </div>
           </div>
 
           <!-- DAF XF 105 — On trip -->
-          <div data-gcard="truck" data-status="trip" data-search="daf xf 105 60 a 467 aa vali rakhimov" onclick="showGarageDetail(3)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:12px;padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
-            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg" style="width:88px;height:88px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-                <div style="min-width:0">
-                  <div style="font-size:13.5px;font-weight:700;color:#0F0F37;margin-bottom:2px">DAF XF 105</div>
-                  <div style="font-size:12px;color:#667085;margin-bottom:2px"><span style="font-weight:600;color:#344054">Vali Rakhimov</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">458,300 km</span></div>
-                  <span class="plate"><span class="uz">UZ</span><span class="num">60 A 467 AA</span></span>
-                </div>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#ECFDF3;color:#079455"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A;flex-shrink:0"></span>On trip</span>
+          <div data-gcard="truck" data-status="trip" data-search="daf xf 105 60 a 467 aa vali rakhimov" onclick="showGarageDetail(3)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:96px">
+            <div style="flex:1.6;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg" style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">DAF XF 105</div>
+                <div style="font-size:11.5px;color:#667085;margin-bottom:4px">Vali Rakhimov · 458,300 km</div>
+                <span class="plate" style="height:20px;font-size:10.5px"><span class="uz">UZ</span><span class="num">60 A 467 AA</span></span>
               </div>
-              <!-- Trailer + route -->
-              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
-                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Cargo Coil</span>
-                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Refrigerator</span>
-                </div>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0">
-                  <span style="font-size:10px;font-weight:600;color:#344054;line-height:1.3">Andijan</span>
-                  <div style="display:flex;align-items:center;gap:4px">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" stroke-linecap="round" width="11" height="11" style="flex-shrink:0"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-                    <span style="font-size:10px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 6px;border-radius:999px;white-space:nowrap">68%</span>
-                  </div>
-                  <span style="font-size:10px;font-weight:600;color:#344054;line-height:1.3">Prague</span>
-                </div>
-              </div>
-              <!-- Monthly stats -->
-              <div style="display:flex;gap:14px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#1570EF">$6,800</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">$3,500</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#17B26A">$3,300</div>
-                </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Прицеп</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Cargo Coil</span>
+              <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;width:fit-content">Refrigerator</span>
+            </div>
+            <div style="flex:1.3;min-width:0;display:flex;align-items:center;justify-content:space-around;padding:12px 16px;border-left:1px solid #EAECF0">
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД</div><div style="font-size:13px;font-weight:800;color:#1570EF">$6,800</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД</div><div style="font-size:13px;font-weight:800;color:#F04438">$3,500</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ</div><div style="font-size:13px;font-weight:800;color:#17B26A">$3,300</div></div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#ECFDF3;color:#079455"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A;flex-shrink:0"></span>On trip</span>
+              <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
+                <span style="font-size:11px;font-weight:600;color:#344054">Andijan</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" stroke-linecap="round" width="12" height="12" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <span style="font-size:11px;font-weight:600;color:#344054">Prague</span>
+                <span style="font-size:10px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 6px;border-radius:999px">68%</span>
               </div>
             </div>
           </div>
 
           <!-- Mercedes Actros — Idle -->
-          <div data-gcard="truck" data-status="idle" data-search="mercedes actros 30 c 201 ba sardor kholmatov" onclick="showGarageDetail(4)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:12px;padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
-            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg" style="width:88px;height:88px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-                <div style="min-width:0">
-                  <div style="font-size:13.5px;font-weight:700;color:#0F0F37;margin-bottom:2px">Mercedes Actros</div>
-                  <div style="font-size:12px;color:#667085;margin-bottom:2px"><span style="font-weight:600;color:#344054">Sardor Kholmatov</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">280,100 km</span></div>
-                  <span class="plate"><span class="uz">UZ</span><span class="num">30 C 201 BA</span></span>
-                </div>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#FEF3F2;color:#B42318"><span style="width:6px;height:6px;border-radius:50%;background:#F04438;flex-shrink:0"></span>Idle 2d</span>
+          <div data-gcard="truck" data-status="idle" data-search="mercedes actros 30 c 201 ba sardor kholmatov" onclick="showGarageDetail(4)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:96px">
+            <div style="flex:1.6;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg" style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Mercedes Actros</div>
+                <div style="font-size:11.5px;color:#667085;margin-bottom:4px">Sardor Kholmatov · 280,100 km</div>
+                <span class="plate" style="height:20px;font-size:10.5px"><span class="uz">UZ</span><span class="num">30 C 201 BA</span></span>
               </div>
-              <!-- Trailer row -->
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <span style="font-size:12px;color:#D0D5DD;font-style:italic">No trailer</span>
-                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Tashkent, Uzbekistan</span>
-              </div>
-              <!-- Monthly stats -->
-              <div style="display:flex;gap:14px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#1570EF">$7,200</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">$1,900</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#17B26A">$5,300</div>
-                </div>
-              </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Прицеп</span>
+              <span style="font-size:12px;color:#D0D5DD;font-style:italic">Без прицепа</span>
+            </div>
+            <div style="flex:1.3;min-width:0;display:flex;align-items:center;justify-content:space-around;padding:12px 16px;border-left:1px solid #EAECF0">
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД</div><div style="font-size:13px;font-weight:800;color:#1570EF">$7,200</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД</div><div style="font-size:13px;font-weight:800;color:#F04438">$1,900</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ</div><div style="font-size:13px;font-weight:800;color:#17B26A">$5,300</div></div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#FEF3F2;color:#B42318"><span style="width:6px;height:6px;border-radius:50%;background:#F04438;flex-shrink:0"></span>Idle 2d</span>
+              <span style="font-size:11px;color:#98A2B3;text-align:right;white-space:nowrap">Tashkent, Uzbekistan</span>
             </div>
           </div>
 
           <!-- Renault T High — Shift ended -->
-          <div data-gcard="truck" data-status="offline" data-search="renault t high 01 e 550 dc jasur ergashev" onclick="showGarageDetail(5)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:12px;padding:10px 16px;background:white;cursor:pointer;transition:box-shadow .2s,background .2s">
-            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg" style="width:88px;height:88px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:3px">
-                <div style="min-width:0">
-                  <div style="font-size:13.5px;font-weight:700;color:#0F0F37;margin-bottom:2px">Renault T High</div>
-                  <div style="font-size:12px;color:#667085;margin-bottom:2px"><span style="font-weight:600;color:#344054">Jasur Ergashev</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">510,000 km</span></div>
-                  <span class="plate"><span class="uz">UZ</span><span class="num">01 E 550 DC</span></span>
-                </div>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#F2F4F7;color:#344054"><span style="width:6px;height:6px;border-radius:50%;background:#475467;flex-shrink:0"></span>Shift ended</span>
+          <div data-gcard="truck" data-status="offline" data-search="renault t high 01 e 550 dc jasur ergashev" onclick="showGarageDetail(5)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:96px">
+            <div style="flex:1.6;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg" style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Renault T High</div>
+                <div style="font-size:11.5px;color:#667085;margin-bottom:4px">Jasur Ergashev · 510,000 km</div>
+                <span class="plate" style="height:20px;font-size:10.5px"><span class="uz">UZ</span><span class="num">01 E 550 DC</span></span>
               </div>
-              <!-- Trailer + location -->
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
-                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">S.CS Universal</span>
-                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Curtainsider</span>
-                </div>
-                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Tashkent, Uzbekistan</span>
-              </div>
-              <!-- Monthly stats -->
-              <div style="display:flex;gap:14px;margin-top:6px;padding-top:6px;border-top:1px solid #F2F4F7">
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#1570EF">$4,200</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">$2,800</div>
-                </div>
-                <div>
-                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#17B26A">$1,400</div>
-                </div>
-              </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Прицеп</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">S.CS Universal</span>
+              <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;width:fit-content">Curtainsider</span>
+            </div>
+            <div style="flex:1.3;min-width:0;display:flex;align-items:center;justify-content:space-around;padding:12px 16px;border-left:1px solid #EAECF0">
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД</div><div style="font-size:13px;font-weight:800;color:#1570EF">$4,200</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД</div><div style="font-size:13px;font-weight:800;color:#F04438">$2,800</div></div>
+              <div style="text-align:center"><div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ</div><div style="font-size:13px;font-weight:800;color:#17B26A">$1,400</div></div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 16px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#F2F4F7;color:#344054"><span style="width:6px;height:6px;border-radius:50%;background:#475467;flex-shrink:0"></span>Shift ended</span>
+              <span style="font-size:11px;color:#98A2B3;text-align:right;white-space:nowrap">Tashkent, Uzbekistan</span>
             </div>
           </div>
 
