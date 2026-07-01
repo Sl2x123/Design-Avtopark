@@ -48,36 +48,36 @@
 <script>
 const APP_ORDERS = [
   {
-    id:'ORD-001', status:'active', from:'Ташкент', to:'Москва',
-    cargo:'Электроника · 14 т', dist:'3 240 км', pct:67,
-    startDate:'20.06.2026', estEnd:'28.06.2026', income:'$4 800', mapLoc:'Самара', mapSpeed:'74 км/ч',
+    id:'ORD-001', status:'active', from:'Ташкент', to:'Лондон',
+    cargo:'Электроника · 14 т', dist:'6 800 км', pct:72,
+    startDate:'20.06.2026', estEnd:'02.07.2026', income:'$8 500', mapLoc:'Польша, A2', mapSpeed:'72 км/ч',
     truck:{name:'Volvo FH16', plate:'01 A 123 BC', img:'assets/img/trucks/truck1.jpg'},
     driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg'},
     trailer:{name:'Schmitz', plate:'60 H 545 AA', type:'Curtainsider'},
     expenses:[{cat:'Топливо',amount:520,note:'АЗС Лукойл'},{cat:'Питание',amount:45,note:'Обед'}]
   },
   {
-    id:'ORD-002', status:'active', from:'Самарканд', to:'Алматы',
-    cargo:'Стройматериалы · 18 т', dist:'860 км', pct:42,
-    startDate:'22.06.2026', estEnd:'24.06.2026', income:'$1 200', mapLoc:'Шымкент', mapSpeed:'81 км/ч',
+    id:'ORD-002', status:'active', from:'Андижан', to:'Прага',
+    cargo:'Текстиль · 18 т', dist:'6 300 км', pct:68,
+    startDate:'22.06.2026', estEnd:'05.07.2026', income:'$6 800', mapLoc:'Польша, A2', mapSpeed:'68 км/ч',
     truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'assets/img/trucks/truck4.jpg'},
     driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg'},
-    trailer:{name:'Kogel', plate:'60 H 457 AA', type:'Refrigerator'},
-    expenses:[{cat:'Топливо',amount:180,note:'АЗС Газпром'}]
+    trailer:{name:'Kogel', plate:'60 H 545 AA', type:'Refrigerator'},
+    expenses:[{cat:'Топливо',amount:380,note:'АЗС Лукойл'}]
   },
   {
-    id:'ORD-003', status:'active', from:'Ташкент', to:'Стамбул',
-    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:18,
-    startDate:'25.06.2026', estEnd:'10.07.2026', income:'$6 500',
+    id:'ORD-003', status:'cancelled', from:'Ташкент', to:'Стамбул',
+    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:0,
+    startDate:'25.06.2026', estEnd:'—', income:'—',
     truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'assets/img/trucks/truck3.jpg'},
-    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg'},
+    driver:{name:'—', phone:'', img:'assets/img/drivers/d2.jpg'},
     trailer:{name:'Krone', plate:'75 A 112 BC', type:'Flatbed'},
-    expenses:[{cat:'Топливо',amount:310,note:'АЗС BP'}]
+    expenses:[]
   },
   {
-    id:'ORD-004', status:'active', from:'Наманган', to:'Бишкек',
-    cargo:'Продукты питания · 12 т', dist:'520 км', pct:55,
-    startDate:'26.06.2026', estEnd:'27.06.2026', income:'$800',
+    id:'ORD-004', status:'done', from:'Наманган', to:'Бишкек',
+    cargo:'Продукты питания · 12 т', dist:'520 км', pct:100,
+    startDate:'20.06.2026', estEnd:'21.06.2026', income:'$800',
     truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg'},
     driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg'},
     trailer:null,
@@ -126,7 +126,7 @@ const QUICK_CATS = [
 let _curFilter = 'all';
 
 const TABS = [
-  ['all','Все',6],['active','В рейсе',4],['done','Завершён',1],['cancelled','Отменён',1]
+  ['all','Все',6],['active','В рейсе',2],['done','Завершён',2],['cancelled','Отменён',2]
 ];
 
 document.getElementById('order-tabs').innerHTML = TABS.map(([k,l,c],i)=>

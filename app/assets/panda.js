@@ -87,8 +87,13 @@ window.NAV_FILLED={"truck":"<path d=\"M14 2.92V11.23C14 12.25 13.17 13.08 12.15 
           '</div>'+
           '<div class="mt-0.5"><span class="plate" style="height:18px;font-size:10px"><span class="uz">UZ</span><span class="num">'+t.plate+'</span></span></div>'+
           '<div class="mt-0.5 min-w-0 text-[10.5px] text-gray-500 leading-snug">'+
-            (t.driver?'<p>Driver: <span class="text-gray-800 font-medium">'+t.driver+'</span></p>':'<p class="text-gray-400">No driver</p>')+
+            (t.driver
+              ? (t.speed
+                  ? '<div style="display:flex;justify-content:space-between;align-items:center"><p>Driver: <span class="text-gray-800 font-medium">'+t.driver+'</span></p><span style="font-size:10.5px;font-weight:700;color:#F79009">'+t.speed+'</span></div>'
+                  : '<p>Driver: <span class="text-gray-800 font-medium">'+t.driver+'</span></p>')
+              : '<p class="text-gray-400">No driver</p>')+
             (trailerLine?'<p class="truncate"><span class="text-gray-800 font-medium">'+trailerLine+'</span></p>':'')+
+            (!t.route&&t.location?'<p style="font-size:10px;color:#98A2B3;margin-top:1px">'+t.location+'</p>':'')+
           '</div>'+
           (routeInline?'<div class="mt-1">'+routeInline+'</div>':'')+
         '</div>'+

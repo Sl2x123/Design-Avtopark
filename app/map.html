@@ -49,8 +49,9 @@
       </div>
     </div>
 
-    <div id="hint" class="absolute left-4 right-4 bottom-[28px] z-[300] text-center text-[13px] font-medium text-gray-600 bg-white/90 backdrop-blur rounded-full py-2.5 shadow-md">
-      Tap a truck marker to view details
+    <!-- Horizontal truck strip -->
+    <div id="truck-strip" class="absolute left-0 right-0 z-[300]" style="bottom:calc(64px + env(safe-area-inset-bottom) + 8px)">
+      <div id="strip-scroll" style="display:flex;gap:10px;overflow-x:auto;padding:0 16px 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
     </div>
   </div>
 </div>
@@ -65,12 +66,12 @@
   };
   const RB=[[40.78,72.34],[41.31,69.24],[39.65,66.96],[43.0,59.0],[46.0,48.0],[48.7,44.5],[51.5,39.2],[52.5,31.0],[50.45,30.52],[49.8,24.0],[50.07,14.43]];
   const trucks=[
-    {name:'Volvo FH16',type:'Tractor · 2019',driver:'Alisher Karimov',mileage:'312,400 km',st:'trip',prog:74,img:'truck1',pos:[52.0,21.0],zoom:5,line:RB},
-    {name:'DAF XF 105',type:'Tractor · 2018',driver:'Vali Rakhimov',mileage:'458,300 km',st:'trip',prog:37,img:'truck4',pos:[42.8,73.5],zoom:6,line:[[41.31,69.24],[42.0,71.0],[42.8,73.5],[43.24,76.95]]},
-    {name:'Scania R500',type:'Tractor · 2021',driver:'Bakhtiyor Yuldashev',mileage:'401,900 km',st:'nosignal',img:'truck2',pos:[43.24,76.95],zoom:8,line:[[43.05,76.6],[43.24,76.95]]},
-    {name:'MAN TGX',type:'Tractor · 2020',driver:'No driver',mileage:'620,000 km',st:'repair',img:'truck3',pos:[39.65,66.96],zoom:8,line:[[39.5,66.7],[39.65,66.96]]},
-    {name:'Mercedes Actros',type:'Tractor · 2023',driver:'Sardor Kholmatov',mileage:'280,100 km',st:'idle',img:'truck5',pos:[55.75,37.62],zoom:7,line:[[55.6,37.4],[55.75,37.62]]},
-    {name:'Renault T High',type:'Tractor · 2019',driver:'Jasur Ergashev',mileage:'510,000 km',st:'done',img:'truck6',pos:[50.07,14.43],zoom:7,line:[[49.9,14.2],[50.07,14.43]]},
+    {name:'Volvo FH16',type:'Tractor · 2019',driver:'Alisher Karimov',mileage:'312,400 km',st:'trip',prog:72,speed:'72 km/h',from:'Tashkent',to:'London',img:'truck1',pos:[52.0,21.0],zoom:5,line:RB},
+    {name:'Scania R500',type:'Tractor · 2021',driver:'Bakhtiyor Yuldashev',mileage:'401,900 km',st:'nosignal',location:'London, UK',img:'truck2',pos:[51.5,0.1],zoom:7,line:[[43.24,76.95],[51.5,0.1]]},
+    {name:'MAN TGX',type:'Tractor · 2020',driver:'No driver',mileage:'620,000 km',st:'repair',daysLabel:'Repair 5 days',location:'Tashkent, UZ',img:'truck3',pos:[41.3,69.3],zoom:8,line:[[41.3,69.3]]},
+    {name:'DAF XF 105',type:'Tractor · 2018',driver:'Vali Rakhimov',mileage:'458,300 km',st:'trip',prog:68,speed:'68 km/h',from:'Andijan',to:'Prague',img:'truck4',pos:[50.07,14.43],zoom:6,line:[[40.78,72.34],[42.8,73.5],[49.8,24.0],[50.07,14.43]]},
+    {name:'Mercedes Actros',type:'Tractor · 2023',driver:'Sardor Kholmatov',mileage:'280,100 km',st:'idle',daysLabel:'Idle 2 days',location:'Tashkent, UZ',img:'truck5',pos:[41.31,69.24],zoom:8,line:[[41.31,69.24]]},
+    {name:'Renault T High',type:'Tractor · 2019',driver:'Jasur Ergashev',mileage:'510,000 km',st:'done',location:'Tashkent, UZ',img:'truck6',pos:[41.2,69.1],zoom:8,line:[[41.2,69.1]]},
   ];
 
   const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([47,55],4);
@@ -85,6 +86,8 @@
 
   const popup=L.popup({className:'truck-popup',closeButton:false,maxWidth:176,minWidth:176,autoPan:true,autoPanPadding:[24,90],offset:[0,2]});
   function cardHTML(t,s){
+    const routeRow = t.st==='trip' ? `<p class="tp-row" style="font-weight:600;color:#0F0F37">${t.from} → ${t.to}</p>` : (t.location?`<p class="tp-row">${t.location}</p>`:'');
+    const speedRow = t.speed ? `<p class="tp-row" style="display:flex;justify-content:space-between"><span>Driver: <b>${t.driver}</b></span><b style="color:#F79009">${t.speed}</b></p>` : `<p class="tp-row">Driver: <b>${t.driver}</b></p>`;
     return `<button class="tp-close" data-close>&times;</button>`+
       `<a href="truck-detail.html" style="display:block;color:inherit;text-decoration:none">`+
         `<img class="tp-img" src="assets/img/trucks/${t.img}.jpg">`+
@@ -92,11 +95,33 @@
           `<p class="tp-type">${t.type}</p>`+
           `<h3 class="tp-name">${t.name}</h3>`+
           `<span class="tp-status ${s.cls}"><span style="width:7px;height:7px;border-radius:50%;background:${s.color};display:inline-block"></span>${s.label}</span>`+
-          `<p class="tp-row">Driver: <b>${t.driver}</b></p>`+
-          `<p class="tp-row">Mileage: <b>${t.mileage}</b></p>`+
-          (t.st==='trip'&&t.prog!=null ? `<p class="tp-row" style="display:flex;justify-content:space-between"><span>Trip progress</span><b>${t.prog}%</b></p><div class="tp-prog"><div class="tp-prog-bar" style="width:${t.prog}%"></div></div>` : '')+
+          routeRow+
+          speedRow+
+          (t.st==='trip'&&t.prog!=null ? `<p class="tp-row" style="display:flex;justify-content:space-between"><span>Progress</span><b>${t.prog}%</b></p><div class="tp-prog"><div class="tp-prog-bar" style="width:${t.prog}%"></div></div>` : '')+
         `</div>`+
       `</a>`;
+  }
+
+  function buildStrip(){
+    document.getElementById('strip-scroll').innerHTML = trucks.map((t,i)=>{
+      const s=ST[t.st];
+      const sub = t.st==='trip' ? `${t.from} → ${t.to}` : (t.location||'');
+      const speedBadge = t.speed ? `<span style="font-size:10px;font-weight:700;color:#F79009">${t.speed}</span>` : '';
+      return `<button onclick="focus(${i})" id="strip-${i}" style="flex-shrink:0;width:156px;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.14);border:2px solid transparent;cursor:pointer;text-align:left;padding:0;transition:border-color .15s">
+        <img src="assets/img/trucks/${t.img}.jpg" style="width:100%;height:76px;object-fit:cover;display:block">
+        <div style="padding:8px 9px 9px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;margin-bottom:3px">
+            <span style="font-size:12px;font-weight:800;color:#0F0F37;line-height:1.2">${t.name}</span>
+            <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:3px;background:${s.cls.includes('success')?'#ECFDF3':s.cls.includes('warning')?'#FFFAEB':s.cls.includes('blue')?'#EFF8FF':'#F2F4F7'};color:${s.color}"><span style="width:5px;height:5px;border-radius:50%;background:${s.color};flex-shrink:0"></span>${s.label}</span>
+          </div>
+          <p style="font-size:10px;color:#667085;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sub}</p>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <p style="font-size:10px;color:#98A2B3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px">${t.driver}</p>
+            ${speedBadge}
+          </div>
+        </div>
+      </button>`;
+    }).join('');
   }
 
   const clusterGroup=L.markerClusterGroup({
@@ -119,25 +144,29 @@
   function focus(i){
     const t=trucks[i],s=ST[t.st];
     markers.forEach((m,j)=>m.setIcon(truckPin(ST[trucks[j].st].color,j===i)));
+    document.querySelectorAll('[id^="strip-"]').forEach((el,j)=>{ el.style.borderColor = j===i ? '#FFCB00' : 'transparent'; });
     routeLayer.clearLayers();
-    if(t.st==='trip'){
+    if(t.st==='trip'&&t.line.length>1){
       L.polyline(t.line,{color:'#0F0F37',weight:4,opacity:.85,dashArray:'2 10',lineCap:'round'}).addTo(routeLayer);
       L.marker(t.line[0],{icon:dot('#17B26A')}).addTo(routeLayer);
       L.marker(t.line[t.line.length-1],{icon:flagPin()}).addTo(routeLayer);
     }
     map.flyTo(t.pos,t.zoom,{duration:.7});
     popup.setLatLng(t.pos).setContent(cardHTML(t,s)).openOn(map);
-    document.getElementById('hint').style.opacity='0';
+    const sc=document.getElementById('strip-scroll');
+    const btn=document.getElementById('strip-'+i);
+    if(btn) sc.scrollTo({left:btn.offsetLeft-16,behavior:'smooth'});
     setTimeout(()=>{const c=document.querySelector('.tp-close'); if(c) c.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();deselect();});},30);
   }
   function deselect(){
     markers.forEach((m,j)=>m.setIcon(truckPin(ST[trucks[j].st].color,false)));
+    document.querySelectorAll('[id^="strip-"]').forEach(el=>el.style.borderColor='transparent');
     routeLayer.clearLayers(); map.closePopup(popup);
-    document.getElementById('hint').style.opacity='1';
   }
   map.on('click',deselect);
-  map.on('popupclose',()=>{routeLayer.clearLayers();markers.forEach((m,j)=>m.setIcon(truckPin(ST[trucks[j].st].color,false)));document.getElementById('hint').style.opacity='1';});
-  map.fitBounds(L.latLngBounds(trucks.map(t=>t.pos)).pad(0.2));
+  map.on('popupclose',()=>{routeLayer.clearLayers();markers.forEach((m,j)=>m.setIcon(truckPin(ST[trucks[j].st].color,false)));document.querySelectorAll('[id^="strip-"]').forEach(el=>el.style.borderColor='transparent');});
+  buildStrip();
+  map.fitBounds(L.latLngBounds(trucks.filter(t=>t.line.length>1?true:true).map(t=>t.pos)).pad(0.3));
 
   Panda.mountNav('map');
   Panda.render();
