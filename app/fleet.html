@@ -140,35 +140,35 @@ function renderList() {
     const s = A_STATUS[o.status];
     const idx = APP_ORDERS.indexOf(o);
     return `
-    <a href="order-detail.html?idx=${idx}" style="text-decoration:none;display:block" class="bg-white rounded-2xl overflow-hidden" style="box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #EAECF0;cursor:pointer">
-      <div class="flex items-start gap-3 p-3.5">
-        <img src="${o.truck.img}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0">
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between gap-2 mb-1">
-            <div class="flex items-center gap-1.5 font-bold text-navy-800" style="font-size:15px">
-              <span class="truncate">${o.from}</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="3" width="14" height="14" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              <span class="truncate">${o.to}</span>
+    <a href="order-detail.html?idx=${idx}" style="text-decoration:none;display:block;background:white;border-radius:20px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid #EAECF0">
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:16px">
+        <img src="${o.truck.img}" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px">
+            <div style="display:flex;align-items:center;gap:5px;font-size:16px;font-weight:800;color:#0F0F37;min-width:0">
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.from}</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="3" width="15" height="15" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.to}</span>
             </div>
-            <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:${s.bg};color:${s.color};white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:3px">
+            <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:${s.bg};color:${s.color};white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:3px">
               <span style="width:5px;height:5px;border-radius:50%;background:${s.dot};flex-shrink:0"></span>${s.label}
             </span>
           </div>
-          <p style="font-size:11px;color:#667085;margin-bottom:${o.status==='active'?'6px':'0'}">${o.cargo} · ${o.dist}</p>
+          <p style="font-size:12px;color:#667085;margin-bottom:${o.status==='active'?'8px':'4px'}">${o.cargo} · ${o.dist}</p>
           ${o.status==='active' ? `
-          <div style="height:4px;background:#F2F4F7;border-radius:999px;margin-bottom:4px;overflow:hidden">
+          <div style="height:5px;background:#F2F4F7;border-radius:999px;margin-bottom:5px;overflow:hidden">
             <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
           </div>
           <div style="display:flex;justify-content:space-between">
-            <span style="font-size:11px;color:#98A2B3">${o.driver.name}</span>
-            <span style="font-size:11px;font-weight:800;color:#0F0F37">${o.pct}% пройдено</span>
-          </div>` : `<p style="font-size:11px;color:#98A2B3">${o.driver.name} · ${o.startDate}</p>`}
+            <span style="font-size:12px;color:#98A2B3">${o.driver.name}</span>
+            <span style="font-size:12px;font-weight:800;color:#0F0F37">${o.pct}% пройдено</span>
+          </div>` : `<p style="font-size:12px;color:#98A2B3">${o.driver.name} · ${o.startDate}</p>`}
         </div>
       </div>
-      ${o.status==='active'?`<div style="height:2px;background:#FFF9E6"><div style="height:100%;width:${o.pct}%;background:#FFCB00"></div></div>`:''}
+      ${o.status==='active'?`<div style="height:3px;background:#FFF9E6"><div style="height:100%;width:${o.pct}%;background:#FFCB00"></div></div>`:''}
     </a>`;
   }).join('') + `
-  <div style="padding:16px 0 8px">
+  <div style="padding:14px 0 8px">
     <button onclick="openCreateOrder()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#FFCB00;color:#0F0F37;border:none;border-radius:18px;padding:15px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s" onmousedown="this.style.opacity='.85'" onmouseup="this.style.opacity='1'" ontouchstart="this.style.opacity='.85'" ontouchend="this.style.opacity='1'">
       <span style="font-size:22px;font-weight:300;line-height:1">+</span>
       <span>Создать рейс</span>
