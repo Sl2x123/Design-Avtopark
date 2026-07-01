@@ -58,22 +58,20 @@ window.NAV_FILLED={"truck":"<path d=\"M14 2.92V11.23C14 12.25 13.17 13.08 12.15 
     var s=Panda.status(t.statusKey,t.days);
     var finance=t.finance?(
       '<div class="border-t border-gray-100">'+
-      '<p class="text-[10px] font-semibold text-gray-400 text-center pt-1.5 uppercase tracking-wide">This month</p>'+
-      '<div class="grid grid-cols-3 pb-2">'+
-      '<div class="px-2 py-1 text-center border-r border-gray-100"><p class="text-[10px] text-gray-400">Revenue</p><p class="text-[13px] font-bold text-success-600">'+money(t.rev)+'</p></div>'+
-      '<div class="px-2 py-1 text-center border-r border-gray-100"><p class="text-[10px] text-gray-400">Expenses</p><p class="text-[13px] font-bold text-error-600">'+money(t.exp)+'</p></div>'+
-      '<div class="px-2 py-1 text-center"><p class="text-[10px] text-gray-400">Profit</p><p class="text-[13px] font-bold text-success-600">'+money(t.prof)+'</p></div>'+
+      '<div class="grid grid-cols-3 py-2">'+
+      '<div class="px-2 py-1 text-center border-r border-gray-100"><p class="text-[10px] font-semibold text-gray-800">Revenue</p><p class="text-[10px] text-gray-400 mb-0.5">this month</p><p class="text-[13px] font-bold text-success-600">'+money(t.rev)+'</p></div>'+
+      '<div class="px-2 py-1 text-center border-r border-gray-100"><p class="text-[10px] font-semibold text-gray-800">Expenses</p><p class="text-[10px] text-gray-400 mb-0.5">this month</p><p class="text-[13px] font-bold text-error-600">'+money(t.exp)+'</p></div>'+
+      '<div class="px-2 py-1 text-center"><p class="text-[10px] font-semibold text-gray-800">Profit</p><p class="text-[10px] text-gray-400 mb-0.5">this month</p><p class="text-[13px] font-bold text-success-600">'+money(t.prof)+'</p></div>'+
       '</div></div>'):'';
     var routeInline='';
     if(t.route){
       routeInline=
-        '<div class="shrink-0 flex flex-col items-end gap-0.5" style="min-width:72px">'+
-          '<span class="text-[11px] font-bold text-navy-800 truncate max-w-full">'+t.route.from+'</span>'+
-          '<div class="flex items-center justify-end gap-1 my-0.5">'+
-            '<svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><path d="M12 5v14M6 14l6 6 6-6"/></svg>'+
-            '<span style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;background:#FEF3C7;color:#D97706;line-height:1.4">'+t.route.pct+'%</span>'+
-          '</div>'+
-          '<span class="text-[11px] font-bold text-navy-800 truncate max-w-full">'+t.route.to+'</span>'+
+        '<div style="display:flex;align-items:center;gap:4px;min-width:0">'+
+          '<span style="font-size:11px;font-weight:700;color:#0F0F37;white-space:nowrap">'+t.route.from+'</span>'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2.5" stroke-linecap="round" width="9" height="9" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'+
+          '<span style="font-size:10px;font-weight:700;padding:1px 5px;border-radius:6px;background:#FEF3C7;color:#D97706;line-height:1.4;flex-shrink:0">'+t.route.pct+'%</span>'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2.5" stroke-linecap="round" width="9" height="9" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'+
+          '<span style="font-size:11px;font-weight:700;color:#0F0F37;white-space:nowrap">'+t.route.to+'</span>'+
         '</div>';
     }
     return '<a href="'+(t.href||'truck-detail.html')+'" class="card-press block rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">'+
@@ -85,14 +83,12 @@ window.NAV_FILLED={"truck":"<path d=\"M14 2.92V11.23C14 12.25 13.17 13.08 12.15 
             '<span class="shrink-0 inline-flex items-center gap-1 '+s.cls+' text-[10px] font-semibold px-2 py-0.5 rounded-full"><span class="dot" style="background:'+s.dot+';width:6px;height:6px"></span>'+s.label+'</span>'+
           '</div>'+
           '<div class="mt-0.5"><span class="plate" style="height:20px;font-size:11px"><span class="uz">UZ</span><span class="num">'+t.plate+'</span></span></div>'+
-          '<div class="mt-1 flex items-end gap-2">'+
-            '<div class="flex-1 min-w-0 space-y-0 text-[11px] text-gray-500 leading-tight">'+
-              line('Driver',t.driver,'No driver')+
-              line('Trailer',t.trailer,'No trailer')+
-              line('Type',t.trailerType,'—')+
-            '</div>'+
-            routeInline+
+          '<div class="mt-1 min-w-0 space-y-0 text-[11px] text-gray-500 leading-tight">'+
+            line('Driver',t.driver,'No driver')+
+            line('Trailer',t.trailer,'No trailer')+
+            line('Type',t.trailerType,'—')+
           '</div>'+
+          (routeInline?'<div class="mt-1.5">'+routeInline+'</div>':'')+
         '</div>'+
       '</div>'+finance+'</a>';
   };
