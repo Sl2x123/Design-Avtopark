@@ -57,11 +57,10 @@
   const fields={
     name:{label:'Name',icon:'user',type:'text',value:'Jamshid Turaev'},
     phone:{label:'Phone',icon:'phone',type:'tel',value:'+998 90 727 77 22'},
-    email:{label:'Email',icon:'mail',type:'email',value:'jamshid@avtopakt.uz'},
     language:{label:'Language',icon:'languages',type:'select',value:'English',options:['English','Russian','Uzbek']},
     timezone:{label:'Timezone',icon:'clock',type:'select',value:'GMT+5',options:['GMT+3','GMT+4','GMT+5','GMT+6']},
   };
-  const order=['name','phone','email','language','timezone'];
+  const order=['name','phone','language','timezone'];
   const sep='<div class="border-t border-gray-100"></div>';
   function renderRows(){
     document.getElementById('rows').innerHTML = order.map(k=>{
