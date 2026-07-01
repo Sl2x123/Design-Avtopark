@@ -254,57 +254,54 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
     </header>
 
     <!-- ═══ PAGE: FLEET ═══ -->
-    <section class="page active" id="page-fleet" style="flex-direction:row!important;overflow:hidden">
-
-  <!-- LEFT: Orders list (380px) -->
-  <div style="width:380px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #EAECF0;overflow:hidden;background:white">
-
-    <!-- Header -->
-    <div style="padding:18px 20px 12px;border-bottom:1px solid #F2F4F7">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-        <div>
-          <h2 style="font-size:22px;font-weight:800;color:#0F0F37;margin:0">Рейсы</h2>
-          <p style="font-size:12px;color:#98A2B3;margin:3px 0 0" id="ord-count-label">6 заказов</p>
-        </div>
-        <button onclick="openCreateOrderModal()" style="display:flex;align-items:center;gap:6px;background:#0F0F37;color:white;border:none;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
-          Создать рейс
-        </button>
+    <section class="page active" id="page-fleet" style="flex-direction:column!important;overflow:hidden">
+  <!-- Header -->
+  <div style="padding:18px 24px 12px;border-bottom:1px solid #F2F4F7;background:white;flex-shrink:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <h2 style="font-size:22px;font-weight:800;color:#0F0F37;margin:0">Рейсы</h2>
+        <p style="font-size:12px;color:#98A2B3;margin:3px 0 0" id="ord-count-label">6 заказов</p>
       </div>
-      <!-- Filter tabs -->
-      <div style="display:flex;gap:4px;overflow-x:auto;scrollbar-width:none">
-        <button class="seg-tab on" onclick="filterOrders('all',this)">Все <span class="c">6</span></button>
-        <button class="seg-tab" onclick="filterOrders('active',this)">В рейсе <span class="c">2</span></button>
-        <button class="seg-tab" onclick="filterOrders('waiting',this)">Ожидание <span class="c">2</span></button>
-        <button class="seg-tab" onclick="filterOrders('done',this)">Завершён <span class="c">1</span></button>
-        <button class="seg-tab" onclick="filterOrders('cancelled',this)">Отменён <span class="c">1</span></button>
-      </div>
+      <button onclick="openCreateOrderModal()" style="display:flex;align-items:center;gap:6px;background:#0F0F37;color:white;border:none;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+        Создать рейс
+      </button>
     </div>
-
-    <!-- Search -->
-    <div style="padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7">
-      <div style="display:flex;align-items:center;gap:8px;background:#F9FAFB;border:1.5px solid #EAECF0;border-radius:10px;padding:8px 12px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input id="order-search" oninput="renderOrders()" placeholder="Поиск по маршруту, водителю…" style="flex:1;border:none;outline:none;font-size:13px;color:#0F0F37;background:none;font-family:Inter,sans-serif">
-      </div>
+    <!-- Filter tabs -->
+    <div style="display:flex;gap:4px;overflow-x:auto;scrollbar-width:none">
+      <button class="seg-tab on" onclick="filterOrders('all',this)">Все <span class="c">6</span></button>
+      <button class="seg-tab" onclick="filterOrders('active',this)">В рейсе <span class="c">4</span></button>
+      <button class="seg-tab" onclick="filterOrders('done',this)">Завершён <span class="c">1</span></button>
+      <button class="seg-tab" onclick="filterOrders('cancelled',this)">Отменён <span class="c">1</span></button>
     </div>
-
-    <!-- Orders list -->
-    <div id="orders-list" style="flex:1;overflow-y:auto;background:#F9FAFB"></div>
   </div>
-
-  <!-- RIGHT: Order detail -->
-  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F9FAFB">
-    <!-- Empty state -->
-    <div id="order-empty-state" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="1.5" width="52" height="52"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 7h10M7 11h6"/></svg>
-      <p style="font-size:14px;font-weight:600;color:#98A2B3;margin:0">Выберите заказ</p>
-      <p style="font-size:12px;color:#D0D5DD;margin:0">для просмотра деталей</p>
+  <!-- Search -->
+  <div style="padding:10px 24px;background:white;border-bottom:1px solid #F2F4F7;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:8px;background:#F9FAFB;border:1.5px solid #EAECF0;border-radius:10px;padding:8px 12px;max-width:420px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="order-search" oninput="renderOrders()" placeholder="Поиск по маршруту, водителю…" style="flex:1;border:none;outline:none;font-size:13px;color:#0F0F37;background:none;font-family:Inter,sans-serif">
     </div>
-    <!-- Detail panel -->
-    <div id="order-detail-wrap" style="display:none;flex:1;overflow-y:auto;padding:24px;display:none"></div>
   </div>
+  <!-- Orders list (full width, grid on desktop) -->
+  <div id="orders-list" style="flex:1;overflow-y:auto;background:#F9FAFB;padding:20px 24px">
+  </div>
+</section>
 
+<!-- ═══ PAGE: ORDER DETAIL ═══ -->
+<section class="page" id="page-order-detail" style="flex-direction:column!important;overflow:hidden">
+  <!-- Back header -->
+  <div style="padding:16px 24px;border-bottom:1px solid #F2F4F7;background:white;flex-shrink:0;display:flex;align-items:center;gap:14px">
+    <button onclick="goBackToFleet()" style="display:flex;align-items:center;gap:6px;background:#F4F5F7;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;color:#344054">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="m15 18-6-6 6-6"/></svg>
+      Назад
+    </button>
+    <div>
+      <span id="detail-order-id" style="font-size:14px;font-weight:700;color:#98A2B3"></span>
+    </div>
+    <div id="detail-status-badge" style="margin-left:4px"></div>
+  </div>
+  <!-- Detail content -->
+  <div id="order-detail-content" style="flex:1;overflow-y:auto;background:#F9FAFB;padding:24px;max-width:900px;width:100%"></div>
 </section>
 
     <!-- ═══ PAGE: MAP ═══ -->
@@ -2161,8 +2158,8 @@ const ORDERS = [
     expenses:[{cat:'Топливо',amount:180,note:'АЗС Газпром'}]
   },
   {
-    id:'ORD-003', status:'waiting', from:'Ташкент', to:'Стамбул',
-    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:0,
+    id:'ORD-003', status:'active', from:'Ташкент', to:'Стамбул',
+    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:18,
     startDate:'25.06.2026', estEnd:'10.07.2026', income:'$6 500',
     truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg', idx:2},
     driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg'},
@@ -2170,9 +2167,9 @@ const ORDERS = [
     expenses:[]
   },
   {
-    id:'ORD-004', status:'waiting', from:'Наманган', to:'Бишкек',
-    cargo:'Продукты питания · 12 т', dist:'520 км', pct:0,
-    startDate:'26.06.2026', estEnd:'27.06.2026', income:'$800',
+    id:'ORD-004', status:'active', from:'Наманган', to:'Бишкек',
+    cargo:'Продукты питания · 12 т', dist:'520 км', pct:55,
+    startDate:'26.06.2026', estEnd:'27.06.2026', income:'$800', mapLoc:'Ош', mapSpeed:'76 км/ч',
     truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg', idx:4},
     driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg'},
     trailer:null,
@@ -2225,30 +2222,35 @@ const QUICK_EXP_CATS = [
 function orderCardHTML(o, i) {
   const s = ORD_STATUS[o.status];
   const progBar = (o.status === 'active') ? `
-    <div style="height:3px;background:#F2F4F7;border-radius:999px;margin:6px 0 4px;overflow:hidden">
+    <div style="height:3px;background:#F2F4F7;border-radius:999px;margin:8px 0 4px;overflow:hidden">
       <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:#98A2B3">
+      <span>${o.from}</span><span style="font-weight:700;color:#0F0F37">${o.pct}%</span><span>${o.to}</span>
     </div>` : '';
-  const isSelected = _activeOrdIdx === i;
-  return `<div onclick="openOrder(${i})" id="ocard-${i}" style="padding:14px 16px;background:${isSelected?'#FFFDF0':'white'};border-bottom:1px solid #F2F4F7;cursor:pointer;transition:background .15s;border-left:3px solid ${isSelected?'#FFCB00':'transparent'}" onmouseover="if(${_activeOrdIdx}!==${i})this.style.background='#FAFAFA'" onmouseout="if(${_activeOrdIdx}!==${i})this.style.background='white'">
-    <div style="display:flex;align-items:flex-start;gap:12px">
-      <img src="${o.truck.img}" style="width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0;margin-top:1px">
+  return `<div onclick="openOrder(${i})" style="background:white;border-radius:16px;border:1px solid #EAECF0;padding:16px;cursor:pointer;transition:box-shadow .15s,border-color .15s;box-shadow:0 1px 3px rgba(0,0,0,.06)" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)';this.style.borderColor='#FFCB00'" onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,.06)';this.style.borderColor='#EAECF0'">
+    <div style="display:flex;align-items:flex-start;gap:14px">
+      <img src="${o.truck.img}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0">
       <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px">
-          <div style="display:flex;align-items:center;gap:5px;font-size:14px;font-weight:800;color:#0F0F37;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:#0F0F37;min-width:0">
             <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.from}</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2.5" width="13" height="13" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" width="14" height="14" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.to}</span>
           </div>
-          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:${s.bg};color:${s.color};white-space:nowrap;display:inline-flex;align-items:center;gap:3px;flex-shrink:0">
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:${s.bg};color:${s.color};white-space:nowrap;display:inline-flex;align-items:center;gap:4px;flex-shrink:0">
             <span style="width:5px;height:5px;border-radius:50%;background:${s.dot};flex-shrink:0"></span>${s.label}
           </span>
         </div>
-        <div style="font-size:11px;color:#667085;margin-bottom:2px">${o.cargo} · ${o.dist}</div>
-        ${progBar}
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:11px;color:#98A2B3">${o.driver.name}</span>
-          ${o.status==='active'?`<span style="font-size:11px;font-weight:800;color:#0F0F37">${o.pct}%</span>`:`<span style="font-size:11px;color:#98A2B3">${o.startDate}</span>`}
+        <div style="font-size:12px;color:#667085;margin-bottom:2px">${o.cargo} · ${o.dist}</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:#98A2B3">${o.driver.name}</span>
+          <span style="font-size:12px;color:#98A2B3">·</span>
+          <span style="font-size:12px;font-weight:600;color:#027A48">${o.income}</span>
+          <span style="font-size:12px;color:#98A2B3">·</span>
+          <span style="font-size:11px;color:#98A2B3">${o.id}</span>
         </div>
+        ${progBar}
       </div>
     </div>
   </div>`;
@@ -2267,7 +2269,7 @@ function renderOrders() {
     list.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#98A2B3;font-size:13px">Нет заказов</div>';
     return;
   }
-  list.innerHTML = filtered.map((o)=>orderCardHTML(o, ORDERS.indexOf(o))).join('');
+  list.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:12px">${filtered.map((o)=>orderCardHTML(o, ORDERS.indexOf(o))).join('')}</div>`;
 }
 
 function filterOrders(status, btn) {
@@ -2279,13 +2281,12 @@ function filterOrders(status, btn) {
 
 function openOrder(idx) {
   _activeOrdIdx = idx;
-  renderOrders();
   const o = ORDERS[idx];
   const s = ORD_STATUS[o.status];
-  const empty = document.getElementById('order-empty-state');
-  const wrap = document.getElementById('order-detail-wrap');
-  if(empty) empty.style.display = 'none';
-  if(wrap) { wrap.style.display = 'block'; }
+
+  // Update header
+  document.getElementById('detail-order-id').textContent = o.id;
+  document.getElementById('detail-status-badge').innerHTML = `<span style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:${s.bg};color:${s.color};display:inline-flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:${s.dot}"></span>${s.label}</span>`;
 
   const miniMap = (o.status === 'active') ? `
   <div style="background:white;border-radius:16px;overflow:hidden;border:1px solid #EAECF0;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
@@ -2300,7 +2301,7 @@ function openOrder(idx) {
       <text x="278" y="76" font-size="8.5" fill="#444" font-family="sans-serif" font-weight="700">${o.from}</text>
       <circle cx="228" cy="108" r="5" fill="#FAE436" stroke="#0F0F37" stroke-width="1.5"/>
       <text x="200" y="123" font-size="8.5" fill="#444" font-family="sans-serif" font-weight="700">${o.to}</text>
-      <circle class="map-pulse-dot" cx="270" cy="94" r="7" fill="#2dbd71" opacity=".35"/>
+      <circle cx="270" cy="94" r="7" fill="#2dbd71" opacity=".35"/>
       <circle cx="270" cy="94" r="5" fill="#2dbd71" stroke="#fff" stroke-width="2"/>
       <text x="278" y="91" font-size="9" fill="#1a8c52" font-family="sans-serif" font-weight="800">${o.mapSpeed||'72 км/ч'}</text>
     </svg>
@@ -2321,12 +2322,12 @@ function openOrder(idx) {
   </div>` : '';
 
   const trailerHTML = o.trailer ? `
-    <div style="display:flex;align-items:center;gap:4px">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="13" height="13"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
-      <span style="font-size:12px;font-weight:600;color:#344054">${o.trailer.name}</span>
-      <span style="font-size:10px;background:#F2F4F7;color:#667085;padding:1px 6px;border-radius:5px">${o.trailer.type}</span>
-      <span style="font-size:11px;color:#98A2B3">· ${o.trailer.plate}</span>
-    </div>` : '<span style="font-size:12px;color:#D0D5DD;font-style:italic">Прицеп не назначен</span>';
+    <div style="display:flex;align-items:center;gap:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="14" height="14"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
+      <span style="font-size:13px;font-weight:600;color:#344054">${o.trailer.name}</span>
+      <span style="font-size:11px;background:#F2F4F7;color:#667085;padding:2px 8px;border-radius:6px">${o.trailer.type}</span>
+      <span style="font-size:12px;color:#98A2B3">· ${o.trailer.plate}</span>
+    </div>` : '<span style="font-size:13px;color:#D0D5DD;font-style:italic">Прицеп не назначен</span>';
 
   const quickExp = QUICK_EXP_CATS.map(c=>`
     <button onclick="addAdminExpense(${idx},'${c.label}')" style="display:flex;flex-direction:column;align-items:center;gap:5px;background:${c.bg};border:none;border-radius:12px;padding:10px 6px;cursor:pointer;min-width:60px;transition:opacity .15s" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
@@ -2335,111 +2336,102 @@ function openOrder(idx) {
     </button>`).join('');
 
   const expList = o.expenses.length ? o.expenses.map(e=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F9FAFB">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #F9FAFB">
       <div>
         <div style="font-size:13px;font-weight:600;color:#0F0F37">${e.cat}</div>
-        ${e.note?`<div style="font-size:11px;color:#98A2B3;margin-top:1px">${e.note}</div>`:''}
+        ${e.note?`<div style="font-size:11px;color:#98A2B3;margin-top:2px">${e.note}</div>`:''}
       </div>
-      <span style="font-size:13px;font-weight:700;color:#F04438">−$${e.amount}</span>
-    </div>`).join('') : '<p style="font-size:12px;color:#D0D5DD;padding:12px 0;margin:0">Расходов пока нет</p>';
+      <span style="font-size:14px;font-weight:700;color:#F04438">−$${e.amount}</span>
+    </div>`).join('') : '<p style="font-size:13px;color:#D0D5DD;padding:16px 0;margin:0">Расходов пока нет</p>';
 
   const progFull = `
-    <div style="margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;color:#0F0F37;margin-bottom:10px">
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;color:#0F0F37;margin-bottom:12px">
         ${o.from}
         <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="3" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         ${o.to}
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
         <span style="font-size:12px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.cargo}</span>
         <span style="font-size:12px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.dist}</span>
         <span style="font-size:12px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.startDate} → ${o.estEnd}</span>
         <span style="font-size:12px;background:#ECFDF3;color:#027A48;padding:4px 10px;border-radius:8px;font-weight:700">${o.income}</span>
       </div>
       ${o.status==='active'?`
-      <div style="height:6px;background:#F2F4F7;border-radius:999px;overflow:hidden;margin-bottom:4px">
+      <div style="height:6px;background:#F2F4F7;border-radius:999px;overflow:hidden;margin-bottom:6px">
         <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#98A2B3">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:#98A2B3">
         <span>${o.from}</span>
         <span style="font-weight:700;color:#0F0F37">${o.pct}%</span>
         <span>${o.to}</span>
       </div>`:``}
     </div>`;
 
-  wrap.innerHTML = `
-    <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:14px;font-weight:700;color:#98A2B3">${o.id}</span>
-          <span style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:${s.bg};color:${s.color};display:inline-flex;align-items:center;gap:4px">
-            <span style="width:6px;height:6px;border-radius:50%;background:${s.dot}"></span>${s.label}
-          </span>
-        </div>
-      </div>
-    </div>
-
+  document.getElementById('order-detail-content').innerHTML = `
     ${progFull}
     ${miniMap}
-
-    <!-- Truck -->
-    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:12px">
-      <div style="padding:10px 14px 8px;border-bottom:1px solid #F2F4F7">
-        <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Грузовик</span>
-      </div>
-      <button onclick="openTruckOnMap(${o.truck.idx})" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;background:none;border:none;cursor:pointer;text-align:left;transition:background .15s" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='none'">
-        <img src="${o.truck.img}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0">
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.truck.name}</div>
-          <div style="font-size:12px;color:#667085;margin-top:2px">${o.truck.plate}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <!-- Truck -->
+      <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden">
+        <div style="padding:10px 16px 8px;border-bottom:1px solid #F2F4F7">
+          <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Грузовик</span>
         </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" width="18" height="18"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-    </div>
-
-    <!-- Driver -->
-    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:12px">
-      <div style="padding:10px 14px 8px;border-bottom:1px solid #F2F4F7">
-        <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Водитель</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
-        <img src="${o.driver.img}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #FFCB00;flex-shrink:0">
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.driver.name}</div>
-          <div style="font-size:12px;color:#667085;margin-top:2px">${o.driver.phone}</div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px">
+          <img src="${o.truck.img}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.truck.name}</div>
+            <div style="font-size:12px;color:#667085;margin-top:2px">${o.truck.plate}</div>
+          </div>
         </div>
-        <a href="tel:${o.driver.phone}" style="width:36px;height:36px;border-radius:50%;background:#ECFDF3;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#17B26A" stroke-width="2" width="16" height="16"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-        </a>
+      </div>
+      <!-- Driver -->
+      <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden">
+        <div style="padding:10px 16px 8px;border-bottom:1px solid #F2F4F7">
+          <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Водитель</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px">
+          <img src="${o.driver.img}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #FFCB00;flex-shrink:0">
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.driver.name}</div>
+            <div style="font-size:12px;color:#667085;margin-top:2px">${o.driver.phone}</div>
+          </div>
+        </div>
       </div>
     </div>
-
     <!-- Trailer -->
-    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:20px">
-      <div style="padding:10px 14px 8px;border-bottom:1px solid #F2F4F7">
+    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:16px">
+      <div style="padding:10px 16px 8px;border-bottom:1px solid #F2F4F7">
         <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Прицеп</span>
       </div>
-      <div style="padding:12px 14px">${trailerHTML}</div>
+      <div style="padding:14px 16px">${trailerHTML}</div>
     </div>
-
     <!-- Quick expenses -->
     <div style="margin-bottom:16px">
-      <div style="font-size:13px;font-weight:700;color:#0F0F37;margin-bottom:10px">Быстрое добавление расхода</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px">
+      <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:12px">Быстрое добавление расхода</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:8px">
         ${quickExp}
       </div>
     </div>
-
     <!-- Expense list -->
     <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden">
-      <div style="padding:12px 14px;border-bottom:1px solid #F2F4F7;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-size:13px;font-weight:700;color:#0F0F37">Расходы</span>
-        <span style="font-size:12px;font-weight:700;color:#F04438">Итого: $${o.expenses.reduce((s,e)=>s+e.amount,0)}</span>
+      <div style="padding:14px 16px;border-bottom:1px solid #F2F4F7;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:14px;font-weight:700;color:#0F0F37">Расходы</span>
+        <span style="font-size:13px;font-weight:700;color:#F04438">Итого: $${o.expenses.reduce((s,e)=>s+e.amount,0)}</span>
       </div>
-      <div style="padding:0 14px">${expList}</div>
+      <div style="padding:0 16px">${expList}</div>
     </div>
   `;
+
+  // Navigate to detail page
+  const fleetNav = document.querySelector('[onclick*="\'fleet\'"]');
+  switchPage('order-detail', null);
+}
+
+function goBackToFleet() {
+  _activeOrdIdx = null;
+  const fleetBtn = document.querySelector('[onclick*="\'fleet\'"]');
+  switchPage('fleet', fleetBtn);
 }
 
 function addAdminExpense(ordIdx, cat) {
@@ -2525,14 +2517,17 @@ function filterTrucks() {
   renderGrid();
 }
 
-const PAGE_TITLES = { fleet: ['Float','48 vehicles · Tashkent, Uzbekistan'], map: ['Map','Live GPS tracking'], analytics: ['Analytics','June 2026'], drivers: ['Drivers','5 drivers · Active fleet'], garage: ['Garage','Trucks & Trailers'], profile: ['Profile','Avtopakt Logistics'], settings: ['Settings','App configuration'] };
+const PAGE_TITLES = { fleet: ['Float','48 vehicles · Tashkent, Uzbekistan'], 'order-detail': ['Рейс','Детали заказа'], map: ['Map','Live GPS tracking'], analytics: ['Analytics','June 2026'], drivers: ['Drivers','5 drivers · Active fleet'], garage: ['Garage','Trucks & Trailers'], profile: ['Profile','Avtopakt Logistics'], settings: ['Settings','App configuration'] };
 
 function switchPage(name, navBtn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  const upb = document.getElementById('user-profile-btn'); if(upb) upb.style.background='none';
-  navBtn.classList.add('active');
+  // For order-detail, keep fleet nav highlighted; otherwise update normally
+  if (name !== 'order-detail') {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    const upb = document.getElementById('user-profile-btn'); if(upb) upb.style.background='none';
+    if (navBtn) navBtn.classList.add('active');
+  }
   const [title, sub] = PAGE_TITLES[name] || ['—',''];
   document.getElementById('page-title').textContent = title;
   document.getElementById('page-sub').textContent = sub;
