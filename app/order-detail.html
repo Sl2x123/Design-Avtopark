@@ -132,8 +132,8 @@ const ORDERS = [
     startDate:'20 июн', estEnd:'28 июн 2026', income:'$4 800',
     mapLoc:'Самара', mapSpeed:'74 км/ч', mapEta:'~14 ч',
     truck:{name:'Volvo FH16', plate:'01 A 123 BC', img:'assets/img/trucks/truck1.jpg', year:'2021', fuel:'Дизель', power:'500 л.с.', link:'truck-detail.html'},
-    driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg', exp:'8 лет', trips:'247', rating:'4.9', link:'garage-trucks.html'},
-    trailer:{name:'Schmitz Cargobull', plate:'60 H 545 AA', type:'Curtainsider', cap:'25 т / 86 м³', link:'garage-trucks.html'},
+    driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg', exp:'8 лет', trips:'247', rating:'4.9', link:'driver-detail.html'},
+    trailer:{name:'Schmitz Cargobull', plate:'60 H 545 AA', type:'Curtainsider', cap:'25 т / 86 м³', link:'trailer-detail.html'},
     expenses:[
       {cat:'Топливо',amount:520,note:'АЗС Лукойл · 240 л',by:'Alisher Karimov',byImg:'assets/img/drivers/d1.jpg',at:'20 июн · 15:42',color:'#17B26A',bg:'#ECFDF3'},
       {cat:'Питание',amount:45,note:'Обед · Самара',by:'Alisher Karimov',byImg:'assets/img/drivers/d1.jpg',at:'21 июн · 13:10',color:'#D97706',bg:'#FFFBEB'},
@@ -151,8 +151,8 @@ const ORDERS = [
     startDate:'22 июн', estEnd:'24 июн 2026', income:'$1 200',
     mapLoc:'Шымкент', mapSpeed:'81 км/ч', mapEta:'~5 ч',
     truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'assets/img/trucks/truck4.jpg', year:'2019', fuel:'Дизель', power:'410 л.с.', link:'truck-detail.html'},
-    driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg', exp:'5 лет', trips:'118', rating:'4.7', link:'garage-trucks.html'},
-    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³', link:'garage-trucks.html'},
+    driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg', exp:'5 лет', trips:'118', rating:'4.7', link:'driver-detail.html'},
+    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³', link:'trailer-detail.html'},
     expenses:[
       {cat:'Топливо',amount:180,note:'АЗС Газпром',by:'Vali Rakhimov',byImg:'assets/img/drivers/d3.jpg',at:'22 июн · 14:00',color:'#17B26A',bg:'#ECFDF3'},
     ],
@@ -167,8 +167,8 @@ const ORDERS = [
     cargo:'Хлопок', weight:'20 т', dist:'4 800 км', pct:0,
     startDate:'25 июн', estEnd:'10 июл 2026', income:'$6 500',
     truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'assets/img/trucks/truck3.jpg', year:'2022', fuel:'Дизель', power:'480 л.с.', link:'truck-detail.html'},
-    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0', link:'garage-trucks.html'},
-    trailer:{name:'Krone Mega', plate:'75 A 112 BC', type:'Flatbed', cap:'24 т / 90 м³', link:'garage-trucks.html'},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0', link:'driver-detail.html'},
+    trailer:{name:'Krone Mega', plate:'75 A 112 BC', type:'Flatbed', cap:'24 т / 90 м³', link:'trailer-detail.html'},
     expenses:[],
     logs:[{text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'22 июн · 10:00',dot:'#98A2B3'}]
   },
@@ -177,7 +177,7 @@ const ORDERS = [
     cargo:'Продукты питания', weight:'12 т', dist:'520 км', pct:0,
     startDate:'26 июн', estEnd:'27 июн 2026', income:'$800',
     truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg', year:'2020', fuel:'Дизель', power:'440 л.с.', link:'truck-detail.html'},
-    driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg', exp:'3 года', trips:'67', rating:'4.6', link:'garage-trucks.html'},
+    driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg', exp:'3 года', trips:'67', rating:'4.6', link:'driver-detail.html'},
     trailer:null,
     expenses:[],
     logs:[{text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'23 июн · 09:00',dot:'#98A2B3'}]
@@ -187,8 +187,8 @@ const ORDERS = [
     cargo:'Хлопковая ткань', weight:'18 т', dist:'5 840 км', pct:100,
     startDate:'8 июн', estEnd:'24 июн 2026', income:'$4 200',
     truck:{name:'Renault T High', plate:'01 E 550 DC', img:'assets/img/trucks/truck6.jpg', year:'2020', fuel:'Дизель', power:'460 л.с.', link:'truck-detail.html'},
-    driver:{name:'Jasur Ergashev', phone:'+998 90 222 11 00', img:'assets/img/drivers/d5.jpg', exp:'6 лет', trips:'204', rating:'4.8', link:'garage-trucks.html'},
-    trailer:{name:'Schmitz Cargobull', plate:'90 K 330 AA', type:'Curtainsider', cap:'25 т / 86 м³', link:'garage-trucks.html'},
+    driver:{name:'Jasur Ergashev', phone:'+998 90 222 11 00', img:'assets/img/drivers/d5.jpg', exp:'6 лет', trips:'204', rating:'4.8', link:'driver-detail.html'},
+    trailer:{name:'Schmitz Cargobull', plate:'90 K 330 AA', type:'Curtainsider', cap:'25 т / 86 м³', link:'trailer-detail.html'},
     expenses:[
       {cat:'Топливо',amount:1840,note:'1 840 л · Дизель',by:'Jasur Ergashev',byImg:'assets/img/drivers/d5.jpg',at:'20 июн · 11:00',color:'#17B26A',bg:'#ECFDF3'},
       {cat:'Зарплата',amount:1280,note:'16 дней · $80/день',by:'Jasur Ergashev',byImg:'assets/img/drivers/d5.jpg',at:'24 июн · 18:00',color:'#1570EF',bg:'#EFF8FF'},
@@ -208,8 +208,8 @@ const ORDERS = [
     cargo:'Продукты', weight:'15 т', dist:'305 км', pct:22,
     startDate:'5 июн', estEnd:'5 июн 2026', income:'—',
     truck:{name:'Scania R500', plate:'70 B 456 DA', img:'assets/img/trucks/truck2.jpg', year:'2018', fuel:'Дизель', power:'500 л.с.', link:'truck-detail.html'},
-    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0', link:'garage-trucks.html'},
-    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³', link:'garage-trucks.html'},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0', link:'driver-detail.html'},
+    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³', link:'trailer-detail.html'},
     expenses:[],
     logs:[
       {text:'Статус: <strong>В рейсе → Отменён</strong>',time:'5 июн · 12:30',dot:'#F04438'},
