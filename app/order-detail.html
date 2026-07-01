@@ -9,240 +9,212 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:#F2F4F7;color:#0F0F37;-webkit-font-smoothing:antialiased}
-.app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.app{max-width:430px;margin:0 auto;min-height:100vh}
 
-/* ── TOP BAR ── */
-.top-bar{position:sticky;top:0;z-index:50;padding:14px 16px;display:flex;align-items:center;gap:12px;background:rgba(242,244,247,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.back-btn{width:34px;height:34px;border-radius:10px;background:white;border:1px solid #E4E7EC;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#344054}
-.top-order-id{font-size:12px;font-weight:700;color:#98A2B3;letter-spacing:.3px}
-.status-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;margin-left:auto}
+/* TOP BAR */
+.top-bar{position:sticky;top:0;z-index:50;padding:14px 16px;display:flex;align-items:center;gap:10px;background:rgba(242,244,247,.9);backdrop-filter:blur(14px)}
+.back-btn{width:36px;height:36px;border-radius:11px;background:white;border:1px solid #E4E7EC;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none;color:#344054;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.top-id{font-size:13px;font-weight:700;color:#344054;flex:1}
+.s-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px}
+.s-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
-/* ── HERO TRUCK ── */
-.truck-hero{position:relative;height:230px;overflow:hidden;margin:0 16px;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.15)}
-.truck-hero img{width:100%;height:100%;object-fit:cover;display:block}
-.truck-hero-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 30%,rgba(0,0,0,.75) 100%)}
-.truck-hero-info{position:absolute;bottom:0;left:0;right:0;padding:16px}
-.truck-hero-name{font-size:20px;font-weight:900;color:white;line-height:1.1;letter-spacing:-.3px}
-.truck-hero-plate{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:3px 9px;margin-top:6px}
-.truck-hero-plate span{font-size:12px;font-weight:700;color:white;letter-spacing:.5px}
-.truck-meta-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.truck-meta-chip{background:rgba(255,255,255,.15);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:600;color:rgba(255,255,255,.9)}
+/* BODY SCROLL */
+.scroll{overflow-y:auto;padding:14px 16px 40px;display:flex;flex-direction:column;gap:10px}
 
-/* ── CREW ROW ── */
-.crew-row{display:flex;gap:10px;padding:14px 16px}
-.crew-card{flex:1;background:white;border-radius:16px;border:1px solid #EAECF0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.crew-inner{padding:12px}
-.crew-label{font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.crew-img-wrap{position:relative;margin-bottom:8px}
-.crew-img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2.5px solid #FFCB00}
-.crew-driver-name{font-size:13px;font-weight:700;color:#0F0F37;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.crew-meta{font-size:10px;color:#667085;margin-top:2px;display:flex;align-items:center;gap:4px}
-.crew-action{display:flex;align-items:center;justify-content:center;gap:4px;background:#ECFDF3;border:none;border-radius:10px;padding:7px 10px;font-size:11px;font-weight:700;color:#17B26A;cursor:pointer;margin-top:8px;width:100%;text-decoration:none}
-.trailer-icon-wrap{width:44px;height:44px;border-radius:12px;background:#F4F5F7;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
-.trailer-name{font-size:13px;font-weight:700;color:#0F0F37;line-height:1.2}
-.trailer-meta{font-size:10px;color:#667085;margin-top:3px}
+/* HERO */
+.hero{position:relative;height:220px;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.14);cursor:pointer;display:block;text-decoration:none}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05) 30%,rgba(0,0,0,.7) 100%)}
+.hero-goto{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 10px;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:white}
+.hero-info{position:absolute;bottom:0;left:0;right:0;padding:14px 16px}
+.hero-name{font-size:21px;font-weight:900;color:white;letter-spacing:-.3px;line-height:1.1}
+.hero-plate{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);border-radius:7px;padding:3px 8px;margin-top:6px}
+.hero-plate span{font-size:11px;font-weight:700;color:white;letter-spacing:.5px}
+.hero-tags{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
+.hero-tag{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:600;color:rgba(255,255,255,.9)}
 
-/* ── ROUTE CARD ── */
-.route-card{margin:0 16px;background:white;border-radius:18px;border:1px solid #EAECF0;box-shadow:0 1px 6px rgba(0,0,0,.06);overflow:hidden}
-.route-top{padding:14px 16px}
-.route-cities{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.city-blk{flex:1;min-width:0}
-.city-name{font-size:18px;font-weight:900;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.city-date{font-size:11px;color:#98A2B3;margin-top:1px}
-.arrow-circle{width:32px;height:32px;border-radius:50%;background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.prog-bar-track{height:5px;background:#F2F4F7;border-radius:999px;overflow:hidden}
-.prog-bar-fill{height:100%;background:linear-gradient(90deg,#FFCB00,#FFAD00);border-radius:999px}
-.prog-labels{display:flex;justify-content:space-between;font-size:10px;color:#98A2B3;margin-top:4px}
-.route-chips{display:flex;gap:6px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid #F4F5F7}
-.rchip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px}
+/* CREW ROW */
+.crew-row{display:flex;gap:10px}
+.crew-card{flex:1;background:white;border-radius:18px;border:1px solid #EAECF0;box-shadow:0 1px 4px rgba(0,0,0,.05);padding:14px;text-decoration:none;color:inherit;display:flex;flex-direction:column;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+.crew-card:active{opacity:.85}
+.crew-goto{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:8px;background:#F4F5F7;display:flex;align-items:center;justify-content:center}
+.crew-lbl{font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.crew-av{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2.5px solid #FFCB00;margin-bottom:8px}
+.crew-icon{width:48px;height:48px;border-radius:14px;background:#F4F5F7;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.crew-name{font-size:13px;font-weight:700;color:#0F0F37;line-height:1.3;padding-right:20px}
+.crew-meta{font-size:10px;color:#667085;margin-top:4px;line-height:1.5}
+.crew-meta b{color:#344054;font-weight:600}
+.crew-call{display:flex;align-items:center;justify-content:center;gap:5px;background:#ECFDF3;border-radius:10px;padding:7px 8px;font-size:11px;font-weight:700;color:#17B26A;margin-top:10px;text-decoration:none;border:none;cursor:pointer;width:100%}
 
-/* ── MAP CARD ── */
-.map-card{margin:14px 16px 0;background:white;border-radius:18px;overflow:hidden;border:1px solid #EAECF0;box-shadow:0 2px 10px rgba(0,0,0,.07)}
-.map-stats-row{display:flex;border-top:1px solid #F0F0F0}
-.map-stat{flex:1;padding:11px 14px;border-right:1px solid #F0F0F0}
-.map-stat:last-child{border-right:none}
-.map-stat-l{font-size:9px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
-.map-stat-v{font-size:14px;font-weight:800;color:#0F0F37}
+/* ROUTE CARD */
+.card{background:white;border-radius:18px;border:1px solid #EAECF0;box-shadow:0 1px 4px rgba(0,0,0,.05);overflow:hidden}
+.card-body{padding:14px 16px}
+.route-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.city{flex:1;min-width:0}
+.city-name{font-size:19px;font-weight:900;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.city-date{font-size:11px;color:#98A2B3;margin-top:2px}
+.arr-circle{width:32px;height:32px;border-radius:50%;background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prog-track{height:5px;background:#F2F4F7;border-radius:999px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#FFCB00,#FFA800);border-radius:999px}
+.prog-lbls{display:flex;justify-content:space-between;font-size:10px;color:#98A2B3;margin-top:4px}
+.chips-row{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid #F4F5F7}
+.chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:8px}
 
-/* ── SECTION HEADER ── */
-.sec-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 10px}
-.sec-hd-title{font-size:13px;font-weight:700;color:#344054}
-.sec-hd-action{display:flex;align-items:center;gap:6px;background:#FFCB00;border:none;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit}
+/* MAP */
+.map-stats{display:flex;border-top:1px solid #F0F0F0}
+.ms{flex:1;padding:11px 14px;border-right:1px solid #F0F0F0}
+.ms:last-child{border-right:none}
+.ms-l{font-size:9px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.ms-v{font-size:14px;font-weight:800;color:#0F0F37}
 
-/* ── EXPENSE ITEMS ── */
-.exp-list{margin:0 16px;background:white;border-radius:18px;border:1px solid #EAECF0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.exp-summary{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border-bottom:1px solid #F4F5F7}
-.exp-summary-label{font-size:13px;font-weight:700;color:#0F0F37}
-.exp-summary-val{font-size:15px;font-weight:800;color:#F04438}
-.exp-item{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;border-bottom:1px solid #F9FAFB}
+/* SECTION HEADER */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 6px}
+.sec-title{font-size:13px;font-weight:700;color:#344054}
+.sec-btn{font-size:12px;font-weight:600;color:#667085;background:none;border:none;cursor:pointer;padding:2px 0;font-family:inherit}
+.add-btn{display:flex;align-items:center;gap:5px;background:#FFCB00;border:none;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit}
+
+/* QUICK ADD */
+.quick-scroll{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:2px 0 6px}
+.quick-scroll::-webkit-scrollbar{display:none}
+.q-btn{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:12px;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:transform .1s;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.q-btn:active{transform:scale(.94)}
+.q-btn span{font-size:12px;font-weight:700}
+
+/* EXPENSES */
+.exp-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid #F9FAFB}
 .exp-item:last-child{border-bottom:none}
-.exp-cat-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.exp-item-body{flex:1;min-width:0}
-.exp-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.exp-item-cat{font-size:13px;font-weight:700;color:#0F0F37}
-.exp-item-amount{font-size:14px;font-weight:800;color:#F04438;white-space:nowrap}
-.exp-item-note{font-size:11px;color:#667085;margin-top:2px}
-.exp-item-who{display:flex;align-items:center;gap:5px;margin-top:6px}
-.exp-who-av{width:18px;height:18px;border-radius:50%;object-fit:cover;border:1.5px solid #EAECF0}
-.exp-who-text{font-size:10px;color:#98A2B3;font-weight:500}
-.exp-empty{padding:24px 16px;text-align:center;color:#D0D5DD;font-size:13px}
+.exp-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.exp-body{flex:1;min-width:0}
+.exp-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.exp-cat{font-size:13px;font-weight:700;color:#0F0F37}
+.exp-amt{font-size:14px;font-weight:800;color:#F04438;white-space:nowrap}
+.exp-note{font-size:11px;color:#667085;margin-top:2px}
+.exp-who{display:flex;align-items:center;gap:5px;margin-top:6px}
+.exp-av{width:18px;height:18px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid #EAECF0}
+.exp-who-txt{font-size:10px;color:#98A2B3}
+.exp-del{margin-left:auto;background:none;border:none;cursor:pointer;color:#D0D5DD;font-size:18px;line-height:1;padding:0 2px}
+.exp-del:hover{color:#F04438}
+.exp-empty{padding:20px 16px;text-align:center;color:#D0D5DD;font-size:13px}
+.exp-summary-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #F4F5F7}
+.exp-summary-row span:first-child{font-size:13px;font-weight:700;color:#0F0F37}
+.exp-total{font-size:15px;font-weight:800;color:#F04438}
+.see-all-btn{display:flex;align-items:center;justify-content:center;gap:4px;padding:11px 16px;font-size:12px;font-weight:600;color:#667085;background:none;border:none;border-top:1px solid #F4F5F7;cursor:pointer;width:100%;font-family:inherit}
 
-/* ── EXPENSE ADD SHEET ── */
-.sheet-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);backdrop-filter:blur(3px)}
-.sheet-overlay.open{display:flex;flex-direction:column;justify-content:flex-end}
-.sheet{background:white;border-radius:22px 22px 0 0;padding:20px 16px 40px;max-height:80vh;overflow-y:auto}
-.sheet-drag{width:36px;height:4px;border-radius:2px;background:#E4E7EC;margin:0 auto 16px}
-.sheet-title{font-size:17px;font-weight:800;color:#0F0F37;margin-bottom:14px}
-.exp-cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
-.exp-cat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 6px;border-radius:14px;border:none;cursor:pointer;transition:transform .1s;-webkit-tap-highlight-color:transparent;background:transparent}
-.exp-cat-btn.sel{outline:2.5px solid #FFCB00;outline-offset:-2px}
-.exp-cat-btn:active{transform:scale(.93)}
-.exp-cat-icon-sm{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center}
-.exp-cat-lbl{font-size:9px;font-weight:700;text-align:center;line-height:1.3}
-.sheet-input{width:100%;border:1.5px solid #EAECF0;border-radius:12px;padding:12px 14px;font-size:15px;font-family:inherit;color:#0F0F37;outline:none;margin-bottom:10px}
-.sheet-input:focus{border-color:#FFCB00}
-.sheet-submit{width:100%;background:#FFCB00;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit}
-
-/* ── ACTIVITY LOG ── */
-.log-list{margin:0 16px 32px;background:white;border-radius:18px;border:1px solid #EAECF0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
-.log-item{display:flex;gap:12px;padding:12px 15px;border-bottom:1px solid #F9FAFB;position:relative}
+/* LOG */
+.log-item{display:flex;gap:12px;padding:11px 16px;border-bottom:1px solid #F9FAFB;position:relative}
 .log-item:last-child{border-bottom:none}
-.log-dot-wrap{display:flex;flex-direction:column;align-items:center;padding-top:3px}
+.log-dot-col{display:flex;flex-direction:column;align-items:center;padding-top:2px;gap:0}
 .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.log-line{width:1px;background:#F0F0F0;flex:1;margin-top:4px;min-height:8px}
-.log-body{flex:1;min-width:0}
+.log-line{width:1.5px;background:#F0F0F0;flex:1;margin-top:3px;min-height:8px}
 .log-text{font-size:12px;color:#344054;font-weight:500;line-height:1.4}
 .log-text strong{font-weight:700;color:#0F0F37}
-.log-time{font-size:10px;color:#98A2B3;margin-top:3px}
-.log-amount{display:inline-block;font-size:11px;font-weight:700;background:#FEF3F2;color:#D92D20;padding:1px 7px;border-radius:6px;margin-left:4px}
-.log-amount.green{background:#ECFDF3;color:#027A48}
+.log-time{font-size:10px;color:#98A2B3;margin-top:2px}
+.log-badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;margin-left:4px;vertical-align:middle}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- Top bar -->
   <div class="top-bar">
     <a href="fleet.html" class="back-btn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M15 18l-6-6 6-6"/></svg>
     </a>
-    <div>
-      <div class="top-order-id" id="hd-id"></div>
-    </div>
-    <span class="status-badge" id="hd-status"></span>
+    <span class="top-id" id="hd-id"></span>
+    <span class="s-pill" id="hd-status"></span>
   </div>
-
-  <!-- Scrollable body -->
-  <div id="body" style="flex:1;overflow-y:auto;padding-bottom:40px"></div>
-
-  <!-- Add expense sheet -->
-  <div class="sheet-overlay" id="exp-sheet">
-    <div class="sheet">
-      <div class="sheet-drag"></div>
-      <div class="sheet-title">Добавить расход</div>
-      <div class="exp-cat-grid" id="cat-grid"></div>
-      <input class="sheet-input" id="exp-amount" type="number" placeholder="Сумма, $" inputmode="decimal">
-      <input class="sheet-input" id="exp-note" type="text" placeholder="Комментарий (необязательно)">
-      <button class="sheet-submit" onclick="submitExpense()">Добавить</button>
-    </div>
-  </div>
-
+  <div class="scroll" id="body"></div>
 </div>
+
 <script>
 const ORDERS = [
   {
     id:'ORD-001', status:'active', from:'Ташкент', to:'Москва',
     cargo:'Электроника', weight:'14 т', dist:'3 240 км', pct:67,
-    startDate:'20 июн 2026', estEnd:'28 июн 2026', income:'$4 800',
+    startDate:'20 июн', estEnd:'28 июн 2026', income:'$4 800',
     mapLoc:'Самара', mapSpeed:'74 км/ч', mapEta:'~14 ч',
-    truck:{name:'Volvo FH16', plate:'01 A 123 BC', img:'assets/img/trucks/truck1.jpg', year:'2021', fuel:'Дизель', power:'500 л.с.'},
-    driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg', exp:'8 лет', trips:'247', rating:'4.9'},
-    trailer:{name:'Schmitz Cargobull', plate:'60 H 545 AA', type:'Curtainsider', cap:'25 т / 86 м³'},
+    truck:{name:'Volvo FH16', plate:'01 A 123 BC', img:'assets/img/trucks/truck1.jpg', year:'2021', fuel:'Дизель', power:'500 л.с.', link:'truck-detail.html'},
+    driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg', exp:'8 лет', trips:'247', rating:'4.9', link:'garage-trucks.html'},
+    trailer:{name:'Schmitz Cargobull', plate:'60 H 545 AA', type:'Curtainsider', cap:'25 т / 86 м³', link:'garage-trucks.html'},
     expenses:[
       {cat:'Топливо',amount:520,note:'АЗС Лукойл · 240 л',by:'Alisher Karimov',byImg:'assets/img/drivers/d1.jpg',at:'20 июн · 15:42',color:'#17B26A',bg:'#ECFDF3'},
       {cat:'Питание',amount:45,note:'Обед · Самара',by:'Alisher Karimov',byImg:'assets/img/drivers/d1.jpg',at:'21 июн · 13:10',color:'#D97706',bg:'#FFFBEB'},
     ],
     logs:[
-      {type:'expense',text:'<strong>Alisher Karimov</strong> добавил расход Питание',amount:'−$45',amountType:'red',time:'21 июн · 13:10',dot:'#F79009'},
-      {type:'expense',text:'<strong>Alisher Karimov</strong> добавил расход Топливо',amount:'−$520',amountType:'red',time:'20 июн · 15:42',dot:'#F79009'},
-      {type:'status',text:'Статус изменён: <strong>Ожидание → В рейсе</strong>',time:'20 июн · 09:00',dot:'#17B26A'},
-      {type:'create',text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'19 июн · 18:30',dot:'#667085'},
+      {text:'<strong>Alisher Karimov</strong> добавил Питание',badge:'−$45',badgeRed:true,time:'21 июн · 13:10',dot:'#F79009'},
+      {text:'<strong>Alisher Karimov</strong> добавил Топливо',badge:'−$520',badgeRed:true,time:'20 июн · 15:42',dot:'#F79009'},
+      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'20 июн · 09:00',dot:'#17B26A'},
+      {text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'19 июн · 18:30',dot:'#98A2B3'},
     ]
   },
   {
     id:'ORD-002', status:'active', from:'Самарканд', to:'Алматы',
     cargo:'Стройматериалы', weight:'18 т', dist:'860 км', pct:42,
-    startDate:'22 июн 2026', estEnd:'24 июн 2026', income:'$1 200',
+    startDate:'22 июн', estEnd:'24 июн 2026', income:'$1 200',
     mapLoc:'Шымкент', mapSpeed:'81 км/ч', mapEta:'~5 ч',
-    truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'assets/img/trucks/truck4.jpg', year:'2019', fuel:'Дизель', power:'410 л.с.'},
-    driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg', exp:'5 лет', trips:'118', rating:'4.7'},
-    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³'},
+    truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'assets/img/trucks/truck4.jpg', year:'2019', fuel:'Дизель', power:'410 л.с.', link:'truck-detail.html'},
+    driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg', exp:'5 лет', trips:'118', rating:'4.7', link:'garage-trucks.html'},
+    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³', link:'garage-trucks.html'},
     expenses:[
       {cat:'Топливо',amount:180,note:'АЗС Газпром',by:'Vali Rakhimov',byImg:'assets/img/drivers/d3.jpg',at:'22 июн · 14:00',color:'#17B26A',bg:'#ECFDF3'},
     ],
     logs:[
-      {type:'expense',text:'<strong>Vali Rakhimov</strong> добавил расход Топливо',amount:'−$180',amountType:'red',time:'22 июн · 14:00',dot:'#F79009'},
-      {type:'status',text:'Статус изменён: <strong>Ожидание → В рейсе</strong>',time:'22 июн · 08:15',dot:'#17B26A'},
-      {type:'create',text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'21 июн · 17:00',dot:'#667085'},
+      {text:'<strong>Vali Rakhimov</strong> добавил Топливо',badge:'−$180',badgeRed:true,time:'22 июн · 14:00',dot:'#F79009'},
+      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'22 июн · 08:15',dot:'#17B26A'},
+      {text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'21 июн · 17:00',dot:'#98A2B3'},
     ]
   },
   {
     id:'ORD-003', status:'waiting', from:'Ташкент', to:'Стамбул',
     cargo:'Хлопок', weight:'20 т', dist:'4 800 км', pct:0,
-    startDate:'25 июн 2026', estEnd:'10 июл 2026', income:'$6 500',
-    truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'assets/img/trucks/truck3.jpg', year:'2022', fuel:'Дизель', power:'480 л.с.'},
-    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0'},
-    trailer:{name:'Krone Mega', plate:'75 A 112 BC', type:'Flatbed', cap:'24 т / 90 м³'},
+    startDate:'25 июн', estEnd:'10 июл 2026', income:'$6 500',
+    truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'assets/img/trucks/truck3.jpg', year:'2022', fuel:'Дизель', power:'480 л.с.', link:'truck-detail.html'},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0', link:'garage-trucks.html'},
+    trailer:{name:'Krone Mega', plate:'75 A 112 BC', type:'Flatbed', cap:'24 т / 90 м³', link:'garage-trucks.html'},
     expenses:[],
-    logs:[
-      {type:'create',text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'22 июн · 10:00',dot:'#667085'},
-    ]
+    logs:[{text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'22 июн · 10:00',dot:'#98A2B3'}]
   },
   {
     id:'ORD-004', status:'waiting', from:'Наманган', to:'Бишкек',
     cargo:'Продукты питания', weight:'12 т', dist:'520 км', pct:0,
-    startDate:'26 июн 2026', estEnd:'27 июн 2026', income:'$800',
-    truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg', year:'2020', fuel:'Дизель', power:'440 л.с.'},
-    driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg', exp:'3 года', trips:'67', rating:'4.6'},
+    startDate:'26 июн', estEnd:'27 июн 2026', income:'$800',
+    truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg', year:'2020', fuel:'Дизель', power:'440 л.с.', link:'truck-detail.html'},
+    driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg', exp:'3 года', trips:'67', rating:'4.6', link:'garage-trucks.html'},
     trailer:null,
     expenses:[],
-    logs:[
-      {type:'create',text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'23 июн · 09:00',dot:'#667085'},
-    ]
+    logs:[{text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'23 июн · 09:00',dot:'#98A2B3'}]
   },
   {
     id:'ORD-005', status:'done', from:'Ташкент', to:'Прага',
     cargo:'Хлопковая ткань', weight:'18 т', dist:'5 840 км', pct:100,
-    startDate:'8 июн 2026', estEnd:'24 июн 2026', income:'$4 200',
-    truck:{name:'Renault T High', plate:'01 E 550 DC', img:'assets/img/trucks/truck6.jpg', year:'2020', fuel:'Дизель', power:'460 л.с.'},
-    driver:{name:'Jasur Ergashev', phone:'+998 90 222 11 00', img:'assets/img/drivers/d5.jpg', exp:'6 лет', trips:'204', rating:'4.8'},
-    trailer:{name:'Schmitz Cargobull', plate:'90 K 330 AA', type:'Curtainsider', cap:'25 т / 86 м³'},
+    startDate:'8 июн', estEnd:'24 июн 2026', income:'$4 200',
+    truck:{name:'Renault T High', plate:'01 E 550 DC', img:'assets/img/trucks/truck6.jpg', year:'2020', fuel:'Дизель', power:'460 л.с.', link:'truck-detail.html'},
+    driver:{name:'Jasur Ergashev', phone:'+998 90 222 11 00', img:'assets/img/drivers/d5.jpg', exp:'6 лет', trips:'204', rating:'4.8', link:'garage-trucks.html'},
+    trailer:{name:'Schmitz Cargobull', plate:'90 K 330 AA', type:'Curtainsider', cap:'25 т / 86 м³', link:'garage-trucks.html'},
     expenses:[
       {cat:'Топливо',amount:1840,note:'1 840 л · Дизель',by:'Jasur Ergashev',byImg:'assets/img/drivers/d5.jpg',at:'20 июн · 11:00',color:'#17B26A',bg:'#ECFDF3'},
       {cat:'Зарплата',amount:1280,note:'16 дней · $80/день',by:'Jasur Ergashev',byImg:'assets/img/drivers/d5.jpg',at:'24 июн · 18:00',color:'#1570EF',bg:'#EFF8FF'},
       {cat:'Страховка',amount:480,note:'4 таможни',by:'Jasur Ergashev',byImg:'assets/img/drivers/d5.jpg',at:'18 июн · 08:30',color:'#0284C7',bg:'#F0F9FF'},
     ],
     logs:[
-      {type:'status',text:'Статус изменён: <strong>В рейсе → Завершён</strong>',time:'24 июн · 18:05',dot:'#667085'},
-      {type:'expense',text:'<strong>Jasur Ergashev</strong> добавил расход Зарплата',amount:'−$1 280',amountType:'red',time:'24 июн · 18:00',dot:'#F79009'},
-      {type:'expense',text:'<strong>Jasur Ergashev</strong> добавил расход Топливо',amount:'−$1 840',amountType:'red',time:'20 июн · 11:00',dot:'#F79009'},
-      {type:'expense',text:'<strong>Jasur Ergashev</strong> добавил расход Страховка',amount:'−$480',amountType:'red',time:'18 июн · 08:30',dot:'#F79009'},
-      {type:'status',text:'Статус изменён: <strong>Ожидание → В рейсе</strong>',time:'8 июн · 07:00',dot:'#17B26A'},
-      {type:'create',text:'Рейс создан · <strong>Admin</strong>',time:'5 июн · 16:00',dot:'#667085'},
+      {text:'Статус: <strong>В рейсе → Завершён</strong>',time:'24 июн · 18:05',dot:'#667085'},
+      {text:'<strong>Jasur Ergashev</strong> добавил Зарплата',badge:'−$1 280',badgeRed:true,time:'24 июн · 18:00',dot:'#F79009'},
+      {text:'<strong>Jasur Ergashev</strong> добавил Топливо',badge:'−$1 840',badgeRed:true,time:'20 июн · 11:00',dot:'#F79009'},
+      {text:'<strong>Jasur Ergashev</strong> добавил Страховка',badge:'−$480',badgeRed:true,time:'18 июн · 08:30',dot:'#F79009'},
+      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'8 июн · 07:00',dot:'#17B26A'},
+      {text:'Рейс создан · <strong>Admin</strong>',time:'5 июн · 16:00',dot:'#98A2B3'},
     ]
   },
   {
     id:'ORD-006', status:'cancelled', from:'Фергана', to:'Андижан',
     cargo:'Продукты', weight:'15 т', dist:'305 км', pct:22,
-    startDate:'5 июн 2026', estEnd:'5 июн 2026', income:'—',
-    truck:{name:'Scania R500', plate:'70 B 456 DA', img:'assets/img/trucks/truck2.jpg', year:'2018', fuel:'Дизель', power:'500 л.с.'},
-    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0'},
-    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³'},
+    startDate:'5 июн', estEnd:'5 июн 2026', income:'—',
+    truck:{name:'Scania R500', plate:'70 B 456 DA', img:'assets/img/trucks/truck2.jpg', year:'2018', fuel:'Дизель', power:'500 л.с.', link:'truck-detail.html'},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0', link:'garage-trucks.html'},
+    trailer:{name:'Kogel Cargo', plate:'60 H 457 AA', type:'Refrigerator', cap:'22 т / 80 м³', link:'garage-trucks.html'},
     expenses:[],
     logs:[
-      {type:'status',text:'Статус изменён: <strong>В рейсе → Отменён</strong>',time:'5 июн · 12:30',dot:'#F04438'},
-      {type:'status',text:'Статус изменён: <strong>Ожидание → В рейсе</strong>',time:'5 июн · 07:00',dot:'#17B26A'},
-      {type:'create',text:'Рейс создан · <strong>Admin</strong>',time:'4 июн · 20:00',dot:'#667085'},
+      {text:'Статус: <strong>В рейсе → Отменён</strong>',time:'5 июн · 12:30',dot:'#F04438'},
+      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'5 июн · 07:00',dot:'#17B26A'},
+      {text:'Рейс создан · <strong>Admin</strong>',time:'4 июн · 20:00',dot:'#98A2B3'},
     ]
   },
 ];
@@ -255,269 +227,248 @@ const STATUS = {
 };
 
 const EXP_CATS = [
-  {label:'Топливо',   bg:'#ECFDF3', color:'#17B26A', icon:'<path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-7a2 2 0 0 0-.59-1.42L18 5"/><path d="M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16"/><path d="M2 21h13"/><path d="M3 9h11"/>'},
-  {label:'Зарплата',  bg:'#EFF8FF', color:'#1570EF', icon:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
-  {label:'Запчасти',  bg:'#FFF8EB', color:'#DC6803', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12h2M20 12h2"/>'},
-  {label:'Сервис',    bg:'#FFF8EB', color:'#DC6803', icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'},
-  {label:'Страховка', bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'},
-  {label:'Kredit',    bg:'#F4F3FF', color:'#6941C6', icon:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>'},
-  {label:'Штраф',     bg:'#FEF3F2', color:'#D92D20', icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'},
-  {label:'Мойка',     bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 22a8 8 0 0 1-8-8c0-4.314 6-12 8-12s8 7.686 8 12a8 8 0 0 1-8 8z"/>'},
-  {label:'Питание',   bg:'#FFFBEB', color:'#D97706', icon:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><line x1="7" y1="2" x2="7" y2="11"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h1v7"/>'},
-  {label:'Стоянка',   bg:'#F2F4F7', color:'#667085', icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>'},
-  {label:'Таможня',   bg:'#F0F9FF', color:'#0369A1', icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
-  {label:'Другое',    bg:'#F2F4F7', color:'#667085', icon:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'},
+  {l:'Топливо',   bg:'#ECFDF3', c:'#17B26A', icon:'<path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-7a2 2 0 0 0-.59-1.42L18 5"/><path d="M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16"/><path d="M2 21h13"/><path d="M3 9h11"/>'},
+  {l:'Зарплата',  bg:'#EFF8FF', c:'#1570EF', icon:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
+  {l:'Запчасти',  bg:'#FFF8EB', c:'#DC6803', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12h2M20 12h2"/>'},
+  {l:'Сервис',    bg:'#FFF8EB', c:'#DC6803', icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'},
+  {l:'Страховка', bg:'#F0F9FF', c:'#0284C7', icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'},
+  {l:'Kredit',    bg:'#F4F3FF', c:'#6941C6', icon:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>'},
+  {l:'Штраф',     bg:'#FEF3F2', c:'#D92D20', icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/>'},
+  {l:'Мойка',     bg:'#F0F9FF', c:'#0284C7', icon:'<path d="M12 22a8 8 0 0 1-8-8c0-4.314 6-12 8-12s8 7.686 8 12a8 8 0 0 1-8 8z"/>'},
+  {l:'Питание',   bg:'#FFFBEB', c:'#D97706', icon:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><line x1="7" y1="2" x2="7" y2="11"/>'},
+  {l:'Стоянка',   bg:'#F2F4F7', c:'#667085', icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>'},
+  {l:'Таможня',   bg:'#F0F9FF', c:'#0369A1', icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'},
+  {l:'Другое',    bg:'#F2F4F7', c:'#667085', icon:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'},
 ];
 
 const idx = parseInt(new URLSearchParams(location.search).get('idx') || '0');
 const o = ORDERS[Math.min(idx, ORDERS.length - 1)];
 const s = STATUS[o.status];
+let showAllExp = false;
 
-// Header
 document.getElementById('hd-id').textContent = o.id;
-document.getElementById('hd-status').textContent = s.label;
-document.getElementById('hd-status').style.cssText = `background:${s.bg};color:${s.color};display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px`;
-document.getElementById('hd-status').innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:${s.dot}"></span>${s.label}`;
+const sp = document.getElementById('hd-status');
+sp.style.cssText = `background:${s.bg};color:${s.color};display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px`;
+sp.innerHTML = `<span class="s-dot" style="background:${s.dot}"></span>${s.label}`;
 document.title = o.from + ' → ' + o.to;
 
-// Cat grid for sheet
-document.getElementById('cat-grid').innerHTML = EXP_CATS.map((c,i) => `
-  <button class="exp-cat-btn" onclick="selectCat(${i},this)" data-cat="${c.label}" data-color="${c.color}" data-bg="${c.bg}" style="background:${c.bg}">
-    <div class="exp-cat-icon-sm" style="background:white;box-shadow:0 1px 4px rgba(0,0,0,.1)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="${c.color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">${c.icon}</svg>
-    </div>
-    <span class="exp-cat-lbl" style="color:${c.color}">${c.label}</span>
-  </button>`).join('');
-
-let selectedCat = null;
-
-function selectCat(i, btn) {
-  document.querySelectorAll('.exp-cat-btn').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  selectedCat = EXP_CATS[i];
-}
-
-function openExpSheet() {
-  selectedCat = null;
-  document.querySelectorAll('.exp-cat-btn').forEach(b => b.classList.remove('sel'));
-  document.getElementById('exp-amount').value = '';
-  document.getElementById('exp-note').value = '';
-  document.getElementById('exp-sheet').classList.add('open');
-}
-
-document.getElementById('exp-sheet').addEventListener('click', function(e) {
-  if (e.target === this) this.classList.remove('open');
-});
-
-function submitExpense() {
-  if (!selectedCat) { alert('Выберите категорию'); return; }
-  const amt = parseFloat(document.getElementById('exp-amount').value);
-  if (!amt || isNaN(amt)) { alert('Введите сумму'); return; }
-  const note = document.getElementById('exp-note').value.trim();
+function addExpense(cat) {
+  const c = EXP_CATS.find(x => x.l === cat);
+  const amt = prompt(`Сумма (${cat}), $:`);
+  if (!amt || isNaN(parseFloat(amt))) return;
+  const note = prompt('Комментарий:') || '';
   const now = new Date();
-  const timeStr = now.getDate() + ' ' + ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'][now.getMonth()] + ' · ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  o.expenses.unshift({
-    cat: selectedCat.label, amount: amt, note, color: selectedCat.color, bg: selectedCat.bg,
-    by: o.driver.name, byImg: o.driver.img, at: timeStr,
-  });
-  o.logs.unshift({
-    type:'expense', text:`<strong>${o.driver.name}</strong> добавил расход ${selectedCat.label}`,
-    amount:`−$${amt.toLocaleString()}`, amountType:'red', time: timeStr, dot:'#F79009',
-  });
-  document.getElementById('exp-sheet').classList.remove('open');
-  renderExpenses();
-  renderLogs();
+  const mo = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'][now.getMonth()];
+  const t = now.getDate() + ' ' + mo + ' · ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  o.expenses.unshift({cat, amount: parseFloat(amt), note, by: o.driver.name, byImg: o.driver.img, at: t, color: c.c, bg: c.bg});
+  o.logs.unshift({text:`<strong>${o.driver.name}</strong> добавил ${cat}`, badge:`−$${parseFloat(amt).toLocaleString()}`, badgeRed:true, time:t, dot:'#F79009'});
+  render();
 }
 
 function deleteExpense(i) {
   const e = o.expenses[i];
   const now = new Date();
-  const timeStr = now.getDate() + ' ' + ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'][now.getMonth()] + ' · ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  o.logs.unshift({
-    type:'expense', text:`<strong>${o.driver.name}</strong> удалил расход ${e.cat}`,
-    amount:`+$${e.amount.toLocaleString()}`, amountType:'green', time: timeStr, dot:'#F04438',
-  });
+  const mo = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'][now.getMonth()];
+  const t = now.getDate() + ' ' + mo + ' · ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  o.logs.unshift({text:`<strong>${o.driver.name}</strong> удалил ${e.cat}`, badge:`+$${e.amount.toLocaleString()}`, badgeRed:false, time:t, dot:'#F04438'});
   o.expenses.splice(i, 1);
-  renderExpenses();
-  renderLogs();
+  render();
 }
 
-function renderExpenses() {
+function toggleAllExp() {
+  showAllExp = !showAllExp;
+  render();
+}
+
+function render() {
   const total = o.expenses.reduce((s,e) => s+e.amount, 0);
-  document.getElementById('exp-wrap').innerHTML = `
-  <div class="exp-list">
-    <div class="exp-summary">
-      <span class="exp-summary-label">Расходы (${o.expenses.length})</span>
-      <span class="exp-summary-val">${total > 0 ? '−$' + total.toLocaleString() : '—'}</span>
-    </div>
-    ${o.expenses.length ? o.expenses.map((e,i) => `
-    <div class="exp-item">
-      <div class="exp-cat-icon" style="background:${e.bg}">
-        <svg viewBox="0 0 24 24" fill="none" stroke="${e.color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">${(EXP_CATS.find(c=>c.label===e.cat)||EXP_CATS[EXP_CATS.length-1]).icon}</svg>
-      </div>
-      <div class="exp-item-body">
-        <div class="exp-item-top">
-          <span class="exp-item-cat">${e.cat}</span>
-          <span class="exp-item-amount">−$${e.amount.toLocaleString()}</span>
-        </div>
-        ${e.note ? `<div class="exp-item-note">${e.note}</div>` : ''}
-        <div class="exp-item-who">
-          <img src="${e.byImg}" class="exp-who-av" onerror="this.style.display='none'">
-          <span class="exp-who-text">${e.by} · ${e.at}</span>
-          <button onclick="deleteExpense(${i})" style="margin-left:auto;background:none;border:none;cursor:pointer;color:#98A2B3;padding:2px 4px;font-size:16px;line-height:1" title="Удалить">×</button>
-        </div>
-      </div>
-    </div>`).join('') : '<div class="exp-empty">Расходов нет</div>'}
-  </div>`;
-}
+  const PREVIEW = 3;
+  const visible = showAllExp ? o.expenses : o.expenses.slice(0, PREVIEW);
 
-function renderLogs() {
-  document.getElementById('log-wrap').innerHTML = `
-  <div class="log-list">
-    ${o.logs.map((l, i) => `
-    <div class="log-item">
-      <div class="log-dot-wrap">
-        <div class="log-dot" style="background:${l.dot}"></div>
-        ${i < o.logs.length - 1 ? '<div class="log-line"></div>' : ''}
-      </div>
-      <div class="log-body">
-        <div class="log-text">${l.text}${l.amount ? `<span class="log-amount${l.amountType==='green'?' green':''}">${l.amount}</span>` : ''}</div>
-        <div class="log-time">${l.time}</div>
-      </div>
-    </div>`).join('')}
-  </div>`;
-}
+  document.getElementById('body').innerHTML = `
 
-// Build page
-document.getElementById('body').innerHTML = `
-  <!-- HERO: Truck photo -->
-  <div style="padding:12px 16px 0">
-    <div class="truck-hero">
+    <!-- HERO: Truck -->
+    <a href="${o.truck.link}" class="hero">
       <img src="${o.truck.img}" onerror="this.src='assets/img/trucks/truck1.jpg'">
-      <div class="truck-hero-gradient"></div>
-      <div class="truck-hero-info">
-        <div class="truck-hero-name">${o.truck.name}</div>
-        <div class="truck-hero-plate"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" width="11" height="11"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18"/></svg><span>${o.truck.plate}</span></div>
-        <div class="truck-meta-row">
-          <span class="truck-meta-chip">${o.truck.year}</span>
-          <span class="truck-meta-chip">${o.truck.power}</span>
-          <span class="truck-meta-chip">${o.truck.fuel}</span>
+      <div class="hero-grad"></div>
+      <div class="hero-goto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="12" height="12"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Открыть
+      </div>
+      <div class="hero-info">
+        <div class="hero-name">${o.truck.name}</div>
+        <div class="hero-plate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" width="10" height="10"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18"/></svg>
+          <span>${o.truck.plate}</span>
+        </div>
+        <div class="hero-tags">
+          <span class="hero-tag">${o.truck.year}</span>
+          <span class="hero-tag">${o.truck.power}</span>
+          <span class="hero-tag">${o.truck.fuel}</span>
         </div>
       </div>
-    </div>
-  </div>
+    </a>
 
-  <!-- CREW: Driver + Trailer -->
-  <div class="crew-row">
-    <!-- Driver -->
-    <div class="crew-card">
-      <div class="crew-inner">
-        <div class="crew-label">Водитель</div>
-        <img src="${o.driver.img}" class="crew-img" onerror="this.src='assets/img/drivers/d1.jpg'">
-        <div class="crew-driver-name">${o.driver.name}</div>
+    <!-- CREW: Driver + Trailer -->
+    <div class="crew-row">
+      <a href="${o.driver.link}" class="crew-card">
+        <div class="crew-goto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2.5" width="12" height="12"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="crew-lbl">Водитель</div>
+        <img src="${o.driver.img}" class="crew-av" onerror="this.src='assets/img/drivers/d1.jpg'">
+        <div class="crew-name">${o.driver.name}</div>
         <div class="crew-meta">
           <span style="color:#FFCB00;font-weight:700">★</span> ${o.driver.rating}
-          <span style="color:#E4E7EC">·</span> ${o.driver.exp}
+          &nbsp;·&nbsp; ${o.driver.exp}
         </div>
-        <div class="crew-meta" style="margin-top:1px">${o.driver.trips} рейсов</div>
-        <a href="tel:${o.driver.phone}" class="crew-action">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#17B26A" stroke-width="2" width="14" height="14"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
+        <div class="crew-meta">${o.driver.trips} рейсов</div>
+        <button class="crew-call" onclick="event.preventDefault();event.stopPropagation();window.location.href='tel:${o.driver.phone}'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#17B26A" stroke-width="2" width="13" height="13"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
           Позвонить
-        </a>
-      </div>
-    </div>
-    <!-- Trailer -->
-    ${o.trailer ? `
-    <div class="crew-card">
-      <div class="crew-inner">
-        <div class="crew-label">Прицеп</div>
-        <div class="trailer-icon-wrap">
+        </button>
+      </a>
+
+      ${o.trailer ? `
+      <a href="${o.trailer.link}" class="crew-card">
+        <div class="crew-goto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2.5" width="12" height="12"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="crew-lbl">Прицеп</div>
+        <div class="crew-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="1.8" width="26" height="26"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
         </div>
-        <div class="trailer-name">${o.trailer.name}</div>
-        <div class="trailer-meta">${o.trailer.type}</div>
-        <div class="trailer-meta">${o.trailer.cap}</div>
-        <div class="trailer-meta" style="margin-top:4px;font-weight:600;color:#344054">${o.trailer.plate}</div>
-      </div>
-    </div>` : `<div class="crew-card"><div class="crew-inner"><div class="crew-label">Прицеп</div><div style="font-size:12px;color:#D0D5DD;margin-top:12px">Не назначен</div></div></div>`}
-  </div>
+        <div class="crew-name">${o.trailer.name}</div>
+        <div class="crew-meta">${o.trailer.type}</div>
+        <div class="crew-meta">${o.trailer.cap}</div>
+        <div class="crew-meta" style="margin-top:4px;font-weight:600;color:#344054">${o.trailer.plate}</div>
+      </a>` : `
+      <div class="crew-card" style="cursor:default">
+        <div class="crew-lbl">Прицеп</div>
+        <div class="crew-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="1.8" width="26" height="26"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg></div>
+        <div style="font-size:12px;color:#D0D5DD;margin-top:4px">Не назначен</div>
+      </div>`}
+    </div>
 
-  <!-- ROUTE STATUS -->
-  <div style="padding:0 16px">
-    <div class="route-card">
-      <div class="route-top">
-        <div class="route-cities">
-          <div class="city-blk">
+    <!-- ROUTE -->
+    <div class="card">
+      <div class="card-body">
+        <div class="route-row">
+          <div class="city">
             <div class="city-name">${o.from}</div>
             <div class="city-date">${o.startDate}</div>
           </div>
-          <div class="arrow-circle">
+          <div class="arr-circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="3" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </div>
-          <div class="city-blk" style="text-align:right">
+          <div class="city" style="text-align:right">
             <div class="city-name">${o.to}</div>
             <div class="city-date">${o.estEnd}</div>
           </div>
         </div>
         ${o.status === 'active' ? `
-        <div>
-          <div class="prog-bar-track"><div class="prog-bar-fill" style="width:${o.pct}%"></div></div>
-          <div class="prog-labels"><span>${o.from}</span><span style="font-weight:800;color:#0F0F37">${o.pct}%</span><span>${o.to}</span></div>
-        </div>` : ''}
+        <div class="prog-track"><div class="prog-fill" style="width:${o.pct}%"></div></div>
+        <div class="prog-lbls"><span>${o.from}</span><span style="font-weight:800;color:#0F0F37">${o.pct}%</span><span>${o.to}</span></div>` : ''}
       </div>
-      <div class="route-chips">
-        <span class="rchip" style="background:#F4F5F7;color:#344054">${o.cargo} · ${o.weight}</span>
-        <span class="rchip" style="background:#F4F5F7;color:#344054">${o.dist}</span>
-        <span class="rchip" style="background:#ECFDF3;color:#027A48">${o.income}</span>
+      <div class="chips-row">
+        <span class="chip" style="background:#F4F5F7;color:#344054">${o.cargo} · ${o.weight}</span>
+        <span class="chip" style="background:#F4F5F7;color:#344054">${o.dist}</span>
+        <span class="chip" style="background:#ECFDF3;color:#027A48">${o.income}</span>
       </div>
     </div>
-  </div>
 
-  <!-- MAP (active only) -->
-  ${o.status === 'active' ? `
-  <div class="map-card">
-    <svg viewBox="0 0 390 155" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
-      <rect width="390" height="155" fill="#e8e3d5"/>
-      <path d="M0,0 L390,0 L390,65 Q320,54 255,58 Q185,50 115,58 Q55,52 0,60Z" fill="#ddd8c9"/>
-      <path d="M20,60 Q85,72 150,66 Q195,68 235,71 Q215,100 168,112 Q105,118 52,102 Q16,91 20,60Z" fill="#e2dcc8"/>
-      <text x="90" y="88" font-size="9" fill="#a09888" font-family="sans-serif" font-weight="600" letter-spacing=".5">УЗБЕКИСТАН</text>
-      <line x1="302" y1="76" x2="274" y2="90" stroke="#0F0F37" stroke-width="2.5" stroke-dasharray="5,4" stroke-linecap="round"/>
-      <line x1="274" y1="90" x2="230" y2="108" stroke="#0F0F37" stroke-width="2" stroke-dasharray="4,5" opacity=".25" stroke-linecap="round"/>
-      <circle cx="302" cy="76" r="5" fill="#475467" stroke="white" stroke-width="1.5"/>
-      <text x="278" y="70" font-size="8.5" fill="#344054" font-family="sans-serif" font-weight="700">${o.from}</text>
-      <circle cx="230" cy="108" r="5" fill="#FFCB00" stroke="#0F0F37" stroke-width="1.5"/>
-      <text x="204" y="124" font-size="8.5" fill="#344054" font-family="sans-serif" font-weight="700">${o.to}</text>
-      <circle cx="274" cy="90" r="9" fill="#17B26A" opacity=".2"/>
-      <circle cx="274" cy="90" r="5" fill="#17B26A" stroke="white" stroke-width="2"/>
-      <rect x="285" y="81" width="54" height="18" rx="7" fill="white" opacity=".92"/>
-      <text x="312" y="93" font-size="9.5" fill="#1a8c52" font-family="sans-serif" font-weight="800" text-anchor="middle">${o.mapSpeed}</text>
-    </svg>
-    <div class="map-stats-row">
-      <div class="map-stat"><div class="map-stat-l">Локация</div><div class="map-stat-v">${o.mapLoc}</div></div>
-      <div class="map-stat"><div class="map-stat-l">Прогресс</div><div class="map-stat-v">${o.pct}%</div></div>
-      <div class="map-stat"><div class="map-stat-l">ETA</div><div class="map-stat-v">${o.mapEta}</div></div>
+    <!-- MAP (active only) -->
+    ${o.status === 'active' ? `
+    <div class="card">
+      <svg viewBox="0 0 390 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+        <rect width="390" height="150" fill="#e8e3d5"/>
+        <path d="M0,0 L390,0 L390,63 Q320,52 255,56 Q185,48 115,56 Q55,50 0,58Z" fill="#ddd8c9"/>
+        <path d="M20,58 Q85,70 150,64 Q195,66 235,69 Q215,98 168,110 Q105,116 52,100 Q16,89 20,58Z" fill="#e2dcc8"/>
+        <text x="88" y="86" font-size="9" fill="#a09888" font-family="sans-serif" font-weight="600" letter-spacing=".5">УЗБЕКИСТАН</text>
+        <line x1="302" y1="74" x2="274" y2="88" stroke="#0F0F37" stroke-width="2.5" stroke-dasharray="5,4" stroke-linecap="round"/>
+        <line x1="274" y1="88" x2="230" y2="106" stroke="#0F0F37" stroke-width="2" stroke-dasharray="4,5" opacity=".25" stroke-linecap="round"/>
+        <circle cx="302" cy="74" r="5" fill="#475467" stroke="white" stroke-width="1.5"/>
+        <text x="278" y="68" font-size="8.5" fill="#344054" font-family="sans-serif" font-weight="700">${o.from}</text>
+        <circle cx="230" cy="106" r="5" fill="#FFCB00" stroke="#0F0F37" stroke-width="1.5"/>
+        <text x="204" y="122" font-size="8.5" fill="#344054" font-family="sans-serif" font-weight="700">${o.to}</text>
+        <circle cx="274" cy="88" r="9" fill="#17B26A" opacity=".2"/>
+        <circle cx="274" cy="88" r="5" fill="#17B26A" stroke="white" stroke-width="2"/>
+        <rect x="285" y="79" width="54" height="18" rx="7" fill="white" opacity=".92"/>
+        <text x="312" y="91" font-size="9.5" fill="#1a8c52" font-family="sans-serif" font-weight="800" text-anchor="middle">${o.mapSpeed}</text>
+      </svg>
+      <div class="map-stats">
+        <div class="ms"><div class="ms-l">Локация</div><div class="ms-v">${o.mapLoc}</div></div>
+        <div class="ms"><div class="ms-l">Прогресс</div><div class="ms-v">${o.pct}%</div></div>
+        <div class="ms"><div class="ms-l">ETA</div><div class="ms-v">${o.mapEta}</div></div>
+      </div>
+    </div>` : ''}
+
+    <!-- EXPENSES -->
+    <div class="sec-hd">
+      <span class="sec-title">Расходы</span>
     </div>
-  </div>` : ''}
 
-  <!-- EXPENSES -->
-  <div class="sec-hd">
-    <span class="sec-hd-title">Расходы</span>
-    <button class="sec-hd-action" onclick="openExpSheet()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0F0F37" stroke-width="2.5" width="13" height="13"><path d="M12 5v14M5 12h14"/></svg>
-      Добавить
-    </button>
-  </div>
-  <div id="exp-wrap" style="padding:0 16px"></div>
+    <!-- Quick add -->
+    <div class="quick-scroll">
+      ${EXP_CATS.map(c => `
+      <button class="q-btn" onclick="addExpense('${c.l}')" style="background:${c.bg}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="${c.c}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">${c.icon}</svg>
+        <span style="color:${c.c}">${c.l}</span>
+      </button>`).join('')}
+    </div>
 
-  <!-- ACTIVITY LOG -->
-  <div class="sec-hd">
-    <span class="sec-hd-title">Журнал активности</span>
-  </div>
-  <div id="log-wrap" style="padding:0 16px"></div>
-`;
+    <!-- Expense list -->
+    <div class="card">
+      <div class="exp-summary-row">
+        <span>Итого расходов</span>
+        <span class="exp-total">${total > 0 ? '−$' + total.toLocaleString() : '—'}</span>
+      </div>
+      ${visible.length ? visible.map((e,i) => `
+      <div class="exp-item">
+        <div class="exp-icon" style="background:${e.bg}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="${e.color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">${(EXP_CATS.find(c=>c.l===e.cat)||EXP_CATS[EXP_CATS.length-1]).icon}</svg>
+        </div>
+        <div class="exp-body">
+          <div class="exp-top">
+            <span class="exp-cat">${e.cat}</span>
+            <span class="exp-amt">−$${e.amount.toLocaleString()}</span>
+          </div>
+          ${e.note ? `<div class="exp-note">${e.note}</div>` : ''}
+          <div class="exp-who">
+            <img src="${e.byImg}" class="exp-av" onerror="this.style.display='none'">
+            <span class="exp-who-txt">${e.by} · ${e.at}</span>
+            <button class="exp-del" onclick="deleteExpense(${i})" title="Удалить">×</button>
+          </div>
+        </div>
+      </div>`).join('') : '<div class="exp-empty">Расходов нет</div>'}
+      ${o.expenses.length > PREVIEW ? `
+      <button class="see-all-btn" onclick="toggleAllExp()">
+        ${showAllExp ? 'Свернуть' : `Посмотреть все (${o.expenses.length})`}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="${showAllExp ? 'm18 15-6-6-6 6' : 'm6 9 6 6 6-6'}"/></svg>
+      </button>` : ''}
+    </div>
 
-renderExpenses();
-renderLogs();
+    <!-- LOG -->
+    <div class="sec-hd" style="margin-top:4px">
+      <span class="sec-title">Журнал активности</span>
+    </div>
+    <div class="card" style="margin-bottom:8px">
+      ${o.logs.map((l, i) => `
+      <div class="log-item">
+        <div class="log-dot-col">
+          <div class="log-dot" style="background:${l.dot}"></div>
+          ${i < o.logs.length - 1 ? '<div class="log-line"></div>' : ''}
+        </div>
+        <div style="flex:1">
+          <div class="log-text">${l.text}${l.badge ? `<span class="log-badge" style="background:${l.badgeRed?'#FEF3F2':'#ECFDF3'};color:${l.badgeRed?'#D92D20':'#027A48'}">${l.badge}</span>` : ''}</div>
+          <div class="log-time">${l.time}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  `;
+}
+
+render();
 </script>
 </body>
 </html>
