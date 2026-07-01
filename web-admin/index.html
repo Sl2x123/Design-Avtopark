@@ -2332,6 +2332,8 @@ function statusLabel(t) {
   return `<span class="inline-flex items-center gap-1.5 rounded-full font-semibold" style="${s.cls};font-size:11px;padding:3px 10px"><span class="dot" style="background:${s.dot}"></span>${label}</span>`;
 }
 
+const CURRENT_ADMIN = 'Jamshid Turaev (Admin)';
+
 // ═══ ORDERS DATA ═══
 const ORDERS = [
   {
@@ -2341,7 +2343,11 @@ const ORDERS = [
     truck:{name:'Volvo FH16', plate:'01 A 123 BC', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg', idx:0},
     driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg'},
     trailer:{name:'Schmitz', plate:'60 H 545 AA', type:'Curtainsider'},
-    expenses:[{cat:'Топливо',amount:520,note:'АЗС Лукойл · 240 л'},{cat:'Питание',amount:45,note:'Обед в Польше'}]
+    expenses:[
+      {cat:'Топливо',amount:520,note:'АЗС Лукойл · 240 л',addedBy:'Alisher Karimov',addedAt:'30 июн, 08:30',deleted:false},
+      {cat:'Питание',amount:45,note:'Обед в Польше',addedBy:'Alisher Karimov',addedAt:'30 июн, 13:10',deleted:false},
+      {cat:'Стоянка',amount:30,note:'',addedBy:'Alisher Karimov',addedAt:'29 июн, 21:00',deleted:true,deletedBy:CURRENT_ADMIN,deletedAt:'29 июн, 21:40'}
+    ]
   },
   {
     id:'ORD-002', status:'active', from:'Андижан', to:'Прага',
@@ -2350,7 +2356,7 @@ const ORDERS = [
     truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg', idx:3},
     driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg'},
     trailer:{name:'Kogel', plate:'60 H 545 AA', type:'Refrigerator'},
-    expenses:[{cat:'Топливо',amount:380,note:'АЗС Лукойл'}]
+    expenses:[{cat:'Топливо',amount:380,note:'АЗС Лукойл',addedBy:'Vali Rakhimov',addedAt:'22 июн, 09:05',deleted:false}]
   },
   {
     id:'ORD-003', status:'cancelled', from:'Ташкент', to:'Стамбул',
@@ -2377,7 +2383,11 @@ const ORDERS = [
     truck:{name:'Renault T High', plate:'01 E 550 DC', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg', idx:5},
     driver:{name:'Jasur Ergashev', phone:'+998 90 222 11 00', img:'assets/img/drivers/d5.jpg'},
     trailer:{name:'Schmitz', plate:'90 K 330 AA', type:'Curtainsider'},
-    expenses:[{cat:'Топливо',amount:1840,note:'1 840 л · Дизель'},{cat:'Зарплата',amount:1280,note:'16 дней · $80/день'},{cat:'Страховка',amount:480,note:'Таможня 4 перехода'}]
+    expenses:[
+      {cat:'Топливо',amount:1840,note:'1 840 л · Дизель',addedBy:'Jasur Ergashev',addedAt:'20 июн, 08:00',deleted:false},
+      {cat:'Зарплата',amount:1280,note:'16 дней · $80/день',addedBy:CURRENT_ADMIN,addedAt:'24 июн, 10:00',deleted:false},
+      {cat:'Страховка',amount:480,note:'Таможня 4 перехода',addedBy:CURRENT_ADMIN,addedAt:'19 июн, 15:30',deleted:false}
+    ]
   },
   {
     id:'ORD-006', status:'cancelled', from:'Фергана', to:'Андижан',
@@ -2415,8 +2425,6 @@ const QUICK_EXP_CATS = [
 ];
 
 const TRUCK_QUICK_CATS = QUICK_EXP_CATS.filter(c => ['Топливо','Зарплата','Запчасти','Штраф','Мойка'].includes(c.label));
-
-const CURRENT_ADMIN = 'Jamshid Turaev (Admin)';
 
 const TRUCK_EXPENSES = {
   0: [
@@ -2655,13 +2663,23 @@ function openOrder(idx) {
       <span style="font-size:9px;font-weight:600;color:${c.color};text-align:center;line-height:1.2;white-space:nowrap">${c.label}</span>
     </button>`).join('');
 
-  const expList = o.expenses.length ? o.expenses.map(e=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #F9FAFB">
-      <div>
-        <div style="font-size:13px;font-weight:600;color:#0F0F37">${e.cat}</div>
-        ${e.note?`<div style="font-size:11px;color:#98A2B3;margin-top:2px">${e.note}</div>`:''}
+  const expList = o.expenses.length ? o.expenses.map((e,ei)=>`
+    <div style="padding:12px 0;border-bottom:1px solid #F9FAFB;${e.deleted?'opacity:.55':''}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:13px;font-weight:600;color:#0F0F37;${e.deleted?'text-decoration:line-through':''}">${e.cat}</div>
+        <span style="font-size:14px;font-weight:700;color:${e.deleted?'#98A2B3':'#F04438'}">−$${e.amount}</span>
       </div>
-      <span style="font-size:14px;font-weight:700;color:#F04438">−$${e.amount}</span>
+      ${e.note?`<div style="font-size:11px;color:#98A2B3;margin-top:2px">${e.note}</div>`:''}
+      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#667085;margin-top:5px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2" width="12" height="12"><path d="M12 5v14M5 12h14"/></svg>
+        Добавил: <b style="color:#344054">${e.addedBy||'—'}</b> · ${e.addedAt||'—'}
+      </div>
+      ${e.deleted
+        ? `<div style="display:flex;align-items:center;gap:5px;font-size:11px;color:#B42318;margin-top:3px">
+             <svg viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2" width="12" height="12"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+             Удалил: <b>${e.deletedBy}</b> · ${e.deletedAt}
+           </div>`
+        : `<button onclick="deleteAdminExpense(${idx},${ei})" style="margin-top:5px;font-size:11px;font-weight:600;color:#B42318;background:none;border:none;cursor:pointer;padding:0;font-family:inherit">Удалить</button>`}
     </div>`).join('') : '<p style="font-size:13px;color:#D0D5DD;padding:16px 0;margin:0">Расходов пока нет</p>';
 
   const progFull = `
@@ -2737,7 +2755,7 @@ function openOrder(idx) {
     <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden">
       <div style="padding:14px 16px;border-bottom:1px solid #F2F4F7;display:flex;align-items:center;justify-content:space-between">
         <span style="font-size:14px;font-weight:700;color:#0F0F37">Расходы</span>
-        <span style="font-size:13px;font-weight:700;color:#F04438">Итого: $${o.expenses.reduce((s,e)=>s+e.amount,0)}</span>
+        <span style="font-size:13px;font-weight:700;color:#F04438">Итого: $${o.expenses.filter(e=>!e.deleted).reduce((s,e)=>s+e.amount,0)}</span>
       </div>
       <div style="padding:0 16px">${expList}</div>
     </div>
@@ -2758,7 +2776,15 @@ function addAdminExpense(ordIdx, cat) {
   const amt = prompt(`Сумма расхода (${cat}), $:`);
   if(!amt || isNaN(parseFloat(amt))) return;
   const note = prompt('Комментарий (необязательно):') || '';
-  ORDERS[ordIdx].expenses.push({cat, amount: parseFloat(amt), note});
+  ORDERS[ordIdx].expenses.push({cat, amount: parseFloat(amt), note, addedBy: CURRENT_ADMIN, addedAt: 'Только что', deleted: false});
+  openOrder(ordIdx);
+}
+
+function deleteAdminExpense(ordIdx, expIdx) {
+  const e = ORDERS[ordIdx].expenses[expIdx];
+  e.deleted = true;
+  e.deletedBy = CURRENT_ADMIN;
+  e.deletedAt = 'Только что';
   openOrder(ordIdx);
 }
 
