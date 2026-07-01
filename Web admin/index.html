@@ -159,9 +159,9 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
     <!-- Nav -->
     <nav class="flex-1 px-3 py-4 space-y-0.5">
       <button class="nav-item active" onclick="switchPage('fleet',this)">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M14 2.92V11.23C14 12.25 13.17 13.08 12.15 13.08H3C2.45 13.08 2 12.63 2 12.08V5.69C2 3.65 3.65 2 5.69 2H13.07C13.59 2 14 2.41 14 2.92Z"/><path d="M21.5 15.5C21.78 15.5 22 15.72 22 16V17C22 18.66 20.66 20 19 20C19 18.35 17.65 17 16 17C14.35 17 13 18.35 13 20H11C11 18.35 9.65 17 8 17C6.35 17 5 18.35 5 20C3.34 20 2 18.66 2 17V15C2 14.45 2.45 14 3 14H12.5C13.88 14 15 12.88 15 11.5V6C15 5.45 15.45 5 16 5H16.84C17.56 5 18.22 5.39 18.58 6.01L19.22 7.13C19.31 7.29 19.19 7.5 19 7.5C17.62 7.5 16.5 8.62 16.5 10V13C16.5 14.38 17.62 15.5 19 15.5H21.5Z"/><circle cx="8" cy="20" r="2"/><circle cx="16" cy="20" r="2"/><path d="M22 12.53V14H19C18.45 14 18 13.55 18 13V10C18 9.45 18.45 9 19 9H20.29L21.74 11.54C21.91 11.84 22 12.18 22 12.53Z"/></svg>
-        Float
-        <span class="ml-auto rounded-full font-bold" style="font-size:11px;background:#FFCB00;color:#0F0F37;padding:1px 7px">48</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="18" height="18"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Рейсы
+        <span class="ml-auto rounded-full font-bold" style="font-size:11px;background:#FFCB00;color:#0F0F37;padding:1px 7px">6</span>
       </button>
       <button class="nav-item" onclick="switchPage('map',this)">
         <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M7.629 3.57A.374.374 0 0 1 8 3.827v13.556a.411.411 0 0 1-.351.399L5.279 19.25C3.639 20.19 2.289 19.41 2.289 17.51V7.78c0-.63.45-1.41 1.01-1.73l4.33-2.48Z"/><path d="M14.722 6.103C14.892 6.187 15 6.361 15 6.551v13.153c0 .369-.385.611-.717.455L10.033 18.107A.375.375 0 0 1 9.75 17.656V4.446c0-.37.39-.612.722-.448l4.25 2.105Z"/><path d="M22 6.49v9.73c0 .63-.45 1.41-1.01 1.73l-3.491 2.001A.374.374 0 0 1 17 19.517V6.33a.374.374 0 0 1 .252-.354L19.01 4.75C20.65 3.81 22 4.59 22 6.49Z"/></svg>
@@ -254,69 +254,58 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
     </header>
 
     <!-- ═══ PAGE: FLEET ═══ -->
-    <section class="page active" id="page-fleet">
-      <!-- KPI row -->
-      <div class="shrink-0 px-6 py-4 bg-white" style="border-bottom:1px solid #F2F4F7">
-        <div class="grid grid-cols-5 gap-3">
-          <div class="rounded-xl p-4 bg-success-50 border border-success-100" style="border-color:#DCFAE6">
-            <div class="flex items-center justify-between mb-1.5">
-              <span style="font-size:11px;font-weight:700;color:#079455;letter-spacing:.4px">ON TRIP</span>
-              <span class="dot" style="background:#17B26A"></span>
-            </div>
-            <p class="font-bold text-navy-800" style="font-size:26px;line-height:1">12</p>
-            <p style="font-size:11px;color:#667085;margin-top:2px">vehicles</p>
-          </div>
-          <div class="rounded-xl p-4 bg-error-50 border" style="border-color:#FEE4E2">
-            <div class="flex items-center justify-between mb-1.5">
-              <span style="font-size:11px;font-weight:700;color:#D92D20;letter-spacing:.4px">IDLE</span>
-              <span class="dot" style="background:#F04438"></span>
-            </div>
-            <p class="font-bold text-navy-800" style="font-size:26px;line-height:1">18</p>
-            <p style="font-size:11px;color:#667085;margin-top:2px">vehicles</p>
-          </div>
-          <div class="rounded-xl p-4 bg-warning-50 border" style="border-color:#FEF0C7">
-            <div class="flex items-center justify-between mb-1.5">
-              <span style="font-size:11px;font-weight:700;color:#DC6803;letter-spacing:.4px">REPAIR</span>
-              <span class="dot" style="background:#F79009"></span>
-            </div>
-            <p class="font-bold text-navy-800" style="font-size:26px;line-height:1">4</p>
-            <p style="font-size:11px;color:#667085;margin-top:2px">vehicles</p>
-          </div>
-          <div class="rounded-xl p-4 bg-gray-50 border border-gray-200">
-            <div class="flex items-center justify-between mb-1.5">
-              <span style="font-size:11px;font-weight:700;color:#667085;letter-spacing:.4px">NO SIGNAL</span>
-              <span class="dot" style="background:#98A2B3"></span>
-            </div>
-            <p class="font-bold text-navy-800" style="font-size:26px;line-height:1">2</p>
-            <p style="font-size:11px;color:#667085;margin-top:2px">vehicles</p>
-          </div>
-          <div class="rounded-xl p-4 bg-gray-50 border border-gray-200">
-            <div class="flex items-center justify-between mb-1.5">
-              <span style="font-size:11px;font-weight:700;color:#475467;letter-spacing:.4px">SHIFT ENDED</span>
-              <span class="dot" style="background:#475467"></span>
-            </div>
-            <p class="font-bold text-navy-800" style="font-size:26px;line-height:1">12</p>
-            <p style="font-size:11px;color:#667085;margin-top:2px">vehicles</p>
-          </div>
+    <section class="page active" id="page-fleet" style="flex-direction:row!important;overflow:hidden">
+
+  <!-- LEFT: Orders list (380px) -->
+  <div style="width:380px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid #EAECF0;overflow:hidden;background:white">
+
+    <!-- Header -->
+    <div style="padding:18px 20px 12px;border-bottom:1px solid #F2F4F7">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <h2 style="font-size:22px;font-weight:800;color:#0F0F37;margin:0">Рейсы</h2>
+          <p style="font-size:12px;color:#98A2B3;margin:3px 0 0" id="ord-count-label">6 заказов</p>
         </div>
+        <button onclick="openCreateOrderModal()" style="display:flex;align-items:center;gap:6px;background:#0F0F37;color:white;border:none;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+          Создать рейс
+        </button>
       </div>
+      <!-- Filter tabs -->
+      <div style="display:flex;gap:4px;overflow-x:auto;scrollbar-width:none">
+        <button class="seg-tab on" onclick="filterOrders('all',this)">Все <span class="c">6</span></button>
+        <button class="seg-tab" onclick="filterOrders('active',this)">В рейсе <span class="c">2</span></button>
+        <button class="seg-tab" onclick="filterOrders('waiting',this)">Ожидание <span class="c">2</span></button>
+        <button class="seg-tab" onclick="filterOrders('done',this)">Завершён <span class="c">1</span></button>
+        <button class="seg-tab" onclick="filterOrders('cancelled',this)">Отменён <span class="c">1</span></button>
+      </div>
+    </div>
 
-      <!-- Filters + toolbar -->
-      <div class="shrink-0 px-6 py-3 bg-white flex items-center gap-2 overflow-x-auto" style="border-bottom:1px solid #EAECF0">
-        <button class="seg-tab on" data-filter="all" onclick="setFilter(this)">All <span class="c">48</span></button>
-        <button class="seg-tab" data-filter="trip" onclick="setFilter(this)">On trip <span class="c">12</span></button>
-        <button class="seg-tab" data-filter="idle" onclick="setFilter(this)">Idle <span class="c">18</span></button>
-        <button class="seg-tab" data-filter="repair" onclick="setFilter(this)">Repair <span class="c">4</span></button>
-        <button class="seg-tab" data-filter="nosignal" onclick="setFilter(this)">No signal <span class="c">2</span></button>
-        <button class="seg-tab" data-filter="done" onclick="setFilter(this)">Shift ended <span class="c">12</span></button>
+    <!-- Search -->
+    <div style="padding:10px 16px;background:white;border-bottom:1px solid #F2F4F7">
+      <div style="display:flex;align-items:center;gap:8px;background:#F9FAFB;border:1.5px solid #EAECF0;border-radius:10px;padding:8px 12px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input id="order-search" oninput="renderOrders()" placeholder="Поиск по маршруту, водителю…" style="flex:1;border:none;outline:none;font-size:13px;color:#0F0F37;background:none;font-family:Inter,sans-serif">
       </div>
+    </div>
 
-      <!-- Truck grid -->
-      <div class="flex-1 overflow-y-auto bg-gray-50 p-6">
-        <div id="truck-grid" class="rounded-2xl overflow-hidden" style="border:1px solid #EAECF0;box-shadow:0 1px 3px rgba(0,0,0,0.06)"></div>
-        <p id="no-results" class="hidden text-center text-gray-400 py-16" style="font-size:14px">No vehicles match your search</p>
-      </div>
-    </section>
+    <!-- Orders list -->
+    <div id="orders-list" style="flex:1;overflow-y:auto;background:#F9FAFB"></div>
+  </div>
+
+  <!-- RIGHT: Order detail -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F9FAFB">
+    <!-- Empty state -->
+    <div id="order-empty-state" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="1.5" width="52" height="52"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 7h10M7 11h6"/></svg>
+      <p style="font-size:14px;font-weight:600;color:#98A2B3;margin:0">Выберите заказ</p>
+      <p style="font-size:12px;color:#D0D5DD;margin:0">для просмотра деталей</p>
+    </div>
+    <!-- Detail panel -->
+    <div id="order-detail-wrap" style="display:none;flex:1;overflow-y:auto;padding:24px;display:none"></div>
+  </div>
+
+</section>
 
     <!-- ═══ PAGE: MAP ═══ -->
     <section class="page" id="page-map" style="flex-direction:row!important;overflow:hidden">
@@ -2151,6 +2140,325 @@ function statusLabel(t) {
   return `<span class="inline-flex items-center gap-1.5 rounded-full font-semibold" style="${s.cls};font-size:11px;padding:3px 10px"><span class="dot" style="background:${s.dot}"></span>${label}</span>`;
 }
 
+// ═══ ORDERS DATA ═══
+const ORDERS = [
+  {
+    id:'ORD-001', status:'active', from:'Ташкент', to:'Москва',
+    cargo:'Электроника · 14 т', dist:'3 240 км', pct:67,
+    startDate:'20.06.2026', estEnd:'28.06.2026', income:'$4 800', mapLoc:'Самара', mapSpeed:'74 км/ч',
+    truck:{name:'Volvo FH16', plate:'01 A 123 BC', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg', idx:0},
+    driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg'},
+    trailer:{name:'Schmitz', plate:'60 H 545 AA', type:'Curtainsider'},
+    expenses:[{cat:'Топливо',amount:520,note:'АЗС Лукойл · 240 л'},{cat:'Питание',amount:45,note:'Обед в Самаре'}]
+  },
+  {
+    id:'ORD-002', status:'active', from:'Самарканд', to:'Алматы',
+    cargo:'Стройматериалы · 18 т', dist:'860 км', pct:42,
+    startDate:'22.06.2026', estEnd:'24.06.2026', income:'$1 200', mapLoc:'Шымкент', mapSpeed:'81 км/ч',
+    truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg', idx:3},
+    driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg'},
+    trailer:{name:'Kogel', plate:'60 H 457 AA', type:'Refrigerator'},
+    expenses:[{cat:'Топливо',amount:180,note:'АЗС Газпром'}]
+  },
+  {
+    id:'ORD-003', status:'waiting', from:'Ташкент', to:'Стамбул',
+    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:0,
+    startDate:'25.06.2026', estEnd:'10.07.2026', income:'$6 500',
+    truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg', idx:2},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg'},
+    trailer:{name:'Krone', plate:'75 A 112 BC', type:'Flatbed'},
+    expenses:[]
+  },
+  {
+    id:'ORD-004', status:'waiting', from:'Наманган', to:'Бишкек',
+    cargo:'Продукты питания · 12 т', dist:'520 км', pct:0,
+    startDate:'26.06.2026', estEnd:'27.06.2026', income:'$800',
+    truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg', idx:4},
+    driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg'},
+    trailer:null,
+    expenses:[]
+  },
+  {
+    id:'ORD-005', status:'done', from:'Ташкент', to:'Прага',
+    cargo:'Хлопковая ткань · 18 т', dist:'5 840 км', pct:100,
+    startDate:'08.06.2026', estEnd:'24.06.2026', income:'$4 200',
+    truck:{name:'Renault T High', plate:'01 E 550 DC', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg', idx:5},
+    driver:{name:'Jasur Ergashev', phone:'+998 90 222 11 00', img:'assets/img/drivers/d5.jpg'},
+    trailer:{name:'Schmitz', plate:'90 K 330 AA', type:'Curtainsider'},
+    expenses:[{cat:'Топливо',amount:1840,note:'1 840 л · Дизель'},{cat:'Зарплата',amount:1280,note:'16 дней · $80/день'},{cat:'Страховка',amount:480,note:'Таможня 4 перехода'}]
+  },
+  {
+    id:'ORD-006', status:'cancelled', from:'Фергана', to:'Андижан',
+    cargo:'Продукты · 15 т', dist:'305 км', pct:22,
+    startDate:'05.06.2026', estEnd:'05.06.2026', income:'—',
+    truck:{name:'Scania R500', plate:'70 B 456 DA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg', idx:1},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg'},
+    trailer:{name:'Kogel', plate:'60 H 457 AA', type:'Refrigerator'},
+    expenses:[]
+  },
+];
+
+let _ordFilter = 'all';
+let _activeOrdIdx = null;
+
+const ORD_STATUS = {
+  active:    {label:'В рейсе',   bg:'#ECFDF3', color:'#027A48', dot:'#17B26A', border:'#ABEFC6'},
+  waiting:   {label:'Ожидание',  bg:'#FFFAEB', color:'#B54708', dot:'#F79009', border:'#FEF0C7'},
+  done:      {label:'Завершён',  bg:'#F2F4F7', color:'#344054', dot:'#667085', border:'#EAECF0'},
+  cancelled: {label:'Отменён',   bg:'#FEF3F2', color:'#B42318', dot:'#F04438', border:'#FECDCA'},
+};
+
+const QUICK_EXP_CATS = [
+  {label:'Топливо',       bg:'#ECFDF3', color:'#17B26A', icon:'<path d="M3 22V8l6-6h6l3 3v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3z"/><path d="M10 22V12h4v10"/>'},
+  {label:'Зарплата',      bg:'#EFF8FF', color:'#1570EF', icon:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
+  {label:'Запчасти',      bg:'#FFF8EB', color:'#F79009', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12h2M20 12h2"/>'},
+  {label:'Сервис/Мастер', bg:'#FFF8EB', color:'#F79009', icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'},
+  {label:'Страховка',     bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'},
+  {label:'Kredit/Lising', bg:'#F4F3FF', color:'#6941C6', icon:'<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>'},
+  {label:'Штраф',         bg:'#FEF3F2', color:'#D92D20', icon:'<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/>'},
+  {label:'Мойка',         bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 22a8 8 0 0 1-8-8c0-4.314 6-12 8-12s8 7.686 8 12a8 8 0 0 1-8 8z"/>'},
+  {label:'Питание',       bg:'#FFFBEB', color:'#D97706', icon:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><line x1="7" y1="2" x2="7" y2="11"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h1v7"/>'},
+  {label:'Стоянка',       bg:'#F2F4F7', color:'#667085', icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>'},
+  {label:'Другое',        bg:'#F2F4F7', color:'#667085', icon:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'},
+];
+
+function orderCardHTML(o, i) {
+  const s = ORD_STATUS[o.status];
+  const progBar = (o.status === 'active') ? `
+    <div style="height:3px;background:#F2F4F7;border-radius:999px;margin:6px 0 4px;overflow:hidden">
+      <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
+    </div>` : '';
+  const isSelected = _activeOrdIdx === i;
+  return `<div onclick="openOrder(${i})" id="ocard-${i}" style="padding:14px 16px;background:${isSelected?'#FFFDF0':'white'};border-bottom:1px solid #F2F4F7;cursor:pointer;transition:background .15s;border-left:3px solid ${isSelected?'#FFCB00':'transparent'}" onmouseover="if(${_activeOrdIdx}!==${i})this.style.background='#FAFAFA'" onmouseout="if(${_activeOrdIdx}!==${i})this.style.background='white'">
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <img src="${o.truck.img}" style="width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0;margin-top:1px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px">
+          <div style="display:flex;align-items:center;gap:5px;font-size:14px;font-weight:800;color:#0F0F37;min-width:0">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.from}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2.5" width="13" height="13" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.to}</span>
+          </div>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:${s.bg};color:${s.color};white-space:nowrap;display:inline-flex;align-items:center;gap:3px;flex-shrink:0">
+            <span style="width:5px;height:5px;border-radius:50%;background:${s.dot};flex-shrink:0"></span>${s.label}
+          </span>
+        </div>
+        <div style="font-size:11px;color:#667085;margin-bottom:2px">${o.cargo} · ${o.dist}</div>
+        ${progBar}
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;color:#98A2B3">${o.driver.name}</span>
+          ${o.status==='active'?`<span style="font-size:11px;font-weight:800;color:#0F0F37">${o.pct}%</span>`:`<span style="font-size:11px;color:#98A2B3">${o.startDate}</span>`}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderOrders() {
+  const q = (document.getElementById('order-search')||{value:''}).value.toLowerCase();
+  const list = document.getElementById('orders-list');
+  if(!list) return;
+  const filtered = ORDERS.filter((o,i)=>{
+    const matchF = _ordFilter==='all' || o.status===_ordFilter;
+    const matchQ = !q || o.from.toLowerCase().includes(q) || o.to.toLowerCase().includes(q) || o.driver.name.toLowerCase().includes(q) || o.truck.name.toLowerCase().includes(q);
+    return matchF && matchQ;
+  });
+  if(!filtered.length){
+    list.innerHTML = '<div style="padding:40px 20px;text-align:center;color:#98A2B3;font-size:13px">Нет заказов</div>';
+    return;
+  }
+  list.innerHTML = filtered.map((o)=>orderCardHTML(o, ORDERS.indexOf(o))).join('');
+}
+
+function filterOrders(status, btn) {
+  _ordFilter = status;
+  document.querySelectorAll('#page-fleet .seg-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderOrders();
+}
+
+function openOrder(idx) {
+  _activeOrdIdx = idx;
+  renderOrders();
+  const o = ORDERS[idx];
+  const s = ORD_STATUS[o.status];
+  const empty = document.getElementById('order-empty-state');
+  const wrap = document.getElementById('order-detail-wrap');
+  if(empty) empty.style.display = 'none';
+  if(wrap) { wrap.style.display = 'block'; }
+
+  const miniMap = (o.status === 'active') ? `
+  <div style="background:white;border-radius:16px;overflow:hidden;border:1px solid #EAECF0;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
+    <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+      <rect width="400" height="160" fill="#e8e3d5"/>
+      <path d="M0,0 L400,0 L400,65 Q340,55 270,58 Q200,50 130,58 Q65,52 0,60Z" fill="#ddd8c9"/>
+      <path d="M30,60 Q90,72 150,67 Q200,68 240,72 Q220,100 175,112 Q110,118 55,102 Q20,92 30,60Z" fill="#e2dcc8"/>
+      <text x="90" y="88" font-size="9" fill="#a09888" font-family="sans-serif" font-weight="600" letter-spacing=".4">УЗБЕКИСТАН</text>
+      <line x1="300" y1="82" x2="270" y2="94" stroke="#0F0F37" stroke-width="2.5" stroke-dasharray="5,3.5" stroke-linecap="round"/>
+      <line x1="270" y1="94" x2="228" y2="108" stroke="#0F0F37" stroke-width="2" stroke-dasharray="4,4" opacity=".3" stroke-linecap="round"/>
+      <circle cx="300" cy="82" r="5" fill="#555" stroke="#fff" stroke-width="1.5"/>
+      <text x="278" y="76" font-size="8.5" fill="#444" font-family="sans-serif" font-weight="700">${o.from}</text>
+      <circle cx="228" cy="108" r="5" fill="#FAE436" stroke="#0F0F37" stroke-width="1.5"/>
+      <text x="200" y="123" font-size="8.5" fill="#444" font-family="sans-serif" font-weight="700">${o.to}</text>
+      <circle class="map-pulse-dot" cx="270" cy="94" r="7" fill="#2dbd71" opacity=".35"/>
+      <circle cx="270" cy="94" r="5" fill="#2dbd71" stroke="#fff" stroke-width="2"/>
+      <text x="278" y="91" font-size="9" fill="#1a8c52" font-family="sans-serif" font-weight="800">${o.mapSpeed||'72 км/ч'}</text>
+    </svg>
+    <div style="display:flex;border-top:1px solid #F0F0F0">
+      <div style="flex:1;padding:10px 14px;border-right:1px solid #F0F0F0">
+        <div style="font-size:10px;color:#98A2B3;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">Локация</div>
+        <div style="font-size:13px;font-weight:800;color:#0F0F37">${o.mapLoc||'—'}</div>
+      </div>
+      <div style="flex:1;padding:10px 14px;border-right:1px solid #F0F0F0">
+        <div style="font-size:10px;color:#98A2B3;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">Проехано</div>
+        <div style="font-size:13px;font-weight:800;color:#0F0F37">${o.pct}%</div>
+      </div>
+      <div style="flex:1;padding:10px 14px">
+        <div style="font-size:10px;color:#98A2B3;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px">Скорость</div>
+        <div style="font-size:13px;font-weight:800;color:#0F0F37">${o.mapSpeed||'—'}</div>
+      </div>
+    </div>
+  </div>` : '';
+
+  const trailerHTML = o.trailer ? `
+    <div style="display:flex;align-items:center;gap:4px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="13" height="13"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
+      <span style="font-size:12px;font-weight:600;color:#344054">${o.trailer.name}</span>
+      <span style="font-size:10px;background:#F2F4F7;color:#667085;padding:1px 6px;border-radius:5px">${o.trailer.type}</span>
+      <span style="font-size:11px;color:#98A2B3">· ${o.trailer.plate}</span>
+    </div>` : '<span style="font-size:12px;color:#D0D5DD;font-style:italic">Прицеп не назначен</span>';
+
+  const quickExp = QUICK_EXP_CATS.map(c=>`
+    <button onclick="addAdminExpense(${idx},'${c.label}')" style="display:flex;flex-direction:column;align-items:center;gap:5px;background:${c.bg};border:none;border-radius:12px;padding:10px 6px;cursor:pointer;min-width:60px;transition:opacity .15s" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="${c.color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">${c.icon}</svg>
+      <span style="font-size:9px;font-weight:600;color:${c.color};text-align:center;line-height:1.2;white-space:nowrap">${c.label}</span>
+    </button>`).join('');
+
+  const expList = o.expenses.length ? o.expenses.map(e=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #F9FAFB">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#0F0F37">${e.cat}</div>
+        ${e.note?`<div style="font-size:11px;color:#98A2B3;margin-top:1px">${e.note}</div>`:''}
+      </div>
+      <span style="font-size:13px;font-weight:700;color:#F04438">−$${e.amount}</span>
+    </div>`).join('') : '<p style="font-size:12px;color:#D0D5DD;padding:12px 0;margin:0">Расходов пока нет</p>';
+
+  const progFull = `
+    <div style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;color:#0F0F37;margin-bottom:10px">
+        ${o.from}
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="3" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        ${o.to}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <span style="font-size:12px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.cargo}</span>
+        <span style="font-size:12px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.dist}</span>
+        <span style="font-size:12px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.startDate} → ${o.estEnd}</span>
+        <span style="font-size:12px;background:#ECFDF3;color:#027A48;padding:4px 10px;border-radius:8px;font-weight:700">${o.income}</span>
+      </div>
+      ${o.status==='active'?`
+      <div style="height:6px;background:#F2F4F7;border-radius:999px;overflow:hidden;margin-bottom:4px">
+        <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#98A2B3">
+        <span>${o.from}</span>
+        <span style="font-weight:700;color:#0F0F37">${o.pct}%</span>
+        <span>${o.to}</span>
+      </div>`:``}
+    </div>`;
+
+  wrap.innerHTML = `
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:14px;font-weight:700;color:#98A2B3">${o.id}</span>
+          <span style="font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:${s.bg};color:${s.color};display:inline-flex;align-items:center;gap:4px">
+            <span style="width:6px;height:6px;border-radius:50%;background:${s.dot}"></span>${s.label}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    ${progFull}
+    ${miniMap}
+
+    <!-- Truck -->
+    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:12px">
+      <div style="padding:10px 14px 8px;border-bottom:1px solid #F2F4F7">
+        <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Грузовик</span>
+      </div>
+      <button onclick="openTruckOnMap(${o.truck.idx})" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;background:none;border:none;cursor:pointer;text-align:left;transition:background .15s" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='none'">
+        <img src="${o.truck.img}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.truck.name}</div>
+          <div style="font-size:12px;color:#667085;margin-top:2px">${o.truck.plate}</div>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" width="18" height="18"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- Driver -->
+    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:12px">
+      <div style="padding:10px 14px 8px;border-bottom:1px solid #F2F4F7">
+        <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Водитель</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+        <img src="${o.driver.img}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #FFCB00;flex-shrink:0">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.driver.name}</div>
+          <div style="font-size:12px;color:#667085;margin-top:2px">${o.driver.phone}</div>
+        </div>
+        <a href="tel:${o.driver.phone}" style="width:36px;height:36px;border-radius:50%;background:#ECFDF3;display:flex;align-items:center;justify-content:center;flex-shrink:0;text-decoration:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#17B26A" stroke-width="2" width="16" height="16"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Trailer -->
+    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:20px">
+      <div style="padding:10px 14px 8px;border-bottom:1px solid #F2F4F7">
+        <span style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px">Прицеп</span>
+      </div>
+      <div style="padding:12px 14px">${trailerHTML}</div>
+    </div>
+
+    <!-- Quick expenses -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;color:#0F0F37;margin-bottom:10px">Быстрое добавление расхода</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px">
+        ${quickExp}
+      </div>
+    </div>
+
+    <!-- Expense list -->
+    <div style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden">
+      <div style="padding:12px 14px;border-bottom:1px solid #F2F4F7;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;font-weight:700;color:#0F0F37">Расходы</span>
+        <span style="font-size:12px;font-weight:700;color:#F04438">Итого: $${o.expenses.reduce((s,e)=>s+e.amount,0)}</span>
+      </div>
+      <div style="padding:0 14px">${expList}</div>
+    </div>
+  `;
+}
+
+function addAdminExpense(ordIdx, cat) {
+  const amt = prompt(`Сумма расхода (${cat}), $:`);
+  if(!amt || isNaN(parseFloat(amt))) return;
+  const note = prompt('Комментарий (необязательно):') || '';
+  ORDERS[ordIdx].expenses.push({cat, amount: parseFloat(amt), note});
+  openOrder(ordIdx);
+}
+
+function openCreateOrderModal() {
+  alert('Создание нового заказа — функция в разработке');
+}
+
+function openTruckOnMap(truckIdx) {
+  const mapBtn = document.querySelector('[onclick*="\'map\'"]');
+  if(mapBtn) switchPage('map', mapBtn);
+}
+
 function truckCard(t, idx) {
   const s = STATUS[t.statusKey] || STATUS.trip;
   let sLabel = s.label;
@@ -2660,6 +2968,7 @@ function openGarageDetail(truckIdx) {
 }
 
 renderGrid();
+renderOrders();
 
 // Auth flow
 function authLogin() {

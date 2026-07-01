@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fleet — Avtopakt Fura</title>
+<title>Рейсы — Avtopakt Fura</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -17,316 +17,324 @@
   <div class="sticky-head px-5 pt-5 pb-3 border-b border-gray-100">
     <div class="flex items-center justify-between mb-3">
       <div>
-        <h1 class="text-2xl font-bold text-navy-800 tracking-tight">Fleet</h1>
-        <p class="text-xs text-gray-500">48 vehicles</p>
+        <h1 class="text-2xl font-bold text-navy-800 tracking-tight">Рейсы</h1>
+        <p class="text-xs text-gray-500">6 заказов</p>
       </div>
-      <a href="notifications.html" class="relative w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50">
-        <i data-icon="bell" class="w-5 h-5"></i>
-        <span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] text-[10px] font-bold bg-error-500 text-white rounded-full flex items-center justify-center px-1">3</span>
-      </a>
+      <div class="flex items-center gap-2">
+        <button onclick="openCreateOrder()" class="w-10 h-10 rounded-lg flex items-center justify-center text-white" style="background:#0F0F37">
+          <i data-icon="plus" class="w-5 h-5"></i>
+        </button>
+        <a href="notifications.html" class="relative w-10 h-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50">
+          <i data-icon="bell" class="w-5 h-5"></i>
+          <span class="absolute -top-1 -right-1 min-w-[18px] h-[18px] text-[10px] font-bold bg-error-500 text-white rounded-full flex items-center justify-center px-1">3</span>
+        </a>
+      </div>
     </div>
-
-
-    <div class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3.5 h-11 shadow-xs">
-      <i data-icon="search" class="w-5 h-5 text-gray-400"></i>
-      <input class="flex-1 outline-none text-[15px] text-navy-800 placeholder:text-gray-400" placeholder="Search: brand, plate, driver, tag…">
-    </div>
-    <div class="flex gap-2 mt-3 overflow-x-auto hide-scroll" id="tabs" data-tabs></div>
+    <!-- Filter tabs -->
+    <div class="flex gap-2 overflow-x-auto hide-scroll" id="order-tabs"></div>
   </div>
 
-  <!-- List -->
-  <div class="app-scroll bg-gray-50 px-4 py-4">
-    <div class="space-y-3" id="list"></div>
+  <!-- Orders list -->
+  <div class="app-scroll bg-gray-50 px-4 py-3">
+    <div id="orders-list" class="space-y-2.5"></div>
   </div>
 
-  <!-- Sheet overlay -->
-  <div id="sheet" class="sheet-overlay">
-    <div class="sheet">
+  <!-- Order detail sheet -->
+  <div id="order-sheet" class="sheet-overlay">
+    <div class="sheet" style="max-height:92vh">
       <div class="sheet-head">
-        <div><h2 id="s-title" class="text-lg font-bold text-navy-800">—</h2><p id="s-sub" class="text-xs text-gray-400 mt-0.5 hidden"></p></div>
+        <div>
+          <h2 id="os-title" class="text-lg font-bold text-navy-800">—</h2>
+          <p id="os-sub" class="text-xs text-gray-400 mt-0.5"></p>
+        </div>
         <button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
       </div>
-      <div class="sheet-body" id="s-body"></div>
-      <div class="sheet-foot" id="s-foot"></div>
+      <div class="sheet-body" id="os-body" style="padding:0"></div>
     </div>
   </div>
 </div>
 
 <script>
-  const tabs=[['all','All',48,1],['trip','On trip',12],['idle','Idle',18],['repair','Repair',4],['nosignal','No signal',2],['done','Shift ended',12]];
-  document.getElementById('tabs').innerHTML = tabs.map(([k,l,c,a])=>`
-    <button class="seg-tab ${a?'on':''}">${l}<span class="c">${c}</span></button>`).join('');
+const APP_ORDERS = [
+  {
+    id:'ORD-001', status:'active', from:'Ташкент', to:'Москва',
+    cargo:'Электроника · 14 т', dist:'3 240 км', pct:67,
+    startDate:'20.06.2026', estEnd:'28.06.2026', income:'$4 800', mapLoc:'Самара', mapSpeed:'74 км/ч',
+    truck:{name:'Volvo FH16', plate:'01 A 123 BC', img:'assets/img/trucks/truck1.jpg'},
+    driver:{name:'Alisher Karimov', phone:'+998 90 123 45 67', img:'assets/img/drivers/d1.jpg'},
+    trailer:{name:'Schmitz', plate:'60 H 545 AA', type:'Curtainsider'},
+    expenses:[{cat:'Топливо',amount:520,note:'АЗС Лукойл'},{cat:'Питание',amount:45,note:'Обед'}]
+  },
+  {
+    id:'ORD-002', status:'active', from:'Самарканд', to:'Алматы',
+    cargo:'Стройматериалы · 18 т', dist:'860 км', pct:42,
+    startDate:'22.06.2026', estEnd:'24.06.2026', income:'$1 200', mapLoc:'Шымкент', mapSpeed:'81 км/ч',
+    truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'assets/img/trucks/truck4.jpg'},
+    driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg'},
+    trailer:{name:'Kogel', plate:'60 H 457 AA', type:'Refrigerator'},
+    expenses:[{cat:'Топливо',amount:180,note:'АЗС Газпром'}]
+  },
+  {
+    id:'ORD-003', status:'waiting', from:'Ташкент', to:'Стамбул',
+    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:0,
+    startDate:'25.06.2026', estEnd:'10.07.2026', income:'$6 500',
+    truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'assets/img/trucks/truck3.jpg'},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg'},
+    trailer:{name:'Krone', plate:'75 A 112 BC', type:'Flatbed'},
+    expenses:[]
+  },
+  {
+    id:'ORD-004', status:'waiting', from:'Наманган', to:'Бишкек',
+    cargo:'Продукты питания · 12 т', dist:'520 км', pct:0,
+    startDate:'26.06.2026', estEnd:'27.06.2026', income:'$800',
+    truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg'},
+    driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg'},
+    trailer:null,
+    expenses:[]
+  },
+  {
+    id:'ORD-005', status:'done', from:'Ташкент', to:'Прага',
+    cargo:'Хлопковая ткань · 18 т', dist:'5 840 км', pct:100,
+    startDate:'08.06.2026', estEnd:'24.06.2026', income:'$4 200',
+    truck:{name:'Renault T High', plate:'01 E 550 DC', img:'assets/img/trucks/truck6.jpg'},
+    driver:{name:'Jasur Ergashev', phone:'+998 90 222 11 00', img:'assets/img/drivers/d5.jpg'},
+    trailer:{name:'Schmitz', plate:'90 K 330 AA', type:'Curtainsider'},
+    expenses:[{cat:'Топливо',amount:1840,note:'1840л'},{cat:'Зарплата',amount:1280,note:'16 дней'},{cat:'Страховка',amount:480,note:'Таможня'}]
+  },
+  {
+    id:'ORD-006', status:'cancelled', from:'Фергана', to:'Андижан',
+    cargo:'Продукты · 15 т', dist:'305 км', pct:22,
+    startDate:'05.06.2026', estEnd:'05.06.2026', income:'—',
+    truck:{name:'Scania R500', plate:'70 B 456 DA', img:'assets/img/trucks/truck2.jpg'},
+    driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg'},
+    trailer:{name:'Kogel', plate:'60 H 457 AA', type:'Refrigerator'},
+    expenses:[]
+  },
+];
 
-  const trucks=[
-    {name:'Volvo FH16',plate:'01 A 123 BC',statusKey:'trip',driver:'Alisher Karimov',trailer:'Schmitz · 60 H 545 AA',trailerType:'Curtainsider',img:'assets/img/trucks/truck1.jpg',route:{from:'Tashkent',to:'Moscow',pct:67},href:'truck-detail.html?s=trip'},
-    {name:'Scania R500',plate:'70 B 456 DA',statusKey:'nosignal',driver:'Bakhtiyor Yuldashev',trailer:'Kogel · 60 H 457 AA',trailerType:'Refrigerator',img:'assets/img/trucks/truck2.jpg',href:'truck-detail.html?s=idle'},
-    {name:'MAN TGX',plate:'01 D 789 AC',statusKey:'repair',days:5,driver:null,trailer:'Krone · 75 A 112 BC',trailerType:'Flatbed',img:'assets/img/trucks/truck3.jpg',href:'truck-detail.html?s=repair'},
-    {name:'DAF XF 105',plate:'60 A 467 AA',statusKey:'trip',driver:'Vali Rakhimov',trailer:'Kogel · 60 H 545 AA',trailerType:'Refrigerator',img:'assets/img/trucks/truck4.jpg',route:{from:'Samarkand',to:'Almaty',pct:42},href:'truck-detail.html?s=trip'},
-    {name:'Mercedes Actros',plate:'30 C 201 BA',statusKey:'idle',days:2,driver:'Sardor Kholmatov',trailer:null,trailerType:null,img:'assets/img/trucks/truck5.jpg',href:'truck-detail.html?s=idle'},
-    {name:'Renault T High',plate:'01 E 550 DC',statusKey:'done',driver:'Jasur Ergashev',trailer:'Schmitz · 90 K 330 AA',trailerType:'Curtainsider',img:'assets/img/trucks/truck6.jpg',href:'truck-detail.html?s=idle'},
-  ];
-  document.getElementById('list').innerHTML = trucks.map(Panda.truckCard).join('');
+const A_STATUS = {
+  active:    {label:'В рейсе',  bg:'#ECFDF3', color:'#027A48', dot:'#17B26A'},
+  waiting:   {label:'Ожидание', bg:'#FFFAEB', color:'#B54708', dot:'#F79009'},
+  done:      {label:'Завершён', bg:'#F2F4F7', color:'#344054', dot:'#667085'},
+  cancelled: {label:'Отменён',  bg:'#FEF3F2', color:'#B42318', dot:'#F04438'},
+};
 
-  Panda.mountNav('fleet');
-  Panda.render();
+const QUICK_CATS = [
+  {label:'Топливо',       bg:'#ECFDF3', color:'#17B26A'},
+  {label:'Зарплата',      bg:'#EFF8FF', color:'#1570EF'},
+  {label:'Запчасти',      bg:'#FFF8EB', color:'#F79009'},
+  {label:'Сервис/Мастер', bg:'#FFF8EB', color:'#F79009'},
+  {label:'Страховка',     bg:'#F0F9FF', color:'#0284C7'},
+  {label:'Kredit/Lising', bg:'#F4F3FF', color:'#6941C6'},
+  {label:'Штраф',         bg:'#FEF3F2', color:'#D92D20'},
+  {label:'Мойка',         bg:'#F0F9FF', color:'#0284C7'},
+  {label:'Питание',       bg:'#FFFBEB', color:'#D97706'},
+  {label:'Стоянка',       bg:'#F2F4F7', color:'#667085'},
+  {label:'Другое',        bg:'#F2F4F7', color:'#667085'},
+];
 
-  // Sheet
-  const ov=document.getElementById('sheet'),sBody=document.getElementById('s-body'),sFoot=document.getElementById('s-foot'),sTitle=document.getElementById('s-title'),sSub=document.getElementById('s-sub');
-  function openSheet(t,b,f,sub){
-    sTitle.textContent=t;
-    if(sub){sSub.textContent=sub;sSub.classList.remove('hidden');}else{sSub.classList.add('hidden');}
-    sBody.innerHTML=b; sFoot.innerHTML=f||''; Panda.render(); ov.classList.add('open');
-    sFoot.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
-  }
-  function closeSheet(){ov.classList.remove('open');}
-  ov.addEventListener('click',e=>{if(e.target===ov)closeSheet();});
-  ov.querySelector('[data-close]').addEventListener('click',closeSheet);
+let _curFilter = 'all';
 
-  const DONE_TRIP={
-    truck:'Renault T High', plate:'01 E 550 DC', driver:'Jasur Ergashev', driverImg:'assets/img/drivers/d5.jpg',
-    truckImg:'assets/img/trucks/truck6.jpg', trailer:'Schmitz · 90 K 330 AA',
-    from:'Tashkent', to:'Prague', startDate:'08 июн 2026', endDate:'24 июн 2026', days:16,
-    distance:'5 840 км', cargo:'Хлопковая ткань · 18 т',
-    incomes:[
-      {label:'Фрахт (основной)', amount:6200},
-      {label:'Доп. услуги (экспресс)', amount:400},
-      {label:'Страховая компенсация', amount:200},
-    ],
-    expenseRows:[
-      {icon:'fuel',   label:'Топливо',            note:'1 840 л · Дизель',          amount:1840},
-      {icon:'user',   label:'Зарплата водителя',   note:'16 дней · $80/день',         amount:1280},
-      {icon:'shield', label:'Таможня / границы',   note:'4 перехода',                 amount:480},
-      {icon:'receipt',label:'Дорожные сборы',      note:'Польша, Чехия, Германия',    amount:310},
-      {icon:'wrench', label:'Техническое обслуж.', note:'Плановое ТО в Польше',       amount:150},
-      {icon:'credit-card',label:'Стоянки',         note:'6 ночей · $18/ночь',         amount:108},
-      {icon:'box',    label:'Питание водителя',    note:'16 дней',                    amount:112},
-      {icon:'alert-triangle',label:'Штраф (Польша)',note:'Превышение скорости',       amount:70},
-    ],
-  };
+const TABS = [
+  ['all','Все',6],['active','В рейсе',2],['waiting','Ожидание',2],['done','Завершён',1],['cancelled','Отменён',1]
+];
 
-  window.togglePendingList = function(){
-    const list = document.getElementById('pending-list');
-    const label = document.getElementById('pending-toggle-label');
-    const open = list.style.display === 'none';
-    list.style.display = open ? 'block' : 'none';
-    label.textContent = open ? 'Скрыть' : 'Показать все';
-  };
+document.getElementById('order-tabs').innerHTML = TABS.map(([k,l,c],i)=>
+  `<button class="seg-tab ${i===0?'on':''}" onclick="setTab('${k}',this)">${l}<span class="c">${c}</span></button>`
+).join('');
 
-  const PENDING_SHEETS = [
-    {
-      icon:'🚛', type:'Запрос старта рейса',
-      title:'Алишер Каримов', titleSub:'VOLVO FH 12 · 01 A 234 DG',
-      from:'Ташкент', to:'Самарканд', dist:'350 км',
-      rows:[
-        {l:'Груз', v:'Электроника'},
-        {l:'Расстояние', v:'350 км'},
-        {l:'Время в пути', v:'5 часов'},
-        {l:'Ожидаемый доход', v:'2 500 000 UZS', green:true},
-      ],
-      confirmLabel:'Подтвердить', rejectLabel:'Отклонить'
-    },
-    {
-      icon:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5L9.5 17.5L19.5 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-      iconBg:'#17B26A', iconRadius:'50%',
-      type:'Завершение рейса',
-      title:'Jasur Ergashev', titleSub:'Renault T High · 01 E 550 DC',
-      from:'Tashkent', to:'Prague', dist:'5 840 км',
-      rows:[
-        {l:'Груз', v:'Хлопковая ткань · 18 т'},
-        {l:'Расстояние', v:'5 840 км'},
-        {l:'В пути', v:'16 дней'},
-        {l:'Доход', v:'$4 200'},
-        {l:'Расходы', v:'$1 380'},
-        {l:'Прибыль', v:'$2 820', green:true},
-      ],
-      confirmLabel:'Подтвердить', rejectLabel:'Оспорить'
-    },
-    {
-      icon:'📦', type:'Подтверждение заказа',
-      title:'Bakhtiyor Yuldashev', titleSub:'Scania R500 · 70 B 456 DA',
-      from:'Самарканд', to:'Алматы', dist:'860 км',
-      rows:[
-        {l:'Груз', v:'Стройматериалы · 12 т'},
-        {l:'Расстояние', v:'860 км'},
-        {l:'Время в пути', v:'~9 часов'},
-        {l:'Ожидаемый доход', v:'3 100 000 UZS', green:true},
-      ],
-      confirmLabel:'Подтвердить', rejectLabel:'Отклонить'
-    },
-  ];
+function setTab(key, btn) {
+  _curFilter = key;
+  document.querySelectorAll('#order-tabs .seg-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderList();
+}
 
-  window.openPendingSheet = function(idx){
-    const p = PENDING_SHEETS[idx];
-    if(!p) return;
-    const rows = p.rows.map((r,i)=>`
-      <div style="display:flex;justify-content:space-between;padding:11px 14px;${i<p.rows.length-1?'border-bottom:1px solid #F2F4F7':'background:#FFFBEB'}">
-        <p style="font-size:13px;color:#667085">${r.l}</p>
-        <p style="font-size:${r.green?'14':'13'}px;font-weight:${r.green?'800':'700'};color:${r.green?'#17B26A':'#0F0F37'}">${r.v}</p>
-      </div>`).join('');
-    openSheet(p.type,
-      `<div style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-radius:16px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-        <div style="width:52px;height:52px;border-radius:${p.iconRadius||'12px'};background:${p.iconBg||'#FFCB00'};display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${p.icon}</div>
-        <div style="min-width:0">
-          <p style="font-size:15px;font-weight:800;color:#0F0F37">${p.title}</p>
-          <p style="font-size:11px;color:#667085;margin-top:2px">${p.titleSub}</p>
-        </div>
-        <span style="margin-left:auto;flex-shrink:0;background:#FFCB00;color:#0F0F37;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">Ожидает</span>
-      </div>
-      <div style="display:flex;align-items:center;margin-bottom:16px">
-        <div style="flex:1">
-          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Откуда</p>
-          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">${p.from}</p>
-        </div>
-        <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:0 12px">
-          <span style="font-size:20px;color:#17B26A">→</span>
-          <p style="font-size:10px;color:#98A2B3;font-weight:600;margin-top:2px">${p.dist}</p>
-        </div>
-        <div style="flex:1;text-align:right">
-          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Куда</p>
-          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">${p.to}</p>
-        </div>
-      </div>
-      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:16px;border:1px solid #EAECF0">${rows}</div>`,
-      `<button onclick="dismissPendingCard(${idx})" data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-error-600 font-bold">${p.rejectLabel}</button>
-       <button onclick="confirmPendingCard(${idx})" class="btn flex-1 h-12 rounded-xl font-bold flex items-center justify-center gap-2" style="background:#FFCB00;color:#0F0F37"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0"><path d="M2.5 7.5L6 11L12.5 4" stroke="#0F0F37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ${p.confirmLabel}</button>`,
-      p.titleSub);
-    setTimeout(()=>{
-      document.querySelector(`[onclick="confirmPendingCard(${idx})"]`)?.addEventListener('click',()=>{
-        document.getElementById('pl-'+idx)?.remove();
-        updatePendingCount();
-        closeSheet();
-      });
-      document.querySelector(`[onclick="dismissPendingCard(${idx})"]`)?.addEventListener('click',()=>{
-        document.getElementById('pl-'+idx)?.remove();
-        updatePendingCount();
-      });
-    },30);
-  };
-
-  window.confirmPendingCard = function(){};
-  window.dismissPendingCard = function(){};
-
-  function updatePendingCount(){
-    const remaining = document.querySelectorAll('#pending-list > button').length;
-    const badge = document.getElementById('pending-badge');
-    if(badge) badge.textContent = remaining;
-    if(remaining === 0){
-      document.getElementById('pending-list').style.display = 'none';
-      document.querySelector('[onclick="togglePendingList()"]').style.display = 'none';
-    }
-  }
-
-  const PENDING_ITEMS = [
-    {
-      id:'p1', icon:'🚛', type:'Запрос старта рейса',
-      title:'Алишер Каримов', sub:'VOLVO FH 12 · Ташкент → Самарканд',
-      detail:'Груз: Электроника · 350 км · 5 ч · 2 500 000 UZS',
-      confirmLabel:'Подтвердить старт', rejectLabel:'Отклонить'
-    },
-    {
-      id:'p2', icon:'✅', type:'Завершение рейса',
-      title:'Renault T High · Jasur Ergashev', sub:'Tashkent → Prague · 2 810 км',
-      detail:'Доход: $4 200 · Расходы: $1 380 · Прибыль: $2 820',
-      confirmLabel:'Подтвердить завершение', rejectLabel:'Оспорить'
-    },
-    {
-      id:'p3', icon:'📦', type:'Подтверждение заказа',
-      title:'Bakhtiyor Yuldashev · Scania R500', sub:'Samarkand → Almaty · 860 км',
-      detail:'Груз: Стройматериалы · 12 т · ~9 ч · 3 100 000 UZS',
-      confirmLabel:'Принять заказ', rejectLabel:'Отклонить'
-    },
-  ];
-
-  window.openAllPending = function(){
-    const body = PENDING_ITEMS.map(p=>`
-      <div id="pcard-${p.id}" style="background:#F9FAFB;border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid #EAECF0">
-        <div style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">${p.type}</div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-          <div style="width:38px;height:38px;border-radius:10px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${p.icon}</div>
-          <div>
-            <p style="font-size:13px;font-weight:700;color:#0F0F37">${p.title}</p>
-            <p style="font-size:11px;color:#667085;margin-top:1px">${p.sub}</p>
+function renderList() {
+  const items = APP_ORDERS.filter(o => _curFilter==='all' || o.status===_curFilter);
+  document.getElementById('orders-list').innerHTML = items.map((o,i) => {
+    const s = A_STATUS[o.status];
+    const idx = APP_ORDERS.indexOf(o);
+    return `
+    <div onclick="openOrderSheet(${idx})" class="bg-white rounded-2xl overflow-hidden" style="box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #EAECF0;cursor:pointer;active:opacity-.8">
+      <div class="flex items-start gap-3 p-3.5">
+        <img src="${o.truck.img}" class="w-12 h-12 rounded-xl object-cover flex-shrink-0">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <div class="flex items-center gap-1.5 font-bold text-navy-800" style="font-size:15px">
+              <span class="truncate">${o.from}</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="3" width="14" height="14" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <span class="truncate">${o.to}</span>
+            </div>
+            <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;background:${s.bg};color:${s.color};white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:3px">
+              <span style="width:5px;height:5px;border-radius:50%;background:${s.dot};flex-shrink:0"></span>${s.label}
+            </span>
           </div>
-        </div>
-        <p style="font-size:12px;color:#667085;margin-bottom:10px;padding:8px 10px;background:#fff;border-radius:10px;border:1px solid #F2F4F7">${p.detail}</p>
-        <div style="display:flex;gap:8px">
-          <button onclick="dismissPending('${p.id}')" style="flex:1;height:36px;border-radius:10px;border:1.5px solid #EAECF0;background:#fff;color:#F04438;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">${p.rejectLabel}</button>
-          <button onclick="confirmPending('${p.id}')" style="flex:1;height:36px;border-radius:10px;border:none;background:#FFCB00;color:#0F0F37;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">${p.confirmLabel}</button>
-        </div>
-      </div>`).join('');
-    openSheet('Ожидают подтверждения', body, '','· 3 действия');
-  };
-
-  window.confirmPending = function(id){
-    const el = document.getElementById('pcard-'+id);
-    if(el) el.style.opacity='0.4';
-    if(el) el.style.pointerEvents='none';
-  };
-  window.dismissPending = function(id){
-    const el = document.getElementById('pcard-'+id);
-    if(el) el.remove();
-  };
-
-  window.openTripDone=function(){
-    openSheet('Запрос рейса от водителя',
-      `<div style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border-radius:16px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
-        <div style="width:52px;height:52px;border-radius:12px;background:#FFCB00;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">🚛</div>
-        <div class="min-w-0">
-          <p style="font-size:15px;font-weight:800;color:#0F0F37">Алишер Каримов</p>
-          <p style="font-size:11px;color:#667085;margin-top:2px">VOLVO FH 12 · 01 A 234 DG</p>
-        </div>
-        <span style="margin-left:auto;flex-shrink:0;background:#FFCB00;color:#0F0F37;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">Ожидает</span>
-      </div>
-
-      <div style="display:flex;align-items:center;margin-bottom:16px">
-        <div style="flex:1">
-          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Откуда</p>
-          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">Ташкент</p>
-        </div>
-        <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:0 12px">
-          <span style="font-size:20px;color:#17B26A">→</span>
-          <p style="font-size:10px;color:#98A2B3;font-weight:600;margin-top:2px">350 км</p>
-        </div>
-        <div style="flex:1;text-align:right">
-          <p style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Куда</p>
-          <p style="font-size:17px;font-weight:800;color:#0F0F37;margin-top:3px">Самарканд</p>
+          <p style="font-size:11px;color:#667085;margin-bottom:${o.status==='active'?'6px':'0'}">${o.cargo} · ${o.dist}</p>
+          ${o.status==='active' ? `
+          <div style="height:4px;background:#F2F4F7;border-radius:999px;margin-bottom:4px;overflow:hidden">
+            <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <span style="font-size:11px;color:#98A2B3">${o.driver.name}</span>
+            <span style="font-size:11px;font-weight:800;color:#0F0F37">${o.pct}% пройдено</span>
+          </div>` : `<p style="font-size:11px;color:#98A2B3">${o.driver.name} · ${o.startDate}</p>`}
         </div>
       </div>
+      ${o.status==='active'?`<div style="height:2px;background:#FFF9E6"><div style="height:100%;width:${o.pct}%;background:#FFCB00"></div></div>`:''}
+    </div>`;
+  }).join('');
+}
 
-      <div style="background:#F9FAFB;border-radius:14px;overflow:hidden;margin-bottom:16px;border:1px solid #EAECF0">
-        <div style="display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid #F2F4F7">
-          <p style="font-size:13px;color:#667085">Груз</p>
-          <p style="font-size:13px;font-weight:700;color:#0F0F37">Электроника</p>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid #F2F4F7">
-          <p style="font-size:13px;color:#667085">Расстояние</p>
-          <p style="font-size:13px;font-weight:700;color:#0F0F37">350 км</p>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid #F2F4F7">
-          <p style="font-size:13px;color:#667085">Время в пути</p>
-          <p style="font-size:13px;font-weight:700;color:#0F0F37">5 часов</p>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:11px 14px;background:#FFFBEB">
-          <p style="font-size:13px;color:#667085">Ожидаемый доход</p>
-          <p style="font-size:14px;font-weight:800;color:#17B26A">2 500 000 UZS</p>
-        </div>
-      </div>`,
-      `<button id="reject-trip" data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-error-600 font-bold">Отклонить</button>
-       <button id="confirm-trip" class="btn flex-1 h-12 rounded-xl font-bold text-navy-800 flex items-center justify-center gap-2" style="background:#FFCB00">
-         <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2.5 7.5L6 11L12.5 4" stroke="#0F0F37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Подтвердить
-       </button>`,
-      'Алишер Каримов · VOLVO FH 12');
+function openOrderSheet(idx) {
+  const o = APP_ORDERS[idx];
+  const s = A_STATUS[o.status];
+  document.getElementById('os-title').textContent = o.from + ' → ' + o.to;
+  document.getElementById('os-sub').textContent = o.id + ' · ' + s.label;
 
-    setTimeout(()=>{
-      document.getElementById('confirm-trip').addEventListener('click',()=>{
-        document.getElementById('tripDoneAlert').style.display='none';
-        closeSheet();
-      });
-      document.getElementById('reject-trip').addEventListener('click',()=>{
-        document.getElementById('tripDoneAlert').style.display='none';
-      });
-    },30);
-  };
+  const miniMap = o.status === 'active' ? `
+  <div style="background:#fff;border-radius:16px;overflow:hidden;margin:0 16px 12px;border:1px solid #EAECF0">
+    <svg viewBox="0 0 360 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+      <rect width="360" height="150" fill="#e8e3d5"/>
+      <path d="M0,0 L360,0 L360,60 Q300,50 240,55 Q180,47 120,55 Q60,50 0,58Z" fill="#ddd8c9"/>
+      <path d="M25,58 Q80,68 140,63 Q180,66 220,68 Q200,96 160,108 Q100,113 50,98 Q18,88 25,58Z" fill="#e2dcc8"/>
+      <text x="85" y="85" font-size="8.5" fill="#a09888" font-family="sans-serif" font-weight="600">УЗБЕКИСТАН</text>
+      <line x1="278" y1="80" x2="254" y2="92" stroke="#0F0F37" stroke-width="2.5" stroke-dasharray="5,3.5" stroke-linecap="round"/>
+      <line x1="254" y1="92" x2="213" y2="106" stroke="#0F0F37" stroke-width="2" stroke-dasharray="4,4" opacity=".3" stroke-linecap="round"/>
+      <circle cx="278" cy="80" r="5" fill="#555" stroke="#fff" stroke-width="1.5"/>
+      <text x="258" y="74" font-size="8" fill="#444" font-family="sans-serif" font-weight="700">${o.from}</text>
+      <circle cx="213" cy="106" r="5" fill="#FAE436" stroke="#0F0F37" stroke-width="1.5"/>
+      <text x="186" y="120" font-size="8" fill="#444" font-family="sans-serif" font-weight="700">${o.to}</text>
+      <circle cx="254" cy="92" r="7" fill="#2dbd71" opacity=".3"/>
+      <circle cx="254" cy="92" r="5" fill="#2dbd71" stroke="#fff" stroke-width="2"/>
+      <text x="263" y="89" font-size="9" fill="#1a8c52" font-family="sans-serif" font-weight="800">${o.mapSpeed||'72 км/ч'}</text>
+    </svg>
+    <div style="display:flex;border-top:1px solid #f0f0f0">
+      <div style="flex:1;padding:9px 12px;border-right:1px solid #f0f0f0">
+        <div style="font-size:9px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px">Локация</div>
+        <div style="font-size:13px;font-weight:800;color:#0F0F37">${o.mapLoc||'—'}</div>
+      </div>
+      <div style="flex:1;padding:9px 12px;border-right:1px solid #f0f0f0">
+        <div style="font-size:9px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px">Проехано</div>
+        <div style="font-size:13px;font-weight:800;color:#0F0F37">${o.pct}%</div>
+      </div>
+      <div style="flex:1;padding:9px 12px">
+        <div style="font-size:9px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px">Доход</div>
+        <div style="font-size:13px;font-weight:800;color:#0F0F37">${o.income}</div>
+      </div>
+    </div>
+  </div>` : '';
+
+  const chips = `
+  <div style="padding:12px 16px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #F2F4F7">
+    <span style="font-size:11px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.cargo}</span>
+    <span style="font-size:11px;background:#F2F4F7;color:#344054;padding:4px 10px;border-radius:8px;font-weight:600">${o.dist}</span>
+    <span style="font-size:11px;background:#ECFDF3;color:#027A48;padding:4px 10px;border-radius:8px;font-weight:700">${o.income}</span>
+  </div>`;
+
+  const prog = o.status==='active' ? `
+  <div style="padding:12px 16px;border-bottom:1px solid #F2F4F7">
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:#98A2B3;margin-bottom:6px">
+      <span>${o.from}</span><span style="font-weight:800;color:#0F0F37">${o.pct}%</span><span>${o.to}</span>
+    </div>
+    <div style="height:5px;background:#F2F4F7;border-radius:999px;overflow:hidden">
+      <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:#98A2B3;margin-top:5px">
+      <span>Начало: ${o.startDate}</span><span>Ожидаемое прибытие: ${o.estEnd}</span>
+    </div>
+  </div>` : '';
+
+  const truckBlock = `
+  <div style="padding:12px 16px;border-bottom:1px solid #F2F4F7">
+    <div style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Грузовик</div>
+    <a href="truck-detail.html" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <img src="${o.truck.img}" style="width:44px;height:44px;border-radius:10px;object-fit:cover;flex-shrink:0">
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.truck.name}</div>
+        <div style="font-size:12px;color:#667085">${o.truck.plate}</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" width="18" height="18"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+  </div>`;
+
+  const driverBlock = `
+  <div style="padding:12px 16px;border-bottom:1px solid #F2F4F7">
+    <div style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Водитель</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="${o.driver.img}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #FFCB00;flex-shrink:0">
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.driver.name}</div>
+        <div style="font-size:12px;color:#667085">${o.driver.phone}</div>
+      </div>
+      <a href="tel:${o.driver.phone}" style="width:36px;height:36px;border-radius:50%;background:#ECFDF3;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#17B26A" stroke-width="2" width="16" height="16"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+      </a>
+    </div>
+  </div>`;
+
+  const trailerBlock = o.trailer ? `
+  <div style="padding:12px 16px;border-bottom:1px solid #F2F4F7">
+    <div style="font-size:10px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Прицеп</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:40px;height:40px;border-radius:10px;background:#F2F4F7;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="1.8" width="20" height="20"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#0F0F37">${o.trailer.name} · ${o.trailer.plate}</div>
+        <div style="font-size:12px;color:#667085">${o.trailer.type}</div>
+      </div>
+    </div>
+  </div>` : '';
+
+  const quickExpBlock = `
+  <div style="padding:12px 16px;border-bottom:1px solid #F2F4F7">
+    <div style="font-size:12px;font-weight:700;color:#0F0F37;margin-bottom:10px">Быстрое добавление расхода</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px">
+      ${QUICK_CATS.map(c=>`
+      <button onclick="addExpense(${idx},'${c.label}')" style="display:flex;flex-direction:column;align-items:center;gap:4px;background:${c.bg};border:none;border-radius:12px;padding:10px 8px;cursor:pointer;flex-shrink:0;min-width:56px">
+        <span style="font-size:9px;font-weight:700;color:${c.color};text-align:center;line-height:1.3;white-space:nowrap">${c.label}</span>
+      </button>`).join('')}
+    </div>
+  </div>`;
+
+  const expBlock = `
+  <div style="padding:12px 16px 80px">
+    <div style="font-size:12px;font-weight:700;color:#0F0F37;margin-bottom:8px">Расходы</div>
+    ${o.expenses.length ? o.expenses.map(e=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F9FAFB">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#0F0F37">${e.cat}</div>
+        ${e.note?`<div style="font-size:11px;color:#98A2B3">${e.note}</div>`:''}
+      </div>
+      <span style="font-size:13px;font-weight:700;color:#F04438">−$${e.amount}</span>
+    </div>`).join('') : '<p style="font-size:12px;color:#D0D5DD;margin:0">Расходов пока нет</p>'}
+  </div>`;
+
+  document.getElementById('os-body').innerHTML = prog + chips + miniMap + truckBlock + driverBlock + trailerBlock + quickExpBlock + expBlock;
+  Panda.render();
+  document.getElementById('order-sheet').classList.add('open');
+}
+
+function addExpense(idx, cat) {
+  const amt = prompt('Сумма ($):');
+  if(!amt || isNaN(parseFloat(amt))) return;
+  const note = prompt('Комментарий:') || '';
+  APP_ORDERS[idx].expenses.push({cat, amount: parseFloat(amt), note});
+  openOrderSheet(idx);
+}
+
+function openCreateOrder() {
+  alert('Создание нового рейса — в разработке');
+}
+
+const sheet = document.getElementById('order-sheet');
+sheet.querySelector('[data-close]').addEventListener('click', ()=>sheet.classList.remove('open'));
+sheet.addEventListener('click', e=>{ if(e.target===sheet) sheet.classList.remove('open'); });
+
+Panda.mountNav('fleet');
+Panda.render();
+renderList();
 </script>
 </body>
 </html>
