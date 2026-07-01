@@ -64,8 +64,21 @@
     <!-- Active trip -->
     <div id="activeTrip" class="rounded-2xl bg-white border border-gray-200 shadow-xs p-4">
       <div class="flex items-center justify-between mb-3"><h3 class="text-sm font-semibold text-navy-800">Active trip</h3><span class="text-[11px] font-semibold text-success-700 bg-success-50 px-2 py-0.5 rounded-full">In transit</span></div>
-      <div class="flex items-center gap-2 text-base font-bold text-navy-800"><span>Andijan</span><i data-icon="arrow-right" class="w-4 h-4 text-gray-400"></i><span>Prague</span></div>
-      <p class="text-[13px] text-gray-500 mt-1.5"><span class="font-semibold text-navy-800">12,089 km</span> of 32,400 km · <span class="font-semibold text-success-700">37%</span></p>
+      <!-- Route progress widget -->
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:14px;font-weight:800;color:#0F0F37;white-space:nowrap">Andijan</span>
+        <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+          <div style="display:flex;justify-content:center">
+            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;background:#FEF3C7;color:#D97706;line-height:1.4">42%</span>
+          </div>
+          <div style="position:relative;height:3px;border-radius:999px;background:#F2F4F7;overflow:visible">
+            <div style="position:absolute;inset-y:0;left:0;width:42%;background:linear-gradient(90deg,#FFCB00,#F97316);border-radius:999px"></div>
+            <div style="position:absolute;top:50%;transform:translate(-50%,-50%);left:42%;width:10px;height:10px;border-radius:50%;background:#F97316;border:2px solid white;box-shadow:0 0 0 1px #F97316"></div>
+          </div>
+        </div>
+        <span style="font-size:14px;font-weight:800;color:#0F0F37;white-space:nowrap">Prague</span>
+      </div>
+      <p class="text-[11px] text-gray-400 mt-1.5">12 089 км из 32 400 км · 58% осталось</p>
       <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
         <div><p class="text-[11px] text-gray-400">Trip revenue</p><p class="text-base font-bold text-success-700">$8,000</p></div>
         <button id="tripCostsBtn" class="btn border border-gray-300 text-navy-800 text-sm font-semibold px-3.5 h-10 rounded-lg flex items-center gap-1.5 hover:bg-gray-50"><i data-icon="receipt" class="w-4 h-4"></i>Trip costs</button>
