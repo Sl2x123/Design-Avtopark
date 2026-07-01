@@ -173,7 +173,7 @@ const ORDERS = [
     logs:[
       {text:'<strong>Alisher Karimov</strong> добавил Питание',badge:'−$45',badgeRed:true,time:'21 июн · 13:10',dot:'#F79009'},
       {text:'<strong>Alisher Karimov</strong> добавил Топливо',badge:'−$520',badgeRed:true,time:'20 июн · 15:42',dot:'#F79009'},
-      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'20 июн · 09:00',dot:'#17B26A'},
+      {text:'Рейс начат',time:'20 июн · 09:00',dot:'#17B26A'},
       {text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'19 июн · 18:30',dot:'#98A2B3'},
     ]
   },
@@ -190,29 +190,40 @@ const ORDERS = [
     ],
     logs:[
       {text:'<strong>Vali Rakhimov</strong> добавил Топливо',badge:'−$180',badgeRed:true,time:'22 июн · 14:00',dot:'#F79009'},
-      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'22 июн · 08:15',dot:'#17B26A'},
+      {text:'Рейс начат',time:'22 июн · 08:15',dot:'#17B26A'},
       {text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'21 июн · 17:00',dot:'#98A2B3'},
     ]
   },
   {
-    id:'ORD-003', status:'waiting', from:'Ташкент', to:'Стамбул',
-    cargo:'Хлопок', weight:'20 т', dist:'4 800 км', pct:0,
+    id:'ORD-003', status:'active', from:'Ташкент', to:'Стамбул',
+    cargo:'Хлопок', weight:'20 т', dist:'4 800 км', pct:18,
     startDate:'25 июн', estEnd:'10 июл 2026', income:'$6 500',
+    mapLoc:'Баку', mapSpeed:'68 км/ч', mapEta:'~38 ч',
     truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'assets/img/trucks/truck3.jpg', year:'2022', fuel:'Дизель', power:'480 л.с.', link:'truck-detail.html'},
     driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', exp:'11 лет', trips:'389', rating:'5.0', link:'driver-detail.html'},
     trailer:{name:'Krone Mega', plate:'75 A 112 BC', type:'Flatbed', cap:'24 т / 90 м³', link:'trailer-detail.html'},
-    expenses:[],
-    logs:[{text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'22 июн · 10:00',dot:'#98A2B3'}]
+    expenses:[
+      {cat:'Топливо',amount:310,note:'АЗС BP · 140 л',by:'Bakhtiyor Yuldashev',byImg:'assets/img/drivers/d2.jpg',at:'26 июн · 08:15',color:'#17B26A',bg:'#ECFDF3'},
+    ],
+    logs:[
+      {text:'<strong>Bakhtiyor Yuldashev</strong> добавил Топливо',badge:'−$310',badgeRed:true,time:'26 июн · 08:15',dot:'#F79009'},
+      {text:'Рейс начат',time:'25 июн · 07:00',dot:'#17B26A'},
+      {text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'22 июн · 10:00',dot:'#98A2B3'},
+    ]
   },
   {
-    id:'ORD-004', status:'waiting', from:'Наманган', to:'Бишкек',
-    cargo:'Продукты питания', weight:'12 т', dist:'520 км', pct:0,
+    id:'ORD-004', status:'active', from:'Наманган', to:'Бишкек',
+    cargo:'Продукты питания', weight:'12 т', dist:'520 км', pct:55,
     startDate:'26 июн', estEnd:'27 июн 2026', income:'$800',
+    mapLoc:'Андижан', mapSpeed:'72 км/ч', mapEta:'~3 ч',
     truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg', year:'2020', fuel:'Дизель', power:'440 л.с.', link:'truck-detail.html'},
     driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg', exp:'3 года', trips:'67', rating:'4.6', link:'driver-detail.html'},
     trailer:null,
     expenses:[],
-    logs:[{text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'23 июн · 09:00',dot:'#98A2B3'}]
+    logs:[
+      {text:'Рейс начат',time:'26 июн · 06:45',dot:'#17B26A'},
+      {text:'Рейс создан · <strong>Jasur Ergashev</strong>',time:'23 июн · 09:00',dot:'#98A2B3'},
+    ]
   },
   {
     id:'ORD-005', status:'done', from:'Ташкент', to:'Прага',
@@ -231,7 +242,7 @@ const ORDERS = [
       {text:'<strong>Jasur Ergashev</strong> добавил Зарплата',badge:'−$1 280',badgeRed:true,time:'24 июн · 18:00',dot:'#F79009'},
       {text:'<strong>Jasur Ergashev</strong> добавил Топливо',badge:'−$1 840',badgeRed:true,time:'20 июн · 11:00',dot:'#F79009'},
       {text:'<strong>Jasur Ergashev</strong> добавил Страховка',badge:'−$480',badgeRed:true,time:'18 июн · 08:30',dot:'#F79009'},
-      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'8 июн · 07:00',dot:'#17B26A'},
+      {text:'Рейс начат',time:'8 июн · 07:00',dot:'#17B26A'},
       {text:'Рейс создан · <strong>Admin</strong>',time:'5 июн · 16:00',dot:'#98A2B3'},
     ]
   },
@@ -245,7 +256,7 @@ const ORDERS = [
     expenses:[],
     logs:[
       {text:'Статус: <strong>В рейсе → Отменён</strong>',time:'5 июн · 12:30',dot:'#F04438'},
-      {text:'Статус: <strong>Ожидание → В рейсе</strong>',time:'5 июн · 07:00',dot:'#17B26A'},
+      {text:'Рейс начат',time:'5 июн · 07:00',dot:'#17B26A'},
       {text:'Рейс создан · <strong>Admin</strong>',time:'4 июн · 20:00',dot:'#98A2B3'},
     ]
   },
@@ -253,7 +264,6 @@ const ORDERS = [
 
 const STATUS = {
   active:    {label:'В рейсе',  bg:'#ECFDF3', color:'#027A48', dot:'#17B26A'},
-  waiting:   {label:'Ожидание', bg:'#FFFAEB', color:'#B54708', dot:'#F79009'},
   done:      {label:'Завершён', bg:'#F2F4F7', color:'#344054', dot:'#667085'},
   cancelled: {label:'Отменён',  bg:'#FEF3F2', color:'#B42318', dot:'#F04438'},
 };
@@ -277,6 +287,7 @@ const idx = parseInt(new URLSearchParams(location.search).get('idx') || '0');
 const o = ORDERS[Math.min(idx, ORDERS.length - 1)];
 const s = STATUS[o.status];
 let showAllExp = false;
+let showAllLogs = false;
 
 document.getElementById('hd-id').textContent = o.id;
 const sp = document.getElementById('hd-status');
@@ -312,10 +323,17 @@ function toggleAllExp() {
   render();
 }
 
+function toggleAllLogs() {
+  showAllLogs = !showAllLogs;
+  render();
+}
+
 function render() {
   const total = o.expenses.reduce((s,e) => s+e.amount, 0);
   const PREVIEW = 3;
+  const LOG_PREVIEW = 4;
   const visible = showAllExp ? o.expenses : o.expenses.slice(0, PREVIEW);
+  const visibleLogs = showAllLogs ? o.logs : o.logs.slice(0, LOG_PREVIEW);
 
   document.getElementById('body').innerHTML = `
 
@@ -491,17 +509,22 @@ function render() {
       <span class="sec-title">Журнал активности</span>
     </div>
     <div class="card" style="margin-bottom:8px">
-      ${o.logs.map((l, i) => `
+      ${visibleLogs.map((l, i) => `
       <div class="log-item">
         <div class="log-dot-col">
           <div class="log-dot" style="background:${l.dot}"></div>
-          ${i < o.logs.length - 1 ? '<div class="log-line"></div>' : ''}
+          ${i < visibleLogs.length - 1 || o.logs.length > LOG_PREVIEW && !showAllLogs ? '<div class="log-line"></div>' : ''}
         </div>
         <div style="flex:1">
           <div class="log-text">${l.text}${l.badge ? `<span class="log-badge" style="background:${l.badgeRed?'#FEF3F2':'#ECFDF3'};color:${l.badgeRed?'#D92D20':'#027A48'}">${l.badge}</span>` : ''}</div>
           <div class="log-time">${l.time}</div>
         </div>
       </div>`).join('')}
+      ${o.logs.length > LOG_PREVIEW ? `
+      <button class="see-all-btn" onclick="toggleAllLogs()">
+        ${showAllLogs ? 'Свернуть' : `Все события (${o.logs.length})`}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="${showAllLogs ? 'm18 15-6-6-6 6' : 'm6 9 6 6 6-6'}"/></svg>
+      </button>` : ''}
     </div>
   `;
 }

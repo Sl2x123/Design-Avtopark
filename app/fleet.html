@@ -59,17 +59,17 @@ const APP_ORDERS = [
     expenses:[{cat:'Топливо',amount:180,note:'АЗС Газпром'}]
   },
   {
-    id:'ORD-003', status:'waiting', from:'Ташкент', to:'Стамбул',
-    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:0,
+    id:'ORD-003', status:'active', from:'Ташкент', to:'Стамбул',
+    cargo:'Хлопок · 20 т', dist:'4 800 км', pct:18,
     startDate:'25.06.2026', estEnd:'10.07.2026', income:'$6 500',
     truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'assets/img/trucks/truck3.jpg'},
     driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg'},
     trailer:{name:'Krone', plate:'75 A 112 BC', type:'Flatbed'},
-    expenses:[]
+    expenses:[{cat:'Топливо',amount:310,note:'АЗС BP'}]
   },
   {
-    id:'ORD-004', status:'waiting', from:'Наманган', to:'Бишкек',
-    cargo:'Продукты питания · 12 т', dist:'520 км', pct:0,
+    id:'ORD-004', status:'active', from:'Наманган', to:'Бишкек',
+    cargo:'Продукты питания · 12 т', dist:'520 км', pct:55,
     startDate:'26.06.2026', estEnd:'27.06.2026', income:'$800',
     truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg'},
     driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg'},
@@ -98,7 +98,6 @@ const APP_ORDERS = [
 
 const A_STATUS = {
   active:    {label:'В рейсе',  bg:'#ECFDF3', color:'#027A48', dot:'#17B26A'},
-  waiting:   {label:'Ожидание', bg:'#FFFAEB', color:'#B54708', dot:'#F79009'},
   done:      {label:'Завершён', bg:'#F2F4F7', color:'#344054', dot:'#667085'},
   cancelled: {label:'Отменён',  bg:'#FEF3F2', color:'#B42318', dot:'#F04438'},
 };
@@ -120,7 +119,7 @@ const QUICK_CATS = [
 let _curFilter = 'all';
 
 const TABS = [
-  ['all','Все',6],['active','В рейсе',2],['waiting','Ожидание',2],['done','Завершён',1],['cancelled','Отменён',1]
+  ['all','Все',6],['active','В рейсе',4],['done','Завершён',1],['cancelled','Отменён',1]
 ];
 
 document.getElementById('order-tabs').innerHTML = TABS.map(([k,l,c],i)=>
