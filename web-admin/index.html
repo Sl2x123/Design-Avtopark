@@ -993,8 +993,132 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
       <div id="gpane-trucks" class="flex-1 overflow-y-auto bg-gray-50 p-6">
         <div class="rounded-2xl overflow-hidden" style="border:1px solid #EAECF0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
 
+          <!-- Volvo FH16 — On trip -->
+          <div data-gcard="truck" data-status="trip" data-search="volvo fh16 01 a 123 bc alisher karimov" onclick="showGarageDetail(0)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
+            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:2px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
+                <div style="min-width:0">
+                  <div style="font-size:15px;font-weight:700;color:#0F0F37;margin-bottom:3px">Volvo FH16</div>
+                  <div style="font-size:12px;color:#667085;margin-bottom:5px"><span style="font-weight:600;color:#344054">Alisher Karimov</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">312,400 km</span></div>
+                  <span class="plate"><span class="uz">UZ</span><span class="num">01 A 123 BC</span></span>
+                </div>
+                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#ECFDF3;color:#079455"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A;flex-shrink:0"></span>On trip</span>
+              </div>
+              <!-- Trailer + route -->
+              <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
+                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Cargobull S.KO</span>
+                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Curtainsider</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+                  <span style="font-size:11px;font-weight:600;color:#344054">Tashkent</span>
+                  <div style="width:44px;height:3px;border-radius:999px;background:#F2F4F7;position:relative;flex-shrink:0">
+                    <div style="position:absolute;left:0;top:0;height:3px;border-radius:999px;background:#FFCB00;width:72%"></div>
+                  </div>
+                  <span style="font-size:11px;font-weight:600;color:#344054">London</span>
+                  <span style="font-size:11px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 7px;border-radius:999px">72%</span>
+                </div>
+              </div>
+              <!-- Monthly stats -->
+              <div style="display:flex;gap:20px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#1570EF">$8,500</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#F04438">$4,200</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#17B26A">$4,300</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scania R500 — No signal -->
+          <div data-gcard="truck" data-status="offline" data-search="scania r500 70 b 456 da bakhtiyor yuldashev" onclick="showGarageDetail(1)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
+            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:2px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
+                <div style="min-width:0">
+                  <div style="font-size:15px;font-weight:700;color:#0F0F37;margin-bottom:3px">Scania R500</div>
+                  <div style="font-size:12px;color:#667085;margin-bottom:5px"><span style="font-weight:600;color:#344054">Bakhtiyor Yuldashev</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">401,900 km</span></div>
+                  <span class="plate"><span class="uz">UZ</span><span class="num">70 B 456 DA</span></span>
+                </div>
+                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#F2F4F7;color:#475467"><span style="width:6px;height:6px;border-radius:50%;background:#98A2B3;flex-shrink:0"></span>No signal</span>
+              </div>
+              <!-- Trailer + last location -->
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
+                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Cargo Coil</span>
+                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Refrigerator</span>
+                </div>
+                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Последний сигнал: London, UK</span>
+              </div>
+              <!-- Monthly stats -->
+              <div style="display:flex;gap:20px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#1570EF">$5,100</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#F04438">$3,300</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#17B26A">$1,800</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAN TGX — Repair 5d -->
+          <div data-gcard="truck" data-status="repair" data-search="man tgx 01 d 789 ac" onclick="showGarageDetail(2)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
+            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:2px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
+                <div style="min-width:0">
+                  <div style="font-size:15px;font-weight:700;color:#0F0F37;margin-bottom:3px">MAN TGX</div>
+                  <div style="font-size:12px;color:#667085;margin-bottom:5px"><span style="color:#D0D5DD;font-style:italic">No driver</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">620,000 km</span></div>
+                  <span class="plate"><span class="uz">UZ</span><span class="num">01 D 789 AC</span></span>
+                </div>
+                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#FFFAEB;color:#B54708"><span style="width:6px;height:6px;border-radius:50%;background:#F79009;flex-shrink:0"></span>Repair 5d</span>
+              </div>
+              <!-- Trailer + location -->
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
+                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Profi Liner</span>
+                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Flatbed</span>
+                </div>
+                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Tashkent, Uzbekistan</span>
+              </div>
+              <!-- Monthly stats -->
+              <div style="display:flex;gap:20px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#1570EF">$0</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#F04438">$1,200</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#F04438">-$1,200</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- DAF XF 105 — On trip -->
-          <div data-gcard="truck" data-status="trip" data-search="daf xf 105 60 a 467 aa vali rakhimov" onclick="showGarageDetail(0)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
+          <div data-gcard="truck" data-status="trip" data-search="daf xf 105 60 a 467 aa vali rakhimov" onclick="showGarageDetail(3)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
             <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:2px">
             <div style="flex:1;min-width:0">
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
@@ -1010,37 +1134,37 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
                 <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
                   <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
                   <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">Cargo Coil</span>
-                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Coil carrier</span>
+                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Refrigerator</span>
                 </div>
                 <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
                   <span style="font-size:11px;font-weight:600;color:#344054">Andijan</span>
                   <div style="width:44px;height:3px;border-radius:999px;background:#F2F4F7;position:relative;flex-shrink:0">
-                    <div style="position:absolute;left:0;top:0;height:3px;border-radius:999px;background:#FFCB00;width:70%"></div>
+                    <div style="position:absolute;left:0;top:0;height:3px;border-radius:999px;background:#FFCB00;width:68%"></div>
                   </div>
                   <span style="font-size:11px;font-weight:600;color:#344054">Prague</span>
-                  <span style="font-size:11px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 7px;border-radius:999px">70%</span>
+                  <span style="font-size:11px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 7px;border-radius:999px">68%</span>
                 </div>
               </div>
               <!-- Monthly stats -->
               <div style="display:flex;gap:20px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
                 <div>
                   <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#1570EF">$18,500</div>
+                  <div style="font-size:14px;font-weight:800;color:#1570EF">$6,800</div>
                 </div>
                 <div>
                   <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#F04438">$11,200</div>
+                  <div style="font-size:14px;font-weight:800;color:#F04438">$3,500</div>
                 </div>
                 <div>
                   <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
-                  <div style="font-size:14px;font-weight:800;color:#17B26A">$7,300</div>
+                  <div style="font-size:14px;font-weight:800;color:#17B26A">$3,300</div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Mercedes Actros — Idle -->
-          <div data-gcard="truck" data-status="idle" data-search="mercedes actros 30 c 201 ba sardor kholmatov" onclick="showGarageDetail(1)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
+          <div data-gcard="truck" data-status="idle" data-search="mercedes actros 30 c 201 ba sardor kholmatov" onclick="showGarageDetail(4)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s">
             <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:2px">
             <div style="flex:1;min-width:0">
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
@@ -1052,8 +1176,9 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
                 <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#FEF3F2;color:#B42318"><span style="width:6px;height:6px;border-radius:50%;background:#F04438;flex-shrink:0"></span>Idle 2d</span>
               </div>
               <!-- Trailer row -->
-              <div style="display:flex;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
                 <span style="font-size:12px;color:#D0D5DD;font-style:italic">No trailer</span>
+                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Tashkent, Uzbekistan</span>
               </div>
               <!-- Monthly stats -->
               <div style="display:flex;gap:20px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
@@ -1068,6 +1193,45 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
                 <div>
                   <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
                   <div style="font-size:14px;font-weight:800;color:#17B26A">$5,300</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Renault T High — Shift ended -->
+          <div data-gcard="truck" data-status="offline" data-search="renault t high 01 e 550 dc jasur ergashev" onclick="showGarageDetail(5)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:flex-start;gap:16px;padding:16px 20px;background:white;cursor:pointer;transition:box-shadow .2s,background .2s">
+            <img src="https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg" style="width:72px;height:72px;border-radius:14px;object-fit:cover;flex-shrink:0;margin-top:2px">
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px">
+                <div style="min-width:0">
+                  <div style="font-size:15px;font-weight:700;color:#0F0F37;margin-bottom:3px">Renault T High</div>
+                  <div style="font-size:12px;color:#667085;margin-bottom:5px"><span style="font-weight:600;color:#344054">Jasur Ergashev</span> <span style="color:#D0D5DD">·</span> <span style="color:#98A2B3">510,000 km</span></div>
+                  <span class="plate"><span class="uz">UZ</span><span class="num">01 E 550 DC</span></span>
+                </div>
+                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;flex-shrink:0;background:#F2F4F7;color:#344054"><span style="width:6px;height:6px;border-radius:50%;background:#475467;flex-shrink:0"></span>Shift ended</span>
+              </div>
+              <!-- Trailer + location -->
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div style="flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;gap:5px">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="1.8" width="12" height="12" style="flex-shrink:0"><rect x="1" y="6" width="16" height="10" rx="2"/><path d="M17 9h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2"/><circle cx="5" cy="16" r="2"/><circle cx="13" cy="16" r="2"/></svg>
+                  <span style="font-size:12px;font-weight:600;color:#344054;white-space:nowrap">S.CS Universal</span>
+                  <span style="font-size:10px;font-weight:600;background:#F2F4F7;color:#667085;padding:2px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0">Curtainsider</span>
+                </div>
+                <span style="font-size:11px;color:#98A2B3;white-space:nowrap;flex-shrink:0">Tashkent, Uzbekistan</span>
+              </div>
+              <!-- Monthly stats -->
+              <div style="display:flex;gap:20px;margin-top:10px;padding-top:10px;border-top:1px solid #F2F4F7">
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ДОХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#1570EF">$4,200</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">РАСХОД / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#F04438">$2,800</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:2px">ПРИБЫЛЬ / МЕС</div>
+                  <div style="font-size:14px;font-weight:800;color:#17B26A">$1,400</div>
                 </div>
               </div>
             </div>
@@ -1092,9 +1256,9 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
       <div id="gpane-trailers" class="flex-1 overflow-y-auto bg-gray-50 p-6" style="display:none">
         <div class="rounded-2xl overflow-hidden" style="border:1px solid #EAECF0;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
           <div data-gcard="trailer" data-status="trip" data-search="cargobull s.ko schmitz 60 h 545 aa volvo fh16" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showTrailerDetail(0)"><img src="https://app-three-red-71.vercel.app/assets/img/trailers/trailer1.jpg" style="width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:14px;font-weight:700;color:#0F0F37">Cargobull S.KO</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#ECFDF3;color:#079455;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A"></span>On trip</span></div><div style="font-size:12px;color:#667085">Schmitz · <span style="font-weight:600;color:#0F0F37">UZ 60 H 545 AA</span> · Volvo FH16</div></div><svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div data-gcard="trailer" data-status="trip" data-search="cargo coil kogel 60 h 457 aa daf xf 105" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showTrailerDetail(1)"><img src="https://app-three-red-71.vercel.app/assets/img/trailers/trailer2.jpg" style="width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:14px;font-weight:700;color:#0F0F37">Cargo Coil</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#ECFDF3;color:#079455;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A"></span>On trip</span></div><div style="font-size:12px;color:#667085">Kogel · <span style="font-weight:600;color:#0F0F37">UZ 60 H 457 AA</span> · DAF XF 105</div></div><svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div data-gcard="trailer" data-status="offline" data-search="cargo coil kogel 60 h 457 aa scania r500" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showTrailerDetail(1)"><img src="https://app-three-red-71.vercel.app/assets/img/trailers/trailer2.jpg" style="width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:14px;font-weight:700;color:#0F0F37">Cargo Coil</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#F2F4F7;color:#475467;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#98A2B3"></span>No signal</span></div><div style="font-size:12px;color:#667085">Kogel · <span style="font-weight:600;color:#0F0F37">UZ 60 H 457 AA</span> · Scania R500</div></div><svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg></div>
           <div data-gcard="trailer" data-status="repair" data-search="profi liner krone 75 a 112 bc man tgx" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showTrailerDetail(2)"><img src="https://app-three-red-71.vercel.app/assets/img/trailers/trailer3.jpg" style="width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:14px;font-weight:700;color:#0F0F37">Profi Liner</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#FFFAEB;color:#B54708;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#F79009"></span>Repair</span></div><div style="font-size:12px;color:#667085">Krone · <span style="font-weight:600;color:#0F0F37">UZ 75 A 112 BC</span> · MAN TGX</div></div><svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div data-gcard="trailer" data-status="idle" data-search="s.cs universal schmitz 90 k 330 aa" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;cursor:pointer" onclick="showTrailerDetail(3)"><img src="https://app-three-red-71.vercel.app/assets/img/trailers/trailer4.jpg" style="width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:14px;font-weight:700;color:#0F0F37">S.CS Universal</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#FEF3F2;color:#B42318;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#F04438"></span>Idle</span></div><div style="font-size:12px;color:#667085">Schmitz · <span style="font-weight:600;color:#0F0F37">UZ 90 K 330 AA</span> · <span style="color:#98A2B3">No truck</span></div></div><svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div data-gcard="trailer" data-status="offline" data-search="s.cs universal schmitz 90 k 330 aa renault t high" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;cursor:pointer" onclick="showTrailerDetail(3)"><img src="https://app-three-red-71.vercel.app/assets/img/trailers/trailer4.jpg" style="width:54px;height:54px;border-radius:12px;object-fit:cover;flex-shrink:0"><div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px"><span style="font-size:14px;font-weight:700;color:#0F0F37">S.CS Universal</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#F2F4F7;color:#344054;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#475467"></span>Shift ended</span></div><div style="font-size:12px;color:#667085">Schmitz · <span style="font-weight:600;color:#0F0F37">UZ 90 K 330 AA</span> · Renault T High</div></div><svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg></div>
           <div id="garage-empty-trailer" style="display:none;padding:40px 20px;text-align:center;color:#98A2B3;font-size:13px;font-weight:500">Ничего не найдено</div>
         </div>
       </div>
@@ -1301,11 +1465,15 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
       }
 
       const GARAGE_DATA=[
-        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg',truckIdx:3,subtitle:'DAF · Tractor unit',name:'DAF XF 105',plate:'60 A 467 AA',statusKey:'trip',year:2018,type:'Tractor',mileage:'458,300 km',vin:'XLRTE47MS0E123456',color:'White',driverName:'Vali Rakhimov',driverPhone:'+998 90 727 77 22',driverImg:'https://app-three-red-71.vercel.app/assets/img/drivers/d3.jpg',trailerName:'Kogel',trailerPlate:'60 H 545 AA',hasTrip:true,tripFrom:'Andijan',tripTo:'Prague',tripPct:70,tripKm:'6,300 km',tripTraveledKm:'4,410 km',tripRev:'$8,000',tripStartDate:'10 Jun 2026, 08:30',tripArrival:'15 Jun 2026',tripCargo:'Juice',tripWeight:'22,000 kg',location:'Poland, A2',speed:'72 km/h',monthly:{rev:'$18,500',exp:'$11,200',prof:'$7,300',trips:4,idle:8,repair:5,offline:5},trips:[['06/01/2026','Tashkent → Andijan','390 km','Juice','$4,000'],['05/24/2026','Andijan → Almaty','920 km','Textile','$6,200'],['05/12/2026','Samarkand → Moscow','3,400 km','Fruit','$9,800']],trH:[['04/01/2026 — Now','Kogel','60 H 545 AA','Type: Tent · Axles: 3'],['01/01/2026 — 04/01/2026','Kogel','60 H 457 AA','Type: Tent · Axles: 3']],drH:[['09/02/2026 — Now','Vali Rakhimov','+998 90 727 77 22'],['01/01/2026 — 09/02/2026','Ali','+998 90 727 77 22']],stats:{month:{rev:'$18,500',exp:'$11,200',prof:'$7,300',trips:4,idle:8,repair:5,offline:5},lastmonth:{rev:'$14,200',exp:'$9,800',prof:'$4,400',trips:3,idle:10,repair:3,offline:4},'6months':{rev:'$98,000',exp:'$64,000',prof:'$34,000',trips:18,idle:42,repair:12,offline:18},year:{rev:'$182,000',exp:'$118,000',prof:'$64,000',trips:34,idle:88,repair:24,offline:30}},docs:[{n:'Vehicle passport',s:'ok',i:'240 days left'},{n:'Insurance',s:'soon',i:'28 days left'},{n:'Waybill',s:'crit',i:'6 days left'}]},
-        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg',truckIdx:4,subtitle:'Mercedes · Tractor unit',name:'Mercedes Actros',plate:'30 C 201 BA',statusKey:'idle',days:2,year:2020,type:'Tractor',mileage:'280,100 km',vin:'WDB9630321L123456',color:'Red',driverName:'Sardor Kholmatov',driverPhone:'+998 91 200 88 11',driverImg:'https://app-three-red-71.vercel.app/assets/img/drivers/d4.jpg',trailerName:null,trailerPlate:null,hasTrip:false,monthly:{rev:'$7,200',exp:'$1,900',prof:'$5,300',trips:2,idle:12,repair:0,offline:3},trips:[['05/20/2026','Tashkent → Samarkand','300 km','Electronics','$3,500'],['04/10/2026','Tashkent → Fergana','420 km','Food','$4,200']],trH:[['01/01/2026 — 03/15/2026','Schmitz','90 K 330 AA','Type: Universal · Axles: 2']],drH:[['01/01/2026 — Now','Sardor Kholmatov','+998 91 200 88 11']],stats:{month:{rev:'$7,200',exp:'$1,900',prof:'$5,300',trips:2,idle:12,repair:0,offline:3},lastmonth:{rev:'$6,800',exp:'$2,100',prof:'$4,700',trips:2,idle:15,repair:2,offline:2},'6months':{rev:'$42,000',exp:'$14,500',prof:'$27,500',trips:11,idle:68,repair:8,offline:14},year:{rev:'$76,000',exp:'$28,000',prof:'$48,000',trips:20,idle:140,repair:14,offline:26}},docs:[{n:'Vehicle passport',s:'ok',i:'180 days left'},{n:'Insurance',s:'ok',i:'90 days left'}]}
+        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg',truckIdx:0,subtitle:'Volvo · Tractor unit',name:'Volvo FH16',plate:'01 A 123 BC',statusKey:'trip',year:2019,type:'Tractor',mileage:'312,400 km',vin:'YV2RTC0A1KA123456',color:'White',driverName:'Alisher Karimov',driverPhone:'+998 90 727 77 22',driverImg:'https://app-three-red-71.vercel.app/assets/img/drivers/d1.jpg',trailerName:'Cargobull S.KO',trailerPlate:'60 H 545 AA',hasTrip:true,tripFrom:'Tashkent',tripTo:'London',tripPct:72,tripKm:'6,800 km',tripTraveledKm:'4,900 km',tripRev:'$8,500',tripStartDate:'20 Jun 2026, 09:00',tripArrival:'02 Jul 2026',tripCargo:'Electronics',tripWeight:'14,000 kg',location:'Poland, A2',speed:'72 km/h',monthly:{rev:'$8,500',exp:'$4,200',prof:'$4,300',trips:3,idle:4,repair:0,offline:2},trips:[['06/20/2026','Tashkent → London','6,800 km','Electronics','$8,500'],['05/28/2026','Tashkent → Moscow','3,240 km','Electronics','$4,800'],['05/05/2026','Andijan → Almaty','860 km','Textile','$1,200']],trH:[['04/01/2026 — Now','Cargobull S.KO','60 H 545 AA','Type: Curtainsider · Axles: 3'],['01/01/2026 — 04/01/2026','Profi Liner','75 A 112 BC','Type: Flatbed · Axles: 3']],drH:[['09/02/2026 — Now','Alisher Karimov','+998 90 727 77 22'],['01/01/2026 — 09/02/2026','Ali','+998 90 000 11 22']],stats:{month:{rev:'$8,500',exp:'$4,200',prof:'$4,300',trips:3,idle:4,repair:0,offline:2},lastmonth:{rev:'$7,800',exp:'$4,000',prof:'$3,800',trips:3,idle:6,repair:0,offline:3},'6months':{rev:'$52,000',exp:'$27,000',prof:'$25,000',trips:16,idle:30,repair:4,offline:14},year:{rev:'$102,000',exp:'$54,000',prof:'$48,000',trips:32,idle:64,repair:8,offline:28}},docs:[{n:'Vehicle passport',s:'ok',i:'300 days left'},{n:'Insurance',s:'ok',i:'150 days left'},{n:'Waybill',s:'soon',i:'20 days left'}]},
+        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg',truckIdx:1,subtitle:'Scania · Tractor unit',name:'Scania R500',plate:'70 B 456 DA',statusKey:'nosignal',year:2021,type:'Tractor',mileage:'401,900 km',vin:'YS2R4X20005123456',color:'Silver',driverName:'Bakhtiyor Yuldashev',driverPhone:'+998 99 102 45 67',driverImg:'https://app-three-red-71.vercel.app/assets/img/drivers/d2.jpg',trailerName:'Cargo Coil',trailerPlate:'60 H 457 AA',hasTrip:false,monthly:{rev:'$5,100',exp:'$3,300',prof:'$1,800',trips:2,idle:5,repair:0,offline:23},trips:[['05/15/2026','Andijan → Almaty','860 km','Cotton','$2,600'],['04/22/2026','Tashkent → Samarkand','300 km','Food','$1,500']],trH:[['02/01/2026 — Now','Cargo Coil','60 H 457 AA','Type: Refrigerator · Axles: 3']],drH:[['01/01/2026 — Now','Bakhtiyor Yuldashev','+998 99 102 45 67']],stats:{month:{rev:'$5,100',exp:'$3,300',prof:'$1,800',trips:2,idle:5,repair:0,offline:23},lastmonth:{rev:'$6,200',exp:'$3,600',prof:'$2,600',trips:3,idle:10,repair:0,offline:17},'6months':{rev:'$38,000',exp:'$22,000',prof:'$16,000',trips:14,idle:48,repair:6,offline:60},year:{rev:'$74,000',exp:'$44,000',prof:'$30,000',trips:26,idle:96,repair:12,offline:120}},docs:[{n:'Vehicle passport',s:'ok',i:'200 days left'},{n:'Insurance',s:'crit',i:'4 days left'},{n:'Waybill',s:'ok',i:'80 days left'}]},
+        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg',truckIdx:2,subtitle:'MAN · Tractor unit',name:'MAN TGX',plate:'01 D 789 AC',statusKey:'repair',days:5,year:2020,type:'Tractor',mileage:'620,000 km',vin:'WMA06XZZ8LM123456',color:'Red',driverName:'—',driverPhone:'—',driverImg:'',trailerName:'Profi Liner',trailerPlate:'75 A 112 BC',hasTrip:false,monthly:{rev:'$0',exp:'$1,200',prof:'-$1,200',trips:0,idle:0,repair:5,offline:0},trips:[],trH:[['01/01/2026 — Now','Profi Liner','75 A 112 BC','Type: Flatbed · Axles: 3']],drH:[['01/01/2025 — 01/01/2026','Bek','+998 90 000 11 22']],stats:{month:{rev:'$0',exp:'$1,200',prof:'-$1,200',trips:0,idle:0,repair:5,offline:0},lastmonth:{rev:'$4,900',exp:'$2,800',prof:'$2,100',trips:2,idle:6,repair:2,offline:0},'6months':{rev:'$28,000',exp:'$16,000',prof:'$12,000',trips:10,idle:38,repair:22,offline:6},year:{rev:'$58,000',exp:'$34,000',prof:'$24,000',trips:20,idle:80,repair:40,offline:12}},docs:[{n:'Vehicle passport',s:'ok',i:'260 days left'},{n:'Insurance',s:'ok',i:'70 days left'},{n:'Waybill',s:'ok',i:'110 days left'}]},
+        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg',truckIdx:3,subtitle:'DAF · Tractor unit',name:'DAF XF 105',plate:'60 A 467 AA',statusKey:'trip',year:2018,type:'Tractor',mileage:'458,300 km',vin:'XLRTE47MS0E123456',color:'White',driverName:'Vali Rakhimov',driverPhone:'+998 90 555 12 34',driverImg:'https://app-three-red-71.vercel.app/assets/img/drivers/d3.jpg',trailerName:'Kogel',trailerPlate:'20 D 341 AA',hasTrip:true,tripFrom:'Andijan',tripTo:'Prague',tripPct:68,tripKm:'6,300 km',tripTraveledKm:'4,280 km',tripRev:'$6,800',tripStartDate:'22 Jun 2026, 08:30',tripArrival:'05 Jul 2026',tripCargo:'Textile',tripWeight:'18,000 kg',location:'Poland, A2',speed:'68 km/h',monthly:{rev:'$6,800',exp:'$3,500',prof:'$3,300',trips:3,idle:6,repair:0,offline:4},trips:[['06/22/2026','Andijan → Prague','6,300 km','Textile','$6,800'],['05/24/2026','Andijan → Almaty','920 km','Textile','$6,200'],['05/12/2026','Samarkand → Moscow','3,400 km','Fruit','$9,800']],trH:[['04/01/2026 — Now','Kogel','20 D 341 AA','Type: Refrigerator · Axles: 3'],['01/01/2026 — 04/01/2026','Kogel','60 H 457 AA','Type: Refrigerator · Axles: 3']],drH:[['09/02/2026 — Now','Vali Rakhimov','+998 90 555 12 34'],['01/01/2026 — 09/02/2026','Ali','+998 90 000 11 22']],stats:{month:{rev:'$6,800',exp:'$3,500',prof:'$3,300',trips:3,idle:6,repair:0,offline:4},lastmonth:{rev:'$14,200',exp:'$9,800',prof:'$4,400',trips:3,idle:10,repair:3,offline:4},'6months':{rev:'$98,000',exp:'$64,000',prof:'$34,000',trips:18,idle:42,repair:12,offline:18},year:{rev:'$182,000',exp:'$118,000',prof:'$64,000',trips:34,idle:88,repair:24,offline:30}},docs:[{n:'Vehicle passport',s:'ok',i:'240 days left'},{n:'Insurance',s:'soon',i:'28 days left'},{n:'Waybill',s:'crit',i:'6 days left'}]},
+        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg',truckIdx:4,subtitle:'Mercedes · Tractor unit',name:'Mercedes Actros',plate:'30 C 201 BA',statusKey:'idle',days:2,year:2020,type:'Tractor',mileage:'280,100 km',vin:'WDB9630321L123456',color:'Red',driverName:'Sardor Kholmatov',driverPhone:'+998 91 200 88 11',driverImg:'https://app-three-red-71.vercel.app/assets/img/drivers/d4.jpg',trailerName:null,trailerPlate:null,hasTrip:false,monthly:{rev:'$7,200',exp:'$1,900',prof:'$5,300',trips:2,idle:12,repair:0,offline:3},trips:[['05/20/2026','Tashkent → Samarkand','300 km','Electronics','$3,500'],['04/10/2026','Tashkent → Fergana','420 km','Food','$4,200']],trH:[['01/01/2026 — 03/15/2026','Schmitz','90 K 330 AA','Type: Universal · Axles: 2']],drH:[['01/01/2026 — Now','Sardor Kholmatov','+998 91 200 88 11']],stats:{month:{rev:'$7,200',exp:'$1,900',prof:'$5,300',trips:2,idle:12,repair:0,offline:3},lastmonth:{rev:'$6,800',exp:'$2,100',prof:'$4,700',trips:2,idle:15,repair:2,offline:2},'6months':{rev:'$42,000',exp:'$14,500',prof:'$27,500',trips:11,idle:68,repair:8,offline:14},year:{rev:'$76,000',exp:'$28,000',prof:'$48,000',trips:20,idle:140,repair:14,offline:26}},docs:[{n:'Vehicle passport',s:'ok',i:'180 days left'},{n:'Insurance',s:'ok',i:'90 days left'}]},
+        {img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck6.jpg',img2:'https://app-three-red-71.vercel.app/assets/img/trucks/truck1.jpg',img3:'https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg',truckIdx:5,subtitle:'Renault · Tractor unit',name:'Renault T High',plate:'01 E 550 DC',statusKey:'done',year:2019,type:'Tractor',mileage:'510,000 km',vin:'VF6FDBHY0KY123456',color:'Blue',driverName:'Jasur Ergashev',driverPhone:'+998 93 410 22 09',driverImg:'https://app-three-red-71.vercel.app/assets/img/drivers/d5.jpg',trailerName:'S.CS Universal',trailerPlate:'90 K 330 AA',hasTrip:false,monthly:{rev:'$4,200',exp:'$2,800',prof:'$1,400',trips:2,idle:3,repair:0,offline:1},trips:[['06/10/2026','Tashkent → Prague','5,840 km','Cotton fabric','$4,200'],['05/02/2026','Tashkent → Bishkek','520 km','Food products','$800']],trH:[['03/01/2026 — Now','S.CS Universal','90 K 330 AA','Type: Curtainsider · Axles: 3']],drH:[['01/01/2026 — Now','Jasur Ergashev','+998 93 410 22 09']],stats:{month:{rev:'$4,200',exp:'$2,800',prof:'$1,400',trips:2,idle:3,repair:0,offline:1},lastmonth:{rev:'$5,600',exp:'$3,200',prof:'$2,400',trips:3,idle:5,repair:0,offline:2},'6months':{rev:'$34,000',exp:'$19,000',prof:'$15,000',trips:14,idle:24,repair:4,offline:8},year:{rev:'$68,000',exp:'$38,000',prof:'$30,000',trips:28,idle:52,repair:8,offline:18}},docs:[{n:'Vehicle passport',s:'ok',i:'320 days left'},{n:'Insurance',s:'ok',i:'200 days left'},{n:'Waybill',s:'ok',i:'150 days left'}]}
       ];
       const DS={ok:{bg:'#ECFDF3',col:'#079455',dot:'#17B26A',lbl:'Active'},soon:{bg:'#FFFAEB',col:'#B54708',dot:'#F79009',lbl:'Expiring'},crit:{bg:'#FEF3F2',col:'#B42318',dot:'#F04438',lbl:'Critical'}};
-      const ST={trip:{bg:'#ECFDF3',col:'#079455',dot:'#17B26A'},idle:{bg:'#FEF3F2',col:'#B42318',dot:'#F04438'},repair:{bg:'#FFFAEB',col:'#B54708',dot:'#F79009'}};
+      const ST={trip:{bg:'#ECFDF3',col:'#079455',dot:'#17B26A'},idle:{bg:'#FEF3F2',col:'#B42318',dot:'#F04438'},repair:{bg:'#FFFAEB',col:'#B54708',dot:'#F79009'},nosignal:{bg:'#F2F4F7',col:'#475467',dot:'#98A2B3'},done:{bg:'#F2F4F7',col:'#344054',dot:'#475467'}};
       let currentGarageIdx=0;
       function switchStatTab(period){
         const t=GARAGE_DATA[currentGarageIdx];const d=t.stats&&t.stats[period];if(!d)return;
@@ -1327,7 +1495,7 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
 
       function showGarageDetail(idx){
         const t=GARAGE_DATA[idx],s=ST[t.statusKey]||{bg:'#F2F4F7',col:'#667085',dot:'#98A2B3'};
-        const slbl=(t.statusKey==='idle'&&t.days)?'Idle '+t.days+'d':{trip:'On trip',idle:'Idle',repair:'Repair'}[t.statusKey]||t.statusKey;
+        const slbl=(t.days&&(t.statusKey==='idle'||t.statusKey==='repair'))?({idle:'Idle',repair:'Repair'}[t.statusKey]+' '+t.days+'d'):{trip:'On trip',idle:'Idle',repair:'Repair',nosignal:'No signal',done:'Shift ended'}[t.statusKey]||t.statusKey;
         document.getElementById('det-title').textContent=t.name;
         document.getElementById('det-img').src=t.img;
         document.getElementById('det-img2').src=t.img2||t.img;
@@ -1401,14 +1569,14 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
 
       // ─── TRAILER DATA ──────────────────────────────────────────────────
       const TRAILER_DATA=[
-        {brand:'Schmitz',model:'Cargobull S.KO',plate:'60 H 545 AA',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer1.jpg',statusKey:'trip',truck:'Volvo FH16',truckPlate:'01 A 123 BC',truckGarageIdx:null,year:2019,type:'Тентованный',axles:3,length:'13.6 м',volume:'92 м³',capacity:'24 t',trips:142,mileage:'389,700 km',
+        {brand:'Schmitz',model:'Cargobull S.KO',plate:'60 H 545 AA',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer1.jpg',statusKey:'trip',truck:'Volvo FH16',truckPlate:'01 A 123 BC',truckGarageIdx:0,year:2019,type:'Тентованный',axles:3,length:'13.6 м',volume:'92 м³',capacity:'24 t',trips:142,mileage:'389,700 km',
          trH:[['04/01/2026 — Now','Volvo FH16','01 A 123 BC'],['01/01/2026 — 04/01/2026','DAF XF 105','60 A 467 AA']]},
-        {brand:'Kogel',model:'Cargo Coil',plate:'60 H 457 AA',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer2.jpg',statusKey:'trip',truck:'DAF XF 105',truckPlate:'60 A 467 AA',truckGarageIdx:0,year:2021,type:'Контейнеровоз',axles:3,length:'13.6 м',volume:'-',capacity:'22 t',trips:88,mileage:'265,200 km',
-         trH:[['04/01/2026 — Now','DAF XF 105','60 A 467 AA'],['11/01/2025 — 04/01/2026','Mercedes Actros','30 C 201 BA']]},
-        {brand:'Krone',model:'Profi Liner',plate:'75 A 112 BC',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer3.jpg',statusKey:'repair',truck:'MAN TGX',truckPlate:'01 D 789 AC',truckGarageIdx:null,year:2017,type:'Тентованный',axles:3,length:'13.6 м',volume:'88 м³',capacity:'24 t',trips:67,mileage:'420,000 km',
+        {brand:'Kogel',model:'Cargo Coil',plate:'60 H 457 AA',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer2.jpg',statusKey:'offline',truck:'Scania R500',truckPlate:'70 B 456 DA',truckGarageIdx:1,year:2021,type:'Контейнеровоз',axles:3,length:'13.6 м',volume:'-',capacity:'22 t',trips:88,mileage:'265,200 km',
+         trH:[['04/01/2026 — Now','Scania R500','70 B 456 DA'],['11/01/2025 — 04/01/2026','Mercedes Actros','30 C 201 BA']]},
+        {brand:'Krone',model:'Profi Liner',plate:'75 A 112 BC',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer3.jpg',statusKey:'repair',truck:'MAN TGX',truckPlate:'01 D 789 AC',truckGarageIdx:2,year:2017,type:'Тентованный',axles:3,length:'13.6 м',volume:'88 м³',capacity:'24 t',trips:67,mileage:'420,000 km',
          trH:[['02/01/2026 — Now','MAN TGX','01 D 789 AC'],['06/01/2025 — 02/01/2026','Renault T High','01 E 550 DC']]},
-        {brand:'Schmitz',model:'S.CS Universal',plate:'90 K 330 AA',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer4.jpg',statusKey:'idle',truck:null,truckPlate:null,truckGarageIdx:null,year:2022,type:'Тентованный',axles:3,length:'13.6 м',volume:'90 м³',capacity:'20 t',trips:34,mileage:'112,500 km',
-         trH:[['01/01/2026 — 03/15/2026','Renault T High','01 E 550 DC']]},
+        {brand:'Schmitz',model:'S.CS Universal',plate:'90 K 330 AA',img:'https://app-three-red-71.vercel.app/assets/img/trailers/trailer4.jpg',statusKey:'offline',truck:'Renault T High',truckPlate:'01 E 550 DC',truckGarageIdx:5,year:2022,type:'Тентованный',axles:3,length:'13.6 м',volume:'90 м³',capacity:'20 t',trips:34,mileage:'112,500 km',
+         trH:[['01/01/2026 — Now','Renault T High','01 E 550 DC']]},
       ];
 
       const TRAILER_DOC_TYPES = [
