@@ -2658,7 +2658,7 @@ function openOrder(idx) {
     </button>`).join('');
 
   const heroHTML = `
-    <div onclick="openGarageDetail(${o.truck.idx})" style="position:relative;height:210px;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(15,15,55,.12);cursor:pointer;margin-bottom:16px" onmouseover="this.style.boxShadow='0 8px 28px rgba(15,15,55,.18)'" onmouseout="this.style.boxShadow='0 6px 24px rgba(15,15,55,.12)'">
+    <div onclick="openGarageDetail(${o.truck.idx})" style="position:relative;height:100%;min-height:260px;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(15,15,55,.12);cursor:pointer" onmouseover="this.style.boxShadow='0 8px 28px rgba(15,15,55,.18)'" onmouseout="this.style.boxShadow='0 6px 24px rgba(15,15,55,.12)'">
       <img src="${o.truck.img}" style="width:100%;height:100%;object-fit:cover;display:block">
       <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,15,55,.05) 30%,rgba(15,15,55,.78) 100%)"></div>
       <div style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.32);border-radius:9px;padding:6px 12px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:white">
@@ -2666,7 +2666,7 @@ function openOrder(idx) {
         Открыть в гараже
       </div>
       <div style="position:absolute;bottom:0;left:0;right:0;padding:18px 20px">
-        <div style="font-size:24px;font-weight:800;color:white;letter-spacing:-.3px;line-height:1.1">${o.truck.name}</div>
+        <div style="font-size:21px;font-weight:800;color:white;letter-spacing:-.3px;line-height:1.15">${o.truck.name}</div>
         <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.24);border-radius:8px;padding:4px 10px;margin-top:8px">
           <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="2" width="12" height="12"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 11h18"/></svg>
           <span style="font-size:12px;font-weight:700;color:white;letter-spacing:.5px">${o.truck.plate}</span>
@@ -2683,7 +2683,7 @@ function openOrder(idx) {
   const trailerClickable = o.trailer && o.trailer.idx !== null && o.trailer.idx !== undefined;
 
   const crewHTML = `
-    <div style="background:white;border-radius:16px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)">
+    <div style="background:white;border-radius:16px;border:1px solid #EAECF0;overflow:hidden;height:100%;box-shadow:0 1px 4px rgba(0,0,0,.04)">
       <div style="padding:12px 18px;border-bottom:1px solid #F2F4F7">
         <span style="font-size:11px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.06em">Экипаж</span>
       </div>
@@ -2741,8 +2741,10 @@ function openOrder(idx) {
     </div>`;
 
   document.getElementById('order-detail-content').innerHTML = `
-    ${heroHTML}
-    ${crewHTML}
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px;align-items:stretch">
+      ${heroHTML}
+      ${crewHTML}
+    </div>
     ${progFull}
     ${miniMap}
     <!-- Quick expenses -->
