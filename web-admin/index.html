@@ -840,88 +840,134 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
         <div class="rounded-2xl overflow-hidden" style="border:1px solid #EAECF0;box-shadow:0 1px 3px rgba(0,0,0,0.06)" id="drivers-list">
 
           <!-- Alisher Karimov — On trip -->
-          <div data-dcard data-status="trip" data-search="alisher karimov volvo fh16 +998 90 727 77 22" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showDriverDetail(0)">
-            <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d1.jpg" style="width:50px;height:50px;border-radius:10px;object-fit:cover;flex-shrink:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <span style="font-size:14px;font-weight:700;color:#0F0F37">Alisher Karimov</span>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#ECFDF3;color:#079455;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A"></span>On trip</span>
-              </div>
-              <div style="font-size:12px;color:#667085;margin-bottom:6px">+998 90 727 77 22 · Volvo FH16 · <span style="font-weight:600;color:#0F0F37">128</span> trips</div>
-              <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:11px;font-weight:600;color:#344054">Tashkent</span>
-                <div style="flex:1;position:relative;height:4px;border-radius:999px;background:#F2F4F7;max-width:160px">
-                  <div style="position:absolute;left:0;top:0;width:72%;height:100%;border-radius:999px;background:#FFCB00"></div>
-                  <div style="position:absolute;left:72%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;border-radius:50%;background:#FFCB00;border:2px solid white;box-shadow:0 0 0 1.5px #FFCB00"></div>
-                </div>
-                <span style="font-size:11px;font-weight:600;color:#344054">London</span>
-                <span style="font-size:11px;font-weight:700;color:#F79009">72%</span>
+          <div data-dcard data-status="trip" data-search="alisher karimov volvo fh16 +998 90 727 77 22" onclick="showDriverDetail(0)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:88px">
+            <div style="flex:1.3;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d1.jpg" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid #FFCB00">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Alisher Karimov</div>
+                <div style="font-size:11.5px;color:#667085">+998 90 727 77 22</div>
               </div>
             </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:0.85;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Грузовик</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Volvo FH16</span>
+              <span class="plate" style="height:18px;font-size:10px;width:fit-content"><span class="uz">UZ</span><span class="num">01 A 123 BC</span></span>
+            </div>
+            <div style="flex:0.55;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:3px">РЕЙСОВ</span>
+              <span style="font-size:15px;font-weight:800;color:#0F0F37">128</span>
+            </div>
+            <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#ECFDF3;color:#079455"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A;flex-shrink:0"></span>On trip</span>
+              <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
+                <span style="font-size:11px;font-weight:600;color:#344054">Tashkent</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" stroke-linecap="round" width="12" height="12" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <span style="font-size:11px;font-weight:600;color:#344054">London</span>
+                <span style="font-size:10px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 6px;border-radius:999px">72%</span>
+              </div>
+            </div>
           </div>
 
           <!-- Vali Rakhimov — On trip -->
-          <div data-dcard data-status="trip" data-search="vali rakhimov daf xf 105 +998 90 555 12 34" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showDriverDetail(1)">
-            <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d3.jpg" style="width:50px;height:50px;border-radius:10px;object-fit:cover;flex-shrink:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <span style="font-size:14px;font-weight:700;color:#0F0F37">Vali Rakhimov</span>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#ECFDF3;color:#079455;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A"></span>On trip</span>
-              </div>
-              <div style="font-size:12px;color:#667085;margin-bottom:6px">+998 90 555 12 34 · DAF XF 105 · <span style="font-weight:600;color:#0F0F37">96</span> trips</div>
-              <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:11px;font-weight:600;color:#344054">Andijan</span>
-                <div style="flex:1;position:relative;height:4px;border-radius:999px;background:#F2F4F7;max-width:160px">
-                  <div style="position:absolute;left:0;top:0;width:68%;height:100%;border-radius:999px;background:#FFCB00"></div>
-                  <div style="position:absolute;left:68%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;border-radius:50%;background:#FFCB00;border:2px solid white;box-shadow:0 0 0 1.5px #FFCB00"></div>
-                </div>
-                <span style="font-size:11px;font-weight:600;color:#344054">Prague</span>
-                <span style="font-size:11px;font-weight:700;color:#F79009">68%</span>
+          <div data-dcard data-status="trip" data-search="vali rakhimov daf xf 105 +998 90 555 12 34" onclick="showDriverDetail(1)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:88px">
+            <div style="flex:1.3;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d3.jpg" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid #FFCB00">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Vali Rakhimov</div>
+                <div style="font-size:11.5px;color:#667085">+998 90 555 12 34</div>
               </div>
             </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:0.85;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Грузовик</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">DAF XF 105</span>
+              <span class="plate" style="height:18px;font-size:10px;width:fit-content"><span class="uz">UZ</span><span class="num">60 A 467 AA</span></span>
+            </div>
+            <div style="flex:0.55;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:3px">РЕЙСОВ</span>
+              <span style="font-size:15px;font-weight:800;color:#0F0F37">96</span>
+            </div>
+            <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#ECFDF3;color:#079455"><span style="width:6px;height:6px;border-radius:50%;background:#17B26A;flex-shrink:0"></span>On trip</span>
+              <div style="display:flex;align-items:center;gap:6px;white-space:nowrap">
+                <span style="font-size:11px;font-weight:600;color:#344054">Andijan</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" stroke-linecap="round" width="12" height="12" style="flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <span style="font-size:11px;font-weight:600;color:#344054">Prague</span>
+                <span style="font-size:10px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 6px;border-radius:999px">68%</span>
+              </div>
+            </div>
           </div>
 
           <!-- Sardor Kholmatov — Idle -->
-          <div data-dcard data-status="idle" data-search="sardor kholmatov mercedes actros +998 91 200 88 11" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showDriverDetail(2)">
-            <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d4.jpg" style="width:50px;height:50px;border-radius:10px;object-fit:cover;flex-shrink:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <span style="font-size:14px;font-weight:700;color:#0F0F37">Sardor Kholmatov</span>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#FEF3F2;color:#B42318;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#F04438"></span>Idle</span>
+          <div data-dcard data-status="idle" data-search="sardor kholmatov mercedes actros +998 91 200 88 11" onclick="showDriverDetail(2)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:88px">
+            <div style="flex:1.3;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d4.jpg" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid #FFCB00">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Sardor Kholmatov</div>
+                <div style="font-size:11.5px;color:#667085">+998 91 200 88 11</div>
               </div>
-              <div style="font-size:12px;color:#667085">+998 91 200 88 11 · Mercedes Actros · <span style="font-weight:600;color:#0F0F37">54</span> trips</div>
             </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:0.85;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Грузовик</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Mercedes Actros</span>
+              <span class="plate" style="height:18px;font-size:10px;width:fit-content"><span class="uz">UZ</span><span class="num">30 C 201 BA</span></span>
+            </div>
+            <div style="flex:0.55;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:3px">РЕЙСОВ</span>
+              <span style="font-size:15px;font-weight:800;color:#0F0F37">54</span>
+            </div>
+            <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#FEF3F2;color:#B42318"><span style="width:6px;height:6px;border-radius:50%;background:#F04438;flex-shrink:0"></span>Idle</span>
+              <span style="font-size:11px;color:#98A2B3;text-align:right;white-space:nowrap">Tashkent, Uzbekistan</span>
+            </div>
           </div>
 
           <!-- Jasur Ergashev — Resting -->
-          <div data-dcard data-status="done" data-search="jasur ergashev renault t high +998 93 410 22 09" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer" onclick="showDriverDetail(3)">
-            <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d5.jpg" style="width:50px;height:50px;border-radius:10px;object-fit:cover;flex-shrink:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <span style="font-size:14px;font-weight:700;color:#0F0F37">Jasur Ergashev</span>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#F0F4FF;color:#3538CD;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#444CE7"></span>Resting</span>
+          <div data-dcard data-status="done" data-search="jasur ergashev renault t high +998 93 410 22 09" onclick="showDriverDetail(3)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:88px">
+            <div style="flex:1.3;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d5.jpg" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid #FFCB00">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Jasur Ergashev</div>
+                <div style="font-size:11.5px;color:#667085">+998 93 410 22 09</div>
               </div>
-              <div style="font-size:12px;color:#667085">+998 93 410 22 09 · Renault T High · <span style="font-weight:600;color:#0F0F37">73</span> trips</div>
             </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:0.85;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Грузовик</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Renault T High</span>
+              <span class="plate" style="height:18px;font-size:10px;width:fit-content"><span class="uz">UZ</span><span class="num">01 E 550 DC</span></span>
+            </div>
+            <div style="flex:0.55;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:3px">РЕЙСОВ</span>
+              <span style="font-size:15px;font-weight:800;color:#0F0F37">73</span>
+            </div>
+            <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#F0F4FF;color:#3538CD"><span style="width:6px;height:6px;border-radius:50%;background:#444CE7;flex-shrink:0"></span>Resting</span>
+              <span style="font-size:11px;color:#98A2B3;text-align:right;white-space:nowrap">Tashkent, Uzbekistan</span>
+            </div>
           </div>
 
-          <!-- Bakhtiyor Yuldashev — Resting -->
+          <!-- Bakhtiyor Yuldashev — No signal -->
           <div id="drivers-empty" style="display:none;padding:40px 20px;text-align:center;color:#98A2B3;font-size:13px;font-weight:500">Ничего не найдено</div>
-          <div data-dcard data-status="nosignal" data-search="bakhtiyor yuldashev scania r500 +998 99 102 45 67" class="card-press" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:white;cursor:pointer" onclick="showDriverDetail(4)">
-            <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d2.jpg" style="width:50px;height:50px;border-radius:10px;object-fit:cover;flex-shrink:0">
-            <div style="flex:1;min-width:0">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-                <span style="font-size:14px;font-weight:700;color:#0F0F37">Bakhtiyor Yuldashev</span>
-                <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#F2F4F7;color:#344054;white-space:nowrap"><span style="width:6px;height:6px;border-radius:50%;background:#667085"></span>No signal</span>
+          <div data-dcard data-status="nosignal" data-search="bakhtiyor yuldashev scania r500 +998 99 102 45 67" onclick="showDriverDetail(4)" onmouseover="this.style.boxShadow='inset 0 0 0 2px #FFCB00';this.style.background='#FFFDF0'" onmouseout="this.style.boxShadow='none';this.style.background='white'" style="display:flex;align-items:stretch;background:white;cursor:pointer;transition:box-shadow .2s,background .2s;min-height:88px">
+            <div style="flex:1.3;min-width:0;display:flex;gap:12px;align-items:center;padding:12px 16px">
+              <img src="https://app-three-red-71.vercel.app/assets/img/drivers/d2.jpg" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid #FFCB00">
+              <div style="min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:2px">Bakhtiyor Yuldashev</div>
+                <div style="font-size:11.5px;color:#667085">+998 99 102 45 67</div>
               </div>
-              <div style="font-size:12px;color:#667085">+998 99 102 45 67 · Scania R500 · <span style="font-weight:600;color:#0F0F37">41</span> trips</div>
-              <div style="font-size:11px;color:#98A2B3;margin-top:3px">Последний сигнал: London, UK</div>
             </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#D0D5DD" stroke-width="2" width="16" height="16" style="flex-shrink:0"><path d="m9 18 6-6-6-6"/></svg>
+            <div style="flex:0.85;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Грузовик</span>
+              <span style="font-size:12px;font-weight:600;color:#344054">Scania R500</span>
+              <span class="plate" style="height:18px;font-size:10px;width:fit-content"><span class="uz">UZ</span><span class="num">70 B 456 DA</span></span>
+            </div>
+            <div style="flex:0.55;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;border-left:1px solid #EAECF0">
+              <span style="font-size:9px;font-weight:700;color:#98A2B3;letter-spacing:.5px;margin-bottom:3px">РЕЙСОВ</span>
+              <span style="font-size:15px;font-weight:800;color:#0F0F37">41</span>
+            </div>
+            <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 14px;border-left:1px solid #EAECF0">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;background:#F2F4F7;color:#475467"><span style="width:6px;height:6px;border-radius:50%;background:#98A2B3;flex-shrink:0"></span>No signal</span>
+              <span style="font-size:11px;color:#98A2B3;text-align:right;white-space:nowrap">Последний сигнал:<br>London, UK</span>
+            </div>
           </div>
 
         </div>
@@ -940,26 +986,30 @@ html, body { height: 100%; margin: 0; font-family: 'Inter', system-ui, sans-seri
         </div>
         <div style="padding:20px 24px 24px;display:flex;flex-direction:column;gap:14px">
           <div>
-            <label style="font-size:12px;font-weight:600;color:#344054;display:block;margin-bottom:6px">Имя и фамилия</label>
-            <input id="add-driver-name" type="text" placeholder="Alisher Karimov" style="width:100%;height:40px;border:1.5px solid #D0D5DD;border-radius:10px;padding:0 12px;font-size:13px;color:#0F0F37;outline:none;box-sizing:border-box;font-family:Inter,sans-serif" onfocus="this.style.borderColor='#FFCB00'" onblur="this.style.borderColor='#D0D5DD'">
-          </div>
-          <div>
             <label style="font-size:12px;font-weight:600;color:#344054;display:block;margin-bottom:6px">Номер телефона</label>
-            <input id="add-driver-phone" type="tel" placeholder="+998 90 123 45 67" style="width:100%;height:40px;border:1.5px solid #D0D5DD;border-radius:10px;padding:0 12px;font-size:13px;color:#0F0F37;outline:none;box-sizing:border-box;font-family:Inter,sans-serif" onfocus="this.style.borderColor='#FFCB00'" onblur="this.style.borderColor='#D0D5DD'">
+            <div style="display:flex;gap:8px">
+              <input id="add-driver-phone" type="tel" placeholder="+998 90 123 45 67" style="flex:1;height:40px;border:1.5px solid #D0D5DD;border-radius:10px;padding:0 12px;font-size:13px;color:#0F0F37;outline:none;box-sizing:border-box;font-family:Inter,sans-serif" onfocus="this.style.borderColor='#FFCB00'" onblur="this.style.borderColor='#D0D5DD'" onkeydown="if(event.key==='Enter')checkDriverPhone()">
+              <button onclick="checkDriverPhone()" style="height:40px;padding:0 16px;background:#0F0F37;color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0">Проверить</button>
+            </div>
           </div>
-          <div>
-            <label style="font-size:12px;font-weight:600;color:#344054;display:block;margin-bottom:6px">Грузовик (опционально)</label>
-            <select id="add-driver-truck" style="width:100%;height:40px;border:1.5px solid #D0D5DD;border-radius:10px;padding:0 12px;font-size:13px;color:#0F0F37;outline:none;box-sizing:border-box;font-family:Inter,sans-serif;background:white;appearance:none;cursor:pointer" onfocus="this.style.borderColor='#FFCB00'" onblur="this.style.borderColor='#D0D5DD'">
-              <option value="">— Не назначен —</option>
-              <option>DAF XF 105 · 60 A 467 AA</option>
-              <option>MAN TGX · 10 B 123 BB</option>
-              <option>Volvo FH16 · 01 A 123 BC</option>
-              <option>Scania R500 · 70 B 456 DA</option>
-            </select>
+
+          <div id="driver-lookup-result" style="display:none"></div>
+
+          <div id="driver-invite-fields" style="display:none;flex-direction:column;gap:14px">
+            <div>
+              <label style="font-size:12px;font-weight:600;color:#344054;display:block;margin-bottom:6px">Грузовик (опционально)</label>
+              <select id="add-driver-truck" style="width:100%;height:40px;border:1.5px solid #D0D5DD;border-radius:10px;padding:0 12px;font-size:13px;color:#0F0F37;outline:none;box-sizing:border-box;font-family:Inter,sans-serif;background:white;appearance:none;cursor:pointer" onfocus="this.style.borderColor='#FFCB00'" onblur="this.style.borderColor='#D0D5DD'">
+                <option value="">— Не назначен —</option>
+                <option>DAF XF 105 · 60 A 467 AA</option>
+                <option>MAN TGX · 10 B 123 BB</option>
+                <option>Volvo FH16 · 01 A 123 BC</option>
+                <option>Scania R500 · 70 B 456 DA</option>
+              </select>
+            </div>
+            <button onclick="submitAddDriver()" style="width:100%;height:44px;background:#FFCB00;color:#0F0F37;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif">
+              Отправить приглашение
+            </button>
           </div>
-          <button onclick="submitAddDriver()" style="width:100%;height:44px;background:#FFCB00;color:#0F0F37;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;margin-top:4px">
-            Отправить приглашение
-          </button>
         </div>
       </div>
     </div>
@@ -2347,6 +2397,14 @@ const ORDERS = [
       {cat:'Топливо',amount:520,note:'АЗС Лукойл · 240 л',addedBy:'Alisher Karimov',addedAt:'30 июн, 08:30',deleted:false},
       {cat:'Питание',amount:45,note:'Обед в Польше',addedBy:'Alisher Karimov',addedAt:'30 июн, 13:10',deleted:false},
       {cat:'Стоянка',amount:30,note:'',addedBy:'Alisher Karimov',addedAt:'29 июн, 21:00',deleted:true,deletedBy:CURRENT_ADMIN,deletedAt:'29 июн, 21:40'}
+    ],
+    logs:[
+      {text:'добавил расход <strong>Питание</strong>',badge:'−$45',badgeRed:true,time:'30 июн, 13:10',dot:'#F79009',by:'Alisher Karimov',byImg:'assets/img/drivers/d1.jpg'},
+      {text:'удалил расход <strong>Стоянка</strong>',badge:'+$30',badgeRed:false,time:'29 июн, 21:40',dot:'#F04438',by:CURRENT_ADMIN,byImg:''},
+      {text:'добавил расход <strong>Топливо</strong>',badge:'−$520',badgeRed:true,time:'30 июн, 08:30',dot:'#F79009',by:'Alisher Karimov',byImg:'assets/img/drivers/d1.jpg'},
+      {text:'добавил расход <strong>Стоянка</strong>',badge:'−$30',badgeRed:true,time:'29 июн, 21:00',dot:'#F79009',by:'Alisher Karimov',byImg:'assets/img/drivers/d1.jpg'},
+      {text:'Рейс начат',time:'20 июн, 09:00',dot:'#17B26A'},
+      {text:'создал рейс',time:'19 июн, 18:30',dot:'#98A2B3',by:CURRENT_ADMIN,byImg:''},
     ]
   },
   {
@@ -2356,7 +2414,12 @@ const ORDERS = [
     truck:{name:'DAF XF 105', plate:'60 A 467 AA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck4.jpg', idx:3, year:2018, power:'410 л.с.', fuel:'Дизель'},
     driver:{name:'Vali Rakhimov', phone:'+998 90 456 78 90', img:'assets/img/drivers/d3.jpg', idx:1},
     trailer:{name:'Kogel', plate:'20 D 341 AA', type:'Refrigerator', idx:null},
-    expenses:[{cat:'Топливо',amount:380,note:'АЗС Лукойл',addedBy:'Vali Rakhimov',addedAt:'22 июн, 09:05',deleted:false}]
+    expenses:[{cat:'Топливо',amount:380,note:'АЗС Лукойл',addedBy:'Vali Rakhimov',addedAt:'22 июн, 09:05',deleted:false}],
+    logs:[
+      {text:'добавил расход <strong>Топливо</strong>',badge:'−$380',badgeRed:true,time:'22 июн, 09:05',dot:'#F79009',by:'Vali Rakhimov',byImg:'assets/img/drivers/d3.jpg'},
+      {text:'Рейс начат',time:'22 июн, 08:30',dot:'#17B26A'},
+      {text:'создал рейс',time:'21 июн, 17:00',dot:'#98A2B3',by:CURRENT_ADMIN,byImg:''},
+    ]
   },
   {
     id:'ORD-003', status:'cancelled', from:'Ташкент', to:'Стамбул',
@@ -2365,7 +2428,11 @@ const ORDERS = [
     truck:{name:'MAN TGX', plate:'01 D 789 AC', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck3.jpg', idx:2, year:2020, power:'480 л.с.', fuel:'Дизель'},
     driver:{name:'—', phone:'', img:'assets/img/drivers/d2.jpg', idx:null},
     trailer:{name:'Krone', plate:'75 A 112 BC', type:'Flatbed', idx:2},
-    expenses:[]
+    expenses:[],
+    logs:[
+      {text:'отменил рейс — <strong>нет свободного водителя</strong>',time:'25 июн, 12:00',dot:'#F04438',by:CURRENT_ADMIN,byImg:''},
+      {text:'создал рейс',time:'24 июн, 10:00',dot:'#98A2B3',by:CURRENT_ADMIN,byImg:''},
+    ]
   },
   {
     id:'ORD-004', status:'done', from:'Наманган', to:'Бишкек',
@@ -2374,7 +2441,13 @@ const ORDERS = [
     truck:{name:'Mercedes Actros', plate:'30 C 201 BA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck5.jpg', idx:4, year:2020, power:'440 л.с.', fuel:'Дизель'},
     driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg', idx:2},
     trailer:null,
-    expenses:[]
+    expenses:[],
+    logs:[
+      {text:'изменил статус <strong>В рейсе → Завершён</strong>',time:'21 июн, 10:00',dot:'#667085',by:CURRENT_ADMIN,byImg:''},
+      {text:'Груз доставлен — <strong>Бишкек</strong>',time:'21 июн, 09:40',dot:'#17B26A',by:'Sardor Kholmatov',byImg:'assets/img/drivers/d4.jpg'},
+      {text:'Рейс начат',time:'20 июн, 09:00',dot:'#17B26A'},
+      {text:'создал рейс',time:'19 июн, 14:00',dot:'#98A2B3',by:CURRENT_ADMIN,byImg:''},
+    ]
   },
   {
     id:'ORD-005', status:'done', from:'Ташкент', to:'Прага',
@@ -2387,6 +2460,15 @@ const ORDERS = [
       {cat:'Топливо',amount:1840,note:'1 840 л · Дизель',addedBy:'Jasur Ergashev',addedAt:'20 июн, 08:00',deleted:false},
       {cat:'Зарплата',amount:1280,note:'16 дней · $80/день',addedBy:CURRENT_ADMIN,addedAt:'24 июн, 10:00',deleted:false},
       {cat:'Страховка',amount:480,note:'Таможня 4 перехода',addedBy:CURRENT_ADMIN,addedAt:'19 июн, 15:30',deleted:false}
+    ],
+    logs:[
+      {text:'изменил статус <strong>В рейсе → Завершён</strong>',time:'24 июн, 18:05',dot:'#667085',by:CURRENT_ADMIN,byImg:''},
+      {text:'добавил расход <strong>Зарплата</strong>',badge:'−$1,280',badgeRed:true,time:'24 июн, 10:00',dot:'#F79009',by:CURRENT_ADMIN,byImg:''},
+      {text:'Груз доставлен — <strong>Прага</strong>',time:'24 июн, 09:00',dot:'#17B26A',by:'Jasur Ergashev',byImg:'assets/img/drivers/d5.jpg'},
+      {text:'добавил расход <strong>Страховка</strong>',badge:'−$480',badgeRed:true,time:'19 июн, 15:30',dot:'#F79009',by:CURRENT_ADMIN,byImg:''},
+      {text:'добавил расход <strong>Топливо</strong>',badge:'−$1,840',badgeRed:true,time:'20 июн, 08:00',dot:'#F79009',by:'Jasur Ergashev',byImg:'assets/img/drivers/d5.jpg'},
+      {text:'Рейс начат',time:'08 июн, 07:00',dot:'#17B26A'},
+      {text:'создал рейс',time:'05 июн, 16:00',dot:'#98A2B3',by:CURRENT_ADMIN,byImg:''},
     ]
   },
   {
@@ -2396,7 +2478,11 @@ const ORDERS = [
     truck:{name:'Scania R500', plate:'70 B 456 DA', img:'https://app-three-red-71.vercel.app/assets/img/trucks/truck2.jpg', idx:1, year:2021, power:'500 л.с.', fuel:'Дизель'},
     driver:{name:'Bakhtiyor Yuldashev', phone:'+998 90 789 01 23', img:'assets/img/drivers/d2.jpg', idx:4},
     trailer:{name:'Kogel', plate:'60 H 457 AA', type:'Refrigerator', idx:1},
-    expenses:[]
+    expenses:[],
+    logs:[
+      {text:'отменил рейс — <strong>клиент отказался от заказа</strong>',time:'05 июн, 12:30',dot:'#F04438',by:CURRENT_ADMIN,byImg:''},
+      {text:'создал рейс',time:'04 июн, 09:00',dot:'#98A2B3',by:CURRENT_ADMIN,byImg:''},
+    ]
   },
 ];
 
@@ -2411,17 +2497,18 @@ const ORD_STATUS = {
 };
 
 const QUICK_EXP_CATS = [
-  {label:'Топливо',       bg:'#ECFDF3', color:'#17B26A', icon:'<path d="M3 22V8l6-6h6l3 3v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3z"/><path d="M10 22V12h4v10"/>'},
-  {label:'Зарплата',      bg:'#EFF8FF', color:'#1570EF', icon:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
-  {label:'Запчасти',      bg:'#FFF8EB', color:'#F79009', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M2 12h2M20 12h2"/>'},
-  {label:'Сервис/Мастер', bg:'#FFF8EB', color:'#F79009', icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'},
-  {label:'Страховка',     bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'},
-  {label:'Kredit/Lising', bg:'#F4F3FF', color:'#6941C6', icon:'<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>'},
-  {label:'Штраф',         bg:'#FEF3F2', color:'#D92D20', icon:'<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/>'},
-  {label:'Мойка',         bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 22a8 8 0 0 1-8-8c0-4.314 6-12 8-12s8 7.686 8 12a8 8 0 0 1-8 8z"/>'},
-  {label:'Питание',       bg:'#FFFBEB', color:'#D97706', icon:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><line x1="7" y1="2" x2="7" y2="11"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h1v7"/>'},
-  {label:'Стоянка',       bg:'#F2F4F7', color:'#667085', icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>'},
-  {label:'Другое',        bg:'#F2F4F7', color:'#667085', icon:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'},
+  {label:'Топливо',   bg:'#ECFDF3', color:'#17B26A', icon:'<path d="M3 22V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v18"/><path d="M3 22h10"/><rect x="5" y="8" width="6" height="4" rx="1"/><path d="M13 9h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0V8l-4-4"/>'},
+  {label:'Зарплата',  bg:'#EFF8FF', color:'#1570EF', icon:'<line x1="12" y1="2" x2="12" y2="22"/><path d="M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'},
+  {label:'Запчасти',  bg:'#FFF8EB', color:'#DC6803', icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'},
+  {label:'Сервис',    bg:'#FFF8EB', color:'#B45309', icon:'<path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>'},
+  {label:'Страховка', bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>'},
+  {label:'Кредит',    bg:'#F4F3FF', color:'#6941C6', icon:'<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/>'},
+  {label:'Штраф',     bg:'#FEF3F2', color:'#D92D20', icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5" fill="currentColor" stroke="none"/>'},
+  {label:'Мойка',     bg:'#F0F9FF', color:'#0284C7', icon:'<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0z"/>'},
+  {label:'Питание',   bg:'#FFFBEB', color:'#D97706', icon:'<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>'},
+  {label:'Стоянка',   bg:'#F2F4F7', color:'#667085', icon:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>'},
+  {label:'Таможня',   bg:'#F0F9FF', color:'#0369A1', icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>'},
+  {label:'Другое',    bg:'#F2F4F7', color:'#667085', icon:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'},
 ];
 
 const TRUCK_QUICK_CATS = QUICK_EXP_CATS.filter(c => ['Топливо','Зарплата','Запчасти','Штраф','Мойка'].includes(c.label));
@@ -2533,21 +2620,9 @@ function orderCardHTML(o, i) {
   const cargoParts = o.cargo.split(' · ');
   const incomeColor = o.status==='active' ? '#027A48' : (o.income==='—' ? '#98A2B3' : '#344054');
 
-  const progBar = (o.status === 'active') ? `
-    <div style="border-top:1px solid #F2F4F7;padding:10px 20px 12px">
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#98A2B3;margin-bottom:5px">
-        <span style="font-weight:600;color:#344054">${o.from}</span>
-        <span style="font-weight:700;color:#0F0F37">${o.pct}% пройдено</span>
-        <span style="font-weight:600;color:#344054">${o.to}</span>
-      </div>
-      <div style="height:5px;background:#F2F4F7;border-radius:999px;overflow:hidden">
-        <div style="height:100%;width:${o.pct}%;background:#FFCB00;border-radius:999px"></div>
-      </div>
-    </div>` : '';
-
   return `<div onclick="openOrder(${i})" style="background:white;border-bottom:1px solid #F2F4F7;cursor:pointer;transition:background .12s;overflow:hidden" onmouseover="this.style.background='#FFFDF5'" onmouseout="this.style.background='white'">
     <div style="display:flex;align-items:stretch;min-height:96px">
-      <div style="flex:1.6;min-width:0;display:flex;gap:12px;align-items:center;padding:14px 16px">
+      <div style="flex:1.5;min-width:0;display:flex;gap:12px;align-items:center;padding:14px 16px">
         <img src="${o.truck.img}" style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0">
         <div style="min-width:0">
           <div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:800;color:#0F0F37;margin-bottom:3px">
@@ -2559,28 +2634,33 @@ function orderCardHTML(o, i) {
           <p style="font-size:11px;color:#98A2B3;margin:0">${o.startDate} → ${o.estEnd}</p>
         </div>
       </div>
-      <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+      <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
         <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Груз</span>
         <span style="font-size:12.5px;font-weight:600;color:#344054;line-height:1.35">${cargoParts[0]}</span>
         <span style="font-size:11px;color:#98A2B3">${cargoParts.slice(1).join(' · ')}</span>
       </div>
-      <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+      <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
         <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Грузовик / Водитель</span>
         <span style="font-size:12.5px;font-weight:600;color:#344054;line-height:1.35">${o.truck.name}</span>
         <span style="font-size:11px;color:#98A2B3">${o.driver.name !== '—' ? o.driver.name : 'Нет водителя'}</span>
       </div>
-      <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 16px;border-left:1px solid #EAECF0">
+      <div style="flex:0.8;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 14px;border-left:1px solid #EAECF0">
         <span style="font-size:9px;font-weight:700;color:#98A2B3;text-transform:uppercase;letter-spacing:.05em">Прицеп</span>
         <span style="font-size:12.5px;font-weight:600;color:#344054;line-height:1.35">${trailerText}</span>
       </div>
-      <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 20px;border-left:1px solid #EAECF0">
+      <div style="flex:0.75;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px 10px;border-left:1px solid #EAECF0;text-align:center">
+        <span style="font-size:11px;font-weight:700;color:#344054;line-height:1.2">${o.from}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" stroke-linecap="round" width="12" height="12" style="flex-shrink:0"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        <span style="font-size:11px;font-weight:700;color:#344054;line-height:1.2">${o.to}</span>
+        <span style="font-size:10px;font-weight:700;color:#FFCB00;background:#FFFBEB;padding:1px 7px;border-radius:999px;margin-top:2px">${o.pct}%</span>
+      </div>
+      <div style="flex:0.9;min-width:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:6px;padding:12px 18px;border-left:1px solid #EAECF0">
         <span style="font-size:12px;font-weight:700;color:${incomeColor}">${o.income}</span>
         <span style="font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;background:${s.bg};color:${s.color};white-space:nowrap;display:inline-flex;align-items:center;gap:5px">
           <span style="width:6px;height:6px;border-radius:50%;background:${s.dot};flex-shrink:0"></span>${s.label}
         </span>
       </div>
     </div>
-    ${progBar}
   </div>`;
 }
 
@@ -2755,10 +2835,15 @@ function openOrder(idx) {
       </div>
     </div>
     <!-- Expense list -->
-    <div id="exp-section" style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden"></div>
+    <div id="exp-section" style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden;margin-bottom:16px"></div>
+    <!-- Activity log -->
+    <div style="font-size:14px;font-weight:700;color:#0F0F37;margin-bottom:12px">Журнал активности</div>
+    <div id="log-section" style="background:white;border-radius:14px;border:1px solid #EAECF0;overflow:hidden"></div>
   `;
   _showAllOrdExp = false;
+  _showAllOrdLogs = false;
   renderExpenseSection(idx);
+  renderLogsSection(idx);
 
   // Navigate to detail page
   const fleetNav = document.querySelector('[onclick*="\'fleet\'"]');
@@ -2791,7 +2876,7 @@ function renderExpenseSection(idx) {
         : `<button onclick="deleteAdminExpense(${idx},${ei})" style="margin-top:5px;font-size:11px;font-weight:600;color:#B42318;background:none;border:none;cursor:pointer;padding:0;font-family:inherit">Удалить</button>`}
     </div>`).join('') : '<p style="font-size:13px;color:#D0D5DD;padding:16px 0;margin:0">Расходов пока нет</p>';
 
-  const seeAll = o.expenses.length > ORD_EXP_PREVIEW
+  const seeAll = o.expenses.length > 0
     ? `<button onclick="toggleAllOrdExp(${idx})" style="display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 16px;font-size:12px;font-weight:600;color:#667085;background:none;border:none;border-top:1px solid #F2F4F7;cursor:pointer;width:100%;font-family:inherit">
         ${_showAllOrdExp ? 'Свернуть' : `Посмотреть все (${o.expenses.length})`}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="${_showAllOrdExp ? 'm18 15-6-6-6 6' : 'm6 9 6 6 6-6'}"/></svg>
@@ -2813,6 +2898,44 @@ function toggleAllOrdExp(idx) {
   renderExpenseSection(idx);
 }
 
+let _showAllOrdLogs = false;
+const ORD_LOG_PREVIEW = 4;
+
+function renderLogsSection(idx) {
+  const o = ORDERS[idx];
+  const logs = o.logs || [];
+  const visible = _showAllOrdLogs ? logs : logs.slice(0, ORD_LOG_PREVIEW);
+  const list = visible.length ? visible.map((l,i)=>`
+    <div style="display:flex;gap:12px;padding:12px 16px;${i<visible.length-1?'border-bottom:1px solid #F9FAFB':''}">
+      <div style="display:flex;flex-direction:column;align-items:center;padding-top:3px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${l.dot};flex-shrink:0"></div>
+        ${i<visible.length-1?'<div style="width:1.5px;background:#F0F0F0;flex:1;margin-top:4px;min-height:10px"></div>':''}
+      </div>
+      <div style="flex:1;min-width:0">
+        ${l.by ? `<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          ${l.byImg ? `<img src="${l.byImg}" style="width:18px;height:18px;border-radius:50%;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'">` : `<div style="width:18px;height:18px;border-radius:50%;background:#F2F4F7;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="#98A2B3" stroke-width="2" width="10" height="10"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>`}
+          <span style="font-size:11px;font-weight:600;color:#344054">${l.by}</span>
+        </div>` : ''}
+        <div style="font-size:12px;color:#344054;font-weight:500;line-height:1.4">${l.text}${l.badge ? `<span style="display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:6px;margin-left:5px;vertical-align:middle;background:${l.badgeRed?'#FEF3F2':'#ECFDF3'};color:${l.badgeRed?'#D92D20':'#027A48'}">${l.badge}</span>` : ''}</div>
+        <div style="font-size:10px;color:#98A2B3;margin-top:3px">${l.time}</div>
+      </div>
+    </div>`).join('') : '<p style="font-size:13px;color:#D0D5DD;padding:16px 0;margin:0;text-align:center">Событий пока нет</p>';
+
+  const seeAll = logs.length > ORD_LOG_PREVIEW
+    ? `<button onclick="toggleAllOrdLogs(${idx})" style="display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 16px;font-size:12px;font-weight:600;color:#667085;background:none;border:none;border-top:1px solid #F2F4F7;cursor:pointer;width:100%;font-family:inherit">
+        ${_showAllOrdLogs ? 'Свернуть' : `Все события (${logs.length})`}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="${_showAllOrdLogs ? 'm18 15-6-6-6 6' : 'm6 9 6 6 6-6'}"/></svg>
+      </button>`
+    : '';
+
+  document.getElementById('log-section').innerHTML = `${list}${seeAll}`;
+}
+
+function toggleAllOrdLogs(idx) {
+  _showAllOrdLogs = !_showAllOrdLogs;
+  renderLogsSection(idx);
+}
+
 function goBackToFleet() {
   _activeOrdIdx = null;
   const fleetBtn = document.querySelector('[onclick*="\'fleet\'"]');
@@ -2823,15 +2946,22 @@ function addAdminExpense(ordIdx, cat) {
   const amt = prompt(`Сумма расхода (${cat}), $:`);
   if(!amt || isNaN(parseFloat(amt))) return;
   const note = prompt('Комментарий (необязательно):') || '';
-  ORDERS[ordIdx].expenses.push({cat, amount: parseFloat(amt), note, addedBy: CURRENT_ADMIN, addedAt: 'Только что', deleted: false});
+  const parsed = parseFloat(amt);
+  const o = ORDERS[ordIdx];
+  o.expenses.push({cat, amount: parsed, note, addedBy: CURRENT_ADMIN, addedAt: 'Только что', deleted: false});
+  if (!o.logs) o.logs = [];
+  o.logs.unshift({text:`добавил расход <strong>${cat}</strong>`, badge:`−$${parsed.toLocaleString()}`, badgeRed:true, time:'Только что', dot:'#F79009', by:CURRENT_ADMIN, byImg:''});
   openOrder(ordIdx);
 }
 
 function deleteAdminExpense(ordIdx, expIdx) {
-  const e = ORDERS[ordIdx].expenses[expIdx];
+  const o = ORDERS[ordIdx];
+  const e = o.expenses[expIdx];
   e.deleted = true;
   e.deletedBy = CURRENT_ADMIN;
   e.deletedAt = 'Только что';
+  if (!o.logs) o.logs = [];
+  o.logs.unshift({text:`удалил расход <strong>${e.cat}</strong>`, badge:`+$${e.amount.toLocaleString()}`, badgeRed:false, time:'Только что', dot:'#F04438', by:CURRENT_ADMIN, byImg:''});
   openOrder(ordIdx);
 }
 
@@ -4801,21 +4931,106 @@ function submitCharge() {
   }, 3500);
 }
 
+// Simulated national/driver registry lookup by phone number
+const DRIVER_REGISTRY = [
+  { phone:'+998999999999', name:'Otabek Yusupov', exp:'6 лет опыта', license:'AB 4455667', busy:true, busyNote:'Уже числится водителем в другом автопарке' },
+  { phone:'+998901112233', name:'Rustam Aliyev', exp:'4 года опыта', license:'AB 1122334', busy:false },
+  { phone:'+998912223344', name:'Farrukh Nazarov', exp:'9 лет опыта', license:'AB 5566778', busy:false },
+];
+
+let _driverLookup = null;
+
+function normalizePhone(p) {
+  return '+' + p.replace(/[^0-9]/g, '');
+}
+
 function closeAddDriverModal() {
   document.getElementById('add-driver-modal').style.display = 'none';
-  document.getElementById('add-driver-name').value = '';
   document.getElementById('add-driver-phone').value = '';
   document.getElementById('add-driver-truck').value = '';
+  document.getElementById('driver-lookup-result').style.display = 'none';
+  document.getElementById('driver-lookup-result').innerHTML = '';
+  document.getElementById('driver-invite-fields').style.display = 'none';
+  _driverLookup = null;
+}
+
+function checkDriverPhone() {
+  const phoneInput = document.getElementById('add-driver-phone');
+  const raw = phoneInput.value.trim();
+  const resultEl = document.getElementById('driver-lookup-result');
+  const inviteEl = document.getElementById('driver-invite-fields');
+
+  if (raw.replace(/[^0-9]/g, '').length < 9) {
+    phoneInput.style.borderColor = '#F04438';
+    resultEl.style.display = 'none';
+    inviteEl.style.display = 'none';
+    return;
+  }
+  phoneInput.style.borderColor = '#D0D5DD';
+
+  const norm = normalizePhone(raw);
+  const known = DRIVER_REGISTRY.find(d => d.phone === norm);
+  _driverLookup = known
+    ? { phone: norm, name: known.name, exp: known.exp, license: known.license, busy: known.busy, busyNote: known.busyNote }
+    : { phone: norm, name: null, exp: null, license: null, busy: false, busyNote: null };
+
+  const d = _driverLookup;
+  if (d.busy) {
+    resultEl.innerHTML = `
+      <div style="background:#FEF3F2;border:1.5px solid #FECDCA;border-radius:14px;padding:14px 16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="width:36px;height:36px;border-radius:50%;background:#FEE4E2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#D92D20" stroke-width="2" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:700;color:#0F0F37">${d.name}</div>
+            <div style="font-size:12px;color:#667085">${d.phone}</div>
+          </div>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:#FEE4E2;color:#B42318;white-space:nowrap">Занят</span>
+        </div>
+        <p style="font-size:12px;color:#B42318;margin:0">${d.busyNote}</p>
+        <p style="font-size:11px;color:#98A2B3;margin:6px 0 0">${d.exp} · Права ${d.license}</p>
+      </div>`;
+    inviteEl.style.display = 'none';
+  } else if (d.name) {
+    resultEl.innerHTML = `
+      <div style="background:#ECFDF3;border:1.5px solid #ABEFC6;border-radius:14px;padding:14px 16px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="width:36px;height:36px;border-radius:50%;background:#D1FADF;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#079455" stroke-width="2" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:700;color:#0F0F37">${d.name}</div>
+            <div style="font-size:12px;color:#667085">${d.phone}</div>
+          </div>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:#D1FADF;color:#079455;white-space:nowrap">Свободен</span>
+        </div>
+        <p style="font-size:11px;color:#98A2B3;margin:0">${d.exp} · Права ${d.license}</p>
+      </div>`;
+    inviteEl.style.display = 'flex';
+  } else {
+    resultEl.innerHTML = `
+      <div style="background:#F9FAFB;border:1.5px solid #EAECF0;border-radius:14px;padding:14px 16px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:50%;background:#F2F4F7;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#667085" stroke-width="2" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:600;color:#344054">${d.phone}</div>
+            <div style="font-size:11px;color:#98A2B3;margin-top:1px">Не найден в базе — новый водитель</div>
+          </div>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:#D1FADF;color:#079455;white-space:nowrap">Свободен</span>
+        </div>
+      </div>`;
+    inviteEl.style.display = 'flex';
+  }
+  resultEl.style.display = 'block';
 }
 
 function submitAddDriver() {
-  const name = document.getElementById('add-driver-name').value.trim();
-  const phone = document.getElementById('add-driver-phone').value.trim();
-  if (!name || !phone) {
-    if (!name) document.getElementById('add-driver-name').style.borderColor = '#F04438';
-    if (!phone) document.getElementById('add-driver-phone').style.borderColor = '#F04438';
-    return;
-  }
+  if (!_driverLookup || _driverLookup.busy) return;
+  const phone = _driverLookup.phone;
+  const name = _driverLookup.name || 'Новый водитель';
   closeAddDriverModal();
   const toast = document.getElementById('driver-toast');
   document.getElementById('toast-title').textContent = 'Приглашение отправлено';
