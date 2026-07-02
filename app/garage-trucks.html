@@ -49,34 +49,23 @@
         <button data-close class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
       </div>
       <div class="sheet-body space-y-4">
-        <label class="dropzone">
-          <span class="w-11 h-11 rounded-xl bg-white border border-primary-200 flex items-center justify-center text-navy-700"><i data-icon="upload" class="w-5 h-5"></i></span>
-          <span class="text-sm font-semibold text-navy-800 mt-1">Upload truck photo</span>
-          <span class="text-xs text-gray-400">PNG or JPG · max 10 MB</span>
-          <input type="file" accept="image/*" class="hidden">
-        </label>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="f-label">Brand</label><div class="f-sel"><select class="f-field"><option>DAF</option><option>Volvo</option><option>Scania</option><option>MAN</option><option>Mercedes</option><option>Renault</option><option>Iveco</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
-          <div><label class="f-label">Model</label><input class="f-field" placeholder="e.g. XF 105"></div>
+        <div>
+          <label class="f-label">License plate</label>
+          <div class="flex gap-2">
+            <div class="f-plate flex-1"><span class="seg">UZ</span><input id="add-truck-plate" placeholder="60 A 467 AA" onkeydown="if(event.key==='Enter')checkTruckPlate()"></div>
+            <button onclick="checkTruckPlate()" class="btn h-12 px-4 rounded-lg bg-navy-800 text-white font-bold shrink-0">Check</button>
+          </div>
         </div>
-        <div><label class="f-label">License plate</label><div class="f-plate"><span class="seg">UZ</span><input placeholder="60 A 467 AA"></div></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="f-label">Year</label><div class="f-sel"><select class="f-field"><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
-          <div><label class="f-label">Type</label><div class="f-sel"><select class="f-field"><option>Tractor unit</option><option>Rigid truck</option><option>Tipper</option><option>Tanker</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="f-label">Color</label><input class="f-field" placeholder="e.g. White"></div>
-          <div><label class="f-label">Mileage (km)</label><input class="f-field" inputmode="numeric" placeholder="e.g. 280,000"></div>
-        </div>
-        <div><label class="f-label">VIN number</label><input class="f-field" placeholder="e.g.  XLRTE47MS0E123456"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="f-label">Assign driver</label><div class="f-sel"><select class="f-field"><option>— Not assigned —</option><option>Alisher Karimov</option><option>Vali Rakhimov</option><option>Sardor Kholmatov</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
-          <div><label class="f-label">Assign trailer</label><div class="f-sel"><select class="f-field"><option>— Not assigned —</option><option>Schmitz · 60 H 545 AA</option><option>Kogel · 60 H 457 AA</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
+
+        <div id="truck-lookup-result" class="hidden"></div>
+
+        <div id="truck-invite-fields" class="hidden space-y-4">
+          <div><label class="f-label">Assign driver (optional)</label><div class="f-sel"><select id="add-truck-driver" class="f-field"><option value="">— Not assigned —</option><option>Alisher Karimov</option><option>Vali Rakhimov</option><option>Sardor Kholmatov</option></select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>
         </div>
       </div>
       <div class="sheet-foot">
         <button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold hover:bg-gray-50">Cancel</button>
-        <button data-close class="btn flex-1 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold shadow-sm">Add Truck</button>
+        <button id="add-truck-submit" onclick="submitAddTruck()" disabled class="btn flex-1 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold shadow-sm opacity-40 pointer-events-none">Add Truck</button>
       </div>
     </div>
   </div>
@@ -100,9 +89,90 @@
   document.getElementById('searchClose').addEventListener('click',()=>{sx.style.width='0';document.getElementById('searchInput').value='';});
 
   const ov=document.getElementById('sheet');
-  document.getElementById('addBtn').addEventListener('click',e=>{e.preventDefault();ov.classList.add('open');});
+  document.getElementById('addBtn').addEventListener('click',e=>{e.preventDefault();resetAddTruckForm();ov.classList.add('open');});
   ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');});
   ov.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>ov.classList.remove('open')));
+
+  // Simulated registry of plates already working for other companies
+  const TRUCK_REGISTRY = [
+    { plate:'01Z999XX', company:'Sharq Logistics LLC', busy:true },
+  ];
+  let _truckLookup = null;
+
+  function normalizePlate(p){ return p.toUpperCase().replace(/[^A-Z0-9]/g,''); }
+
+  function resetAddTruckForm(){
+    document.getElementById('add-truck-plate').value = '';
+    document.getElementById('add-truck-driver').value = '';
+    document.getElementById('truck-lookup-result').classList.add('hidden');
+    document.getElementById('truck-lookup-result').innerHTML = '';
+    document.getElementById('truck-invite-fields').classList.add('hidden');
+    const submitBtn = document.getElementById('add-truck-submit');
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-40','pointer-events-none');
+    _truckLookup = null;
+  }
+
+  function checkTruckPlate(){
+    const plateInput = document.getElementById('add-truck-plate');
+    const raw = plateInput.value.trim();
+    const resultEl = document.getElementById('truck-lookup-result');
+    const inviteEl = document.getElementById('truck-invite-fields');
+    const submitBtn = document.getElementById('add-truck-submit');
+
+    if (normalizePlate(raw).length < 6) {
+      plateInput.style.borderColor = '#F04438';
+      resultEl.classList.add('hidden');
+      inviteEl.classList.add('hidden');
+      return;
+    }
+    plateInput.style.borderColor = '';
+
+    const norm = normalizePlate(raw);
+    const known = TRUCK_REGISTRY.find(t => normalizePlate(t.plate) === norm);
+    _truckLookup = known ? { plate: raw, busy: true, company: known.company } : { plate: raw, busy: false };
+
+    if (_truckLookup.busy) {
+      resultEl.innerHTML = `
+        <div class="rounded-2xl p-4" style="background:#FEF3F2;border:1.5px solid #FECDCA">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background:#FEE4E2"><i data-icon="truck" class="w-5 h-5" style="color:#D92D20"></i></div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-navy-800">UZ ${_truckLookup.plate}</p>
+              <p class="text-xs text-gray-500">Занят другой компанией</p>
+            </div>
+            <span class="text-xs font-bold px-2.5 py-1 rounded-full" style="background:#FEE4E2;color:#B42318">Занят</span>
+          </div>
+          <p class="text-xs" style="color:#B42318">Работает в: <strong>${_truckLookup.company}</strong></p>
+        </div>`;
+      inviteEl.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-40','pointer-events-none');
+    } else {
+      resultEl.innerHTML = `
+        <div class="rounded-2xl p-4" style="background:#ECFDF3;border:1.5px solid #ABEFC6">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background:#D1FADF"><i data-icon="truck" class="w-5 h-5" style="color:#079455"></i></div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-navy-800">UZ ${_truckLookup.plate}</p>
+              <p class="text-xs text-gray-400">Не занят другой компанией</p>
+            </div>
+            <span class="text-xs font-bold px-2.5 py-1 rounded-full" style="background:#D1FADF;color:#079455">Свободен</span>
+          </div>
+        </div>`;
+      inviteEl.classList.remove('hidden');
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('opacity-40','pointer-events-none');
+    }
+    resultEl.classList.remove('hidden');
+    Panda.render();
+  }
+
+  function submitAddTruck(){
+    if (!_truckLookup || _truckLookup.busy) return;
+    ov.classList.remove('open');
+    resetAddTruckForm();
+  }
 </script>
 </body>
 </html>
