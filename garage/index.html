@@ -4,10 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
 <title>Гараж — Driver App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:#111;display:flex;justify-content:center;align-items:center;min-height:100vh;
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;}
+  font-family:'Manrope',-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;}
 
 .phone{width:393px;height:852px;background:#f5f5f5;border-radius:54px;overflow:hidden;
   position:relative;
@@ -50,24 +53,30 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   border-top:1px solid #e8e8e8;display:flex;padding:8px 0 20px;flex-shrink:0;}
 .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
   cursor:pointer;padding:4px 0;border:none;background:none;font-family:inherit;}
-.tab-icon{font-size:22px;}
+.tab-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:#bbb;}
 .tab-label{font-size:10px;font-weight:500;}
 .tab-item.active .tab-label{color:#0F0F37;font-weight:700;}
+.tab-item.active .tab-icon{color:#0F0F37;}
 .tab-item:not(.active) .tab-label{color:#bbb;}
-.tab-item:not(.active) .tab-icon{filter:grayscale(1) opacity(.35);}
 
 /* ══ SCREEN 1: GARAGE LIST ══════════════════ */
-.g-top{padding:4px 20px 12px;flex-shrink:0;}
+.g-top{padding:4px 20px 12px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .g-title{font-size:28px;font-weight:800;color:#0F0F37;}
 .g-sub{font-size:13px;color:#aaa;font-weight:500;margin-top:2px;}
 .g-pad{padding:0 16px;display:flex;flex-direction:column;gap:14px;padding-bottom:24px;}
 
-/* Garage segment tabs */
-.g-tabs{display:flex;gap:0;background:#e8e8e8;border-radius:14px;padding:3px;
-  margin:0 16px 10px;flex-shrink:0;}
-.g-tab{flex:1;padding:9px 6px;border:none;border-radius:11px;font-size:13px;font-weight:600;
-  background:transparent;color:#aaa;cursor:pointer;font-family:inherit;transition:all .2s;}
-.g-tab.active{background:#fff;color:#0F0F37;box-shadow:0 2px 8px rgba(0,0,0,.10);}
+/* Own-fleet quick-access icon (top-right of Гараж header) */
+.g-own-icon-btn{flex-shrink:0;width:40px;height:40px;border-radius:14px;background:#0F0F37;
+  border:none;display:flex;align-items:center;justify-content:center;font-size:19px;
+  cursor:pointer;color:#fff;}
+.g-own-icon-btn.active-icon{background:#FAE436;color:#0F0F37;}
+
+/* Back row shown inside "Свой грузовик" panel */
+.g-panel-back{display:flex;align-items:center;gap:10px;padding:0 16px 12px;}
+.g-panel-back button{width:32px;height:32px;border-radius:10px;background:#f4f4f4;border:none;
+  font-size:18px;color:#0F0F37;cursor:pointer;flex-shrink:0;}
+.g-panel-back span{font-size:15px;font-weight:800;color:#0F0F37;}
+
 .g-panel{display:none;}
 .g-panel.show{display:block;}
 
@@ -78,13 +87,13 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .work-empty-title{font-size:17px;font-weight:700;color:#0F0F37;}
 .work-empty-sub{font-size:13px;color:#aaa;line-height:1.5;}
 .work-truck-card{background:#fff;border-radius:24px;overflow:hidden;
-  box-shadow:0 4px 20px rgba(0,0,0,.10);margin-bottom:14px;}
+  border:1.5px solid #eee;margin-bottom:14px;}
 .wtc-badge{background:#e8f9f0;border-radius:10px;padding:3px 10px;
   font-size:11px;font-weight:700;color:#1a8c52;display:inline-flex;align-items:center;gap:5px;}
 .wtc-owner{font-size:12px;color:#aaa;margin-top:4px;}
 
 .gc-card{background:#fff;border-radius:24px;overflow:hidden;
-  box-shadow:0 4px 20px rgba(0,0,0,.10);cursor:pointer;transition:transform .12s;}
+  border:1.5px solid #eee;cursor:pointer;transition:transform .12s;}
 .gc-card:active{transform:scale(.99);}
 .gc-photo-wrap{position:relative;height:185px;}
 .gc-photo-img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -133,8 +142,8 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .hdr-action:active{background:#e8e8e8;}
 .otb{background:#fff;margin:4px 16px 2px;border-radius:18px;padding:11px 14px;
   display:flex;align-items:center;gap:12px;cursor:pointer;
-  box-shadow:0 2px 10px rgba(0,0,0,.05);flex-shrink:0;
-  border:none;width:calc(100% - 32px);text-align:left;font-family:inherit;
+  border:1.5px solid #eee;flex-shrink:0;
+  width:calc(100% - 32px);text-align:left;font-family:inherit;
   transition:background .12s;}
 .otb:active{background:#f8f8f8;}
 .otb-logo{width:38px;height:38px;border-radius:19px;overflow:hidden;flex-shrink:0;}
@@ -148,7 +157,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
 /* Active trip card */
 .trip-card{background:#fff;border-radius:20px;padding:16px;
-  box-shadow:0 2px 12px rgba(0,0,0,.06);display:none;}
+  border:1.5px solid #eee;display:none;}
 .trip-card.show{display:block;}
 .trip-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .trip-lbl{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;}
@@ -182,7 +191,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
 /* Trip done */
 .trip-done{background:#EFEFEF;border-radius:20px;padding:18px;
-  box-shadow:0 2px 12px rgba(0,0,0,.07);border:1.5px solid #E2E2E2;display:none;}
+  border:1.5px solid #E2E2E2;display:none;}
 .trip-done.show{display:block;}
 .td-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
 .td-icon{width:40px;height:40px;border-radius:20px;background:rgba(45,189,113,.15);
@@ -200,7 +209,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
 /* Mini map */
 .mini-map{background:#fff;border-radius:20px;overflow:hidden;
-  box-shadow:0 2px 12px rgba(0,0,0,.07);display:none;}
+  border:1.5px solid #eee;display:none;}
 .mini-map.show{display:block;}
 .mm-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;}
 .mm-title{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;}
@@ -212,7 +221,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
 /* Trip history list */
 .trip-item{background:#fff;border-radius:18px;padding:14px;
-  box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer;transition:transform .12s;}
+  border:1.5px solid #eee;cursor:pointer;transition:transform .12s;}
 .trip-item:active{transform:scale(.99);}
 .ti-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .ti-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;}
@@ -240,7 +249,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 /* ══ SCREEN 3: TRUCK DETAIL ══════════════════ */
 .scroll{padding:8px 16px 40px;display:flex;flex-direction:column;gap:14px;}
 
-.truck-card{background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.truck-card{background:#fff;border-radius:24px;overflow:hidden;border:1.5px solid #eee;}
 .tc-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;}
 .tc-brand-row{display:flex;align-items:center;gap:10px;}
 .tc-logo{width:44px;height:44px;border-radius:22px;background:#f0f0f0;border:1.5px solid #e8e8e8;
@@ -261,7 +270,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .tc-driver-pill{background:#f4f4f4;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;color:#555;}
 .tc-driver-pill.yellow{background:rgba(250,228,54,.18);color:#0F0F37;}
 
-.trailer-card{background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.trailer-card{background:#fff;border-radius:24px;overflow:hidden;border:1.5px solid #eee;}
 .tc-info{padding:10px 14px 4px;border-top:1px solid #f3f3f3;}
 .tc-row{display:flex;align-items:center;gap:8px;padding:6px 0;}
 .tc-row:not(:last-child){border-bottom:1px solid #f7f7f7;}
@@ -270,31 +279,31 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .tc-val{font-size:13px;font-weight:600;color:#0F0F37;}
 
 /* Driver status card */
-.driver-status-card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.driver-status-card{background:#fff;border-radius:20px;padding:16px;border:1.5px solid #eee;}
 .ds-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .ds-title{font-size:13px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.6px;}
 .ds-change{font-size:12px;font-weight:700;color:#0F0F37;cursor:pointer;padding:5px 12px;background:#f4f4f4;border-radius:20px;border:none;letter-spacing:.2px;}
 .status-badge{display:inline-flex;align-items:center;gap:7px;border-radius:100px;padding:8px 16px;
-  cursor:pointer;transition:transform .12s,box-shadow .12s;border:none;font-family:inherit;}
-.status-badge:hover{transform:scale(1.03);box-shadow:0 4px 16px rgba(0,0,0,.1);}
+  cursor:pointer;transition:transform .12s;border:1.5px solid #eee;background:#fff;font-family:inherit;}
 .status-badge:active{transform:scale(.97);}
 .sb-dot{width:9px;height:9px;border-radius:50%;}
 .sb-icon{font-size:15px;}
-.sb-text{font-size:15px;font-weight:700;}
-.s-driving{background:#e8f9f0;}.s-driving .sb-dot{background:#2dbd71;}.s-driving .sb-text{color:#1a8c52;}
-.s-parked{background:#fff8e6;}.s-parked .sb-dot{background:#f5a623;}.s-parked .sb-text{color:#c07a00;}
-.s-free{background:#ffeaea;}.s-free .sb-dot{background:#ff4b4b;}.s-free .sb-text{color:#cc1c1c;}
-.s-repair{background:#fff3e0;}.s-repair .sb-text{color:#c06000;}
+.sb-text{font-size:15px;font-weight:700;color:#0F0F37;}
+.s-driving .sb-dot{background:#2dbd71;}
+.s-parked .sb-dot{background:#f5a623;}
+.s-free .sb-dot{background:#ff4b4b;}
+.s-repair .sb-dot{background:#8a94a6;}
 .status-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
 .status-option{display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:16px;
-  cursor:pointer;border:2px solid transparent;transition:all .15s;background:#f8f8f8;}
-.status-option:hover{background:#f0f0f0;}
+  cursor:pointer;border:1.5px solid #eee;transition:all .15s;background:#fff;}
+.status-option:hover{background:#f8f8f8;}
+.status-option.active{border-color:#0F0F37;}
 .so-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
-.so-text{font-size:13px;font-weight:700;}
+.so-text{font-size:13px;font-weight:700;color:#0F0F37;}
 
 /* Odometer */
 .odo-btn{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;
-  gap:12px;box-shadow:0 2px 10px rgba(0,0,0,.05);cursor:pointer;border:none;width:100%;
+  gap:12px;border:1.5px solid #eee;cursor:pointer;width:100%;
   text-align:left;font-family:inherit;transition:opacity .15s;}
 .odo-btn:active{opacity:.8;}
 .odo-ico{width:44px;height:44px;border-radius:22px;background:#f2f2f2;
@@ -308,21 +317,33 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .sec-title{font-size:18px;font-weight:700;color:#0F0F37;margin-bottom:14px;}
 .fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .stat-card{background:#fff;border-radius:20px;padding:16px;
-  box-shadow:0 2px 10px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:7px;}
+  border:1.5px solid #eee;display:flex;flex-direction:column;gap:7px;}
 .stat-ic{width:46px;height:46px;border-radius:23px;display:flex;align-items:center;justify-content:center;font-size:20px;}
 .stat-l{font-size:12px;color:#aaa;font-weight:500;}
 .stat-a{font-size:15px;font-weight:700;}
-.act-card{background:#fff;border-radius:20px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.05);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  min-height:108px;cursor:pointer;border:none;transition:transform .12s;font-family:inherit;}
-.act-card:hover{transform:translateY(-1px);}
-.act-card:active{transform:scale(.97);}
-.add-c{width:52px;height:52px;border-radius:26px;display:flex;align-items:center;justify-content:center;}
-.act-l{font-size:13px;font-weight:500;color:#333;text-align:center;}
+.qa-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;}
+.qa-strip::-webkit-scrollbar{display:none;}
+.qa-ic{flex:0 0 auto;width:62px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:#fff;border-radius:14px;padding:10px 4px;border:1.5px solid #eee;
+  cursor:pointer;font-family:inherit;transition:transform .12s;}
+.qa-ic:active{transform:scale(.94);}
+.qa-ic span{width:36px;height:36px;border-radius:18px;background:#0F0F37;color:#fff;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.qa-ic small{font-size:9px;color:#667085;font-weight:600;text-align:center;line-height:1.15;}
 .net-row{grid-column:1/-1;background:#fff;border-radius:16px;padding:14px 18px;
-  display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+  display:flex;justify-content:space-between;align-items:center;border:1.5px solid #eee;}
 .net-l{font-size:14px;color:#666;font-weight:500;}
 .net-a{font-size:17px;font-weight:700;}
+
+/* Compact info chips (matches reference "Общая информация" chip style) */
+.info-chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.info-chip{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #eee;
+  border-radius:14px;padding:10px 12px;}
+.info-chip-ic{width:30px;height:30px;border-radius:15px;background:#0F0F37;color:#fff;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;}
+.info-chip-l{font-size:10px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+.info-chip-v{font-size:12.5px;color:#0F0F37;font-weight:700;margin-top:1px;}
 
 /* ── MODALS ────────────────────────────────── */
 .modal{position:absolute;inset:0;background:rgba(0,0,0,.52);display:flex;align-items:flex-end;
@@ -359,7 +380,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   padding:12px 6px;border-radius:14px;border:1.5px solid #e8e8e8;background:#fff;
   font-size:11px;font-weight:700;color:#444;cursor:pointer;transition:all .15s;line-height:1.2;
   text-align:center;}
-.exp-cat-btn span:first-child{font-size:22px;}
+.exp-cat-btn span:first-child{display:flex;align-items:center;justify-content:center;height:20px;}
 .exp-cat-btn.active{background:#0F0F37;border-color:#0F0F37;color:#FAE436;}
 .exp-cur-btn{flex:1;padding:8px 4px;border-radius:10px;border:1.5px solid #e0e0e0;
   background:#fff;color:#888;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;}
@@ -399,7 +420,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 /* ── Trip detail screen ───────────────────── */
 .td-info-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
 .td-trip-stat{font-size:12px;color:#999;margin-bottom:14px;}
-.td-card{background:#fff;border-radius:20px;padding:16px;margin:0 16px 12px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.td-card{background:#fff;border-radius:20px;padding:16px;margin:0 16px 12px;border:1.5px solid #eee;}
 .td-sect{font-size:11px;font-weight:700;color:#aaa;letter-spacing:.8px;margin:0 16px 8px;text-transform:uppercase;}
 .td-route-big{font-size:18px;font-weight:800;color:#0F0F37;margin-bottom:4px;}
 .td-cargo{font-size:13px;color:#888;margin-bottom:4px;}
@@ -455,23 +476,27 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   </div>
 
   <div class="g-top">
-    <div class="g-title">Гараж</div>
-    <div class="g-sub" id="gSub">3 грузовика</div>
-  </div>
-
-  <div class="g-tabs">
-    <button class="g-tab active" onclick="switchGTab(this,'panelOwn')">Свой грузовик</button>
-    <button class="g-tab" onclick="switchGTab(this,'panelWork')">Рабочий грузовик</button>
+    <div>
+      <div class="g-title">Гараж</div>
+      <div class="g-sub" id="gSub">ООО «АвтоТранс»</div>
+    </div>
+    <button class="g-own-icon-btn" id="gOwnIconBtn" onclick="toggleOwnFleet()" title="Свой грузовик">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7v-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+    </button>
   </div>
 
   <div class="screen-scroll">
 
   <!-- TAB: Свой грузовик -->
-  <div class="g-panel show" id="panelOwn">
+  <div class="g-panel" id="panelOwn">
+  <div class="g-panel-back">
+    <button onclick="showWorkTruck()">‹</button>
+    <span>Свой грузовик</span>
+  </div>
   <div class="g-pad">
 
     <!-- VOLVO -->
-    <div class="gc-card" onclick="goToOrders(0,'info')">
+    <div class="gc-card" onclick="goToOrders(0)">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -483,7 +508,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
           </div>
           <div class="gc-status-chip">
             <div class="sb-dot" style="background:#2dbd71"></div>
-            <span style="color:#1a8c52">В пути</span>
+            <span style="color:#0F0F37">В пути</span>
           </div>
         </div>
         <div class="gc-plate-row">
@@ -499,7 +524,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
 
     <!-- SCANIA -->
-    <div class="gc-card" onclick="goToOrders(1,'info')">
+    <div class="gc-card" onclick="goToOrders(1)">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -511,7 +536,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
           </div>
           <div class="gc-status-chip">
             <div class="sb-dot" style="background:#ff4b4b"></div>
-            <span style="color:#cc1c1c">Свободен</span>
+            <span style="color:#0F0F37">Свободен</span>
           </div>
         </div>
         <div class="gc-plate-row">
@@ -527,7 +552,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
 
     <!-- MAN -->
-    <div class="gc-card" onclick="goToOrders(2,'info')">
+    <div class="gc-card" onclick="goToOrders(2)">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -539,7 +564,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
           </div>
           <div class="gc-status-chip">
             <div class="sb-dot" style="background:#f5a623"></div>
-            <span style="color:#c07a00">Стоянка</span>
+            <span style="color:#0F0F37">Стоянка</span>
           </div>
         </div>
         <div class="gc-plate-row">
@@ -563,11 +588,11 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   </div><!-- /panelOwn -->
 
   <!-- TAB: Рабочий грузовик -->
-  <div class="g-panel" id="panelWork">
+  <div class="g-panel show" id="panelWork">
   <div class="g-pad">
 
     <!-- Assigned truck from employer -->
-    <div class="work-truck-card">
+    <div class="work-truck-card" onclick="goToOrders(0)" style="cursor:pointer">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -579,7 +604,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
           </div>
           <div class="gc-status-chip">
             <div class="sb-dot" style="background:#2dbd71"></div>
-            <span style="color:#1a8c52">В пути</span>
+            <span style="color:#0F0F37">В пути</span>
           </div>
         </div>
         <div class="gc-plate-row">
@@ -591,11 +616,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
           <span class="wtc-badge">✓ Назначен</span>
           <span class="wtc-owner">от Иван Петров</span>
         </div>
-        <div style="font-size:13px;color:#888">🔗 Прицеп: 01 B 123 RT · Рефрижератор · 20т</div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button onclick="goToOrders(0,'info')" style="flex:1;padding:12px;border-radius:14px;border:1.5px solid #e0e0e0;background:#f7f7f7;font-size:14px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;">Инфо</button>
-          <button onclick="goToOrders(0,'orders')" style="flex:1;padding:12px;border-radius:14px;border:none;background:#FAE436;font-size:14px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;">Заказы</button>
-        </div>
+        <div style="font-size:13px;color:#888">Прицеп: 01 B 123 RT · Рефрижератор · 20т</div>
       </div>
     </div>
 
@@ -609,11 +630,11 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   </div><!-- /screen-scroll -->
 
   <div class="tab-bar">
-    <button class="tab-item"><span class="tab-icon">🏠</span><span class="tab-label">Главная</span></button>
-    <button class="tab-item active"><span class="tab-icon">🚛</span><span class="tab-label">Гараж</span></button>
-    <button class="tab-item"><span class="tab-icon">📦</span><span class="tab-label">Рейсы</span></button>
-    <button class="tab-item"><span class="tab-icon">💰</span><span class="tab-label">Финансы</span></button>
-    <button class="tab-item"><span class="tab-icon">👤</span><span class="tab-label">Профиль</span></button>
+    <button class="tab-item"><span class="tab-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="tab-label">Главная</span></button>
+    <button class="tab-item active"><span class="tab-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7v-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg></span><span class="tab-label">Гараж</span></button>
+    <button class="tab-item"><span class="tab-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><span class="tab-label">Рейсы</span></button>
+    <button class="tab-item"><span class="tab-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="14.5" r="1.5"/></svg></span><span class="tab-label">Финансы</span></button>
+    <button class="tab-item"><span class="tab-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="tab-label">Профиль</span></button>
   </div>
 
 </div><!-- /screenGarage -->
@@ -679,10 +700,10 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
     <!-- Start trip button (visible when free) -->
     <button class="start-trip-btn hidden" id="startTripBtn" onclick="closeModal('tripsModal');openModal('newTripModal')">
-      <span style="font-size:18px">🚛</span><span>Начать рейс</span>
+      <span style="display:inline-flex"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7v-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg></span><span>Начать рейс</span>
     </button>
     <button class="start-trip-btn hidden" id="ownerTripBtn" onclick="openModal('ownerTripModal')" style="background:#f0f4ff;color:#3d5afe;border:1.5px solid #c5cae9;margin-top:0;">
-      <span style="font-size:18px">👤</span><span>Рейс от владельца</span>
+      <span style="display:inline-flex"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span>Рейс от владельца</span>
     </button>
 
     <!-- History -->
@@ -803,11 +824,11 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div class="td-card">
         <div class="fin-row">
           <span class="fin-lbl">Доход</span>
-          <span class="fin-val" style="color:#2dbd71" id="tdIncome">+980 000 UZS</span>
+          <span class="fin-val" id="tdIncome">+980 000 UZS</span>
         </div>
         <div class="fin-row">
           <span class="fin-lbl">Расходы</span>
-          <span class="fin-val" style="color:#ff4b4b" id="tdExpTotal">−280 000 UZS</span>
+          <span class="fin-val" id="tdExpTotal">−280 000 UZS</span>
         </div>
         <div class="fin-row">
           <span class="fin-lbl">Итого</span>
@@ -888,10 +909,8 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <span id="tcDriverName" style="display:none"></span>
     <div id="tcDriverBadge" style="display:none"></div>
 
-    <div id="tcTabInfo">
-
     <!-- Mini map (shown when tripActive) -->
-    <div id="tcMiniMapCard" style="display:none;background:#fff;border-radius:20px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);" onmousedown="startNavPress(event)" onmouseup="cancelNavPress()" onmouseleave="cancelNavPress()" ontouchstart="startNavPress(event)" ontouchend="cancelNavPress()">
+    <div id="tcMiniMapCard" style="display:none;background:#fff;border-radius:20px;overflow:hidden;margin-bottom:12px;border:1.5px solid #eee;" onmousedown="startNavPress(event)" onmouseup="cancelNavPress()" onmouseleave="cancelNavPress()" ontouchstart="startNavPress(event)" ontouchend="cancelNavPress()">
       <div style="position:relative;cursor:pointer;" onclick="openModal('navModal')">
         <svg id="tcMapSvg" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
           <!-- sky/background -->
@@ -955,7 +974,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
 
     <!-- Current trip card (shown when В пути) -->
-    <div id="tcTripCard" style="display:none;background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);">
+    <div id="tcTripCard" style="display:none;background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;border:1.5px solid #eee;">
       <!-- header row -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <span style="font-size:11px;font-weight:700;color:#aaa;letter-spacing:.6px;text-transform:uppercase">Текущий рейс</span>
@@ -986,7 +1005,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <!-- progress bar -->
       <div style="height:10px;background:#f0f0f0;border-radius:5px;overflow:visible;position:relative;margin-bottom:14px">
         <div id="tcTripBar" style="height:100%;background:#FAE436;border-radius:5px;width:38%;position:relative;transition:width .4s">
-          <span style="position:absolute;right:-10px;top:-5px;font-size:18px;line-height:1">🚛</span>
+          <span style="position:absolute;right:-9px;top:-4px;width:18px;height:18px;border-radius:9px;background:#0F0F37;border:2px solid #fff;display:block"></span>
         </div>
       </div>
       <!-- stepper -->
@@ -1008,7 +1027,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
 
     <!-- Odometer photo -->
-    <button onclick="openModal('odoModal')" style="width:100%;background:#fff;border-radius:20px;padding:18px 20px;border:none;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:12px;text-align:left;">
+    <button onclick="openModal('odoModal')" style="width:100%;background:#fff;border-radius:20px;padding:18px 20px;border:1.5px solid #eee;cursor:pointer;display:flex;align-items:center;gap:16px;margin-bottom:12px;text-align:left;">
       <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#f7971e,#ffd200);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(247,151,30,.35);">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -1022,99 +1041,15 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="#ccc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 7,7 1,13"/></svg>
     </button>
 
-    <!-- Truck technical info -->
-    <div style="background:#fff;border-radius:20px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
-      <div style="padding:14px 16px 10px;border-bottom:1px solid #f0f0f0;">
-        <div style="font-size:12px;font-weight:700;color:#aaa;letter-spacing:.5px;text-transform:uppercase">Технические данные</div>
-      </div>
-      <div style="padding:4px 0">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
-            </div>
-            <span style="font-size:14px;color:#667085">Двигатель</span>
-          </div>
-          <span style="font-size:14px;font-weight:700;color:#0F0F37">D13K500 · Euro 6</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <span style="font-size:14px;color:#667085">Мощность</span>
-          </div>
-          <span style="font-size:14px;font-weight:700;color:#0F0F37">500 л.с.</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4M7 2l4 4-4 4M17 22l-4-4 4-4M21 2l-4 4 4 4"/><line x1="7" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="17" y2="18"/></svg>
-            </div>
-            <span style="font-size:14px;color:#667085">Тип топлива</span>
-          </div>
-          <span style="font-size:14px;font-weight:700;color:#0F0F37">Дизель</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            </div>
-            <span style="font-size:14px;color:#667085">Грузоподъёмность</span>
-          </div>
-          <span style="font-size:14px;font-weight:700;color:#0F0F37">25 тонн</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            </div>
-            <span style="font-size:14px;color:#667085">Пробег</span>
-          </div>
-          <span style="font-size:14px;font-weight:700;color:#0F0F37">245 000 км</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #f8f8f8;">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <span style="font-size:14px;color:#667085">Год выпуска</span>
-          </div>
-          <span style="font-size:14px;font-weight:700;color:#0F0F37">2021</span>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:32px;height:32px;border-radius:10px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 12h.01"/></svg>
-            </div>
-            <span style="font-size:14px;color:#667085">VIN</span>
-          </div>
-          <span style="font-size:13px;font-weight:700;color:#0F0F37;letter-spacing:.3px">YV2RT40A2MA123456</span>
-        </div>
-      </div>
+    <!-- Brief truck info (compact info-chip grid) -->
+    <div class="info-chip-grid">
+      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><div><div class="info-chip-l">Двигатель</div><div class="info-chip-v">D13K500 · 500 л.с.</div></div></div>
+      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><div><div class="info-chip-l">Пробег</div><div class="info-chip-v">245 000 км</div></div></div>
+      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div><div class="info-chip-l">Прицеп</div><div class="info-chip-v">01 B 123 RT</div></div></div>
+      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4M7 2l4 4-4 4M17 22l-4-4 4-4M21 2l-4 4 4 4"/><line x1="7" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="17" y2="18"/></svg></span><div><div class="info-chip-l">Тип прицепа</div><div class="info-chip-v">Рефрижератор · 20т</div></div></div>
     </div>
 
-    <!-- Trailer -->
-    <div class="trailer-card">
-      <div class="tc-hdr">
-        <div class="tc-brand-row">
-          <div class="tc-logo" style="background:#f0f0f0"><span style="font-size:22px">🔗</span></div>
-          <div><div class="tc-brand">Прицеп</div><div class="tc-model">01 B 123 RT · Рефрижератор</div></div>
-        </div>
-      </div>
-      <div class="tc-photo" style="height:155px">
-        <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=700&h=320&fit=crop&q=80" alt=""/>
-      </div>
-      <div class="tc-info">
-        <div class="tc-row"><span class="tc-ico">📦</span><span class="tc-lbl">Тип</span><span class="tc-val">Рефрижератор</span></div>
-        <div class="tc-row"><span class="tc-ico">⚖️</span><span class="tc-lbl">Грузоподъём.</span><span class="tc-val">20 тонн</span></div>
-        <div class="tc-row"><span class="tc-ico">📏</span><span class="tc-lbl">Длина</span><span class="tc-val">13.6 м</span></div>
-      </div>
-    </div>
-
-    </div><!-- /tcTabInfo -->
-
-    <div id="tcTabOrders" style="display:none;padding-bottom:20px">
+    <div id="tcTabOrders" style="padding-bottom:20px">
 
       <!-- Finance block -->
       <div style="margin-bottom:4px">
@@ -1123,25 +1058,24 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
           <div class="stat-card">
             <div class="stat-ic" style="background:#fff0f0"><span style="color:#ff4b4b">↗</span></div>
             <div class="stat-l">Расходы</div>
-            <div class="stat-a" style="color:#ff4b4b" id="expDisp">0 UZS</div>
+            <div class="stat-a" id="expDisp">0 UZS</div>
           </div>
           <div class="stat-card">
             <div class="stat-ic" style="background:#edfbf3"><span style="color:#2dbd71">↙</span></div>
             <div class="stat-l">Доходы</div>
-            <div class="stat-a" style="color:#2dbd71" id="incDisp">1 500 000 UZS</div>
+            <div class="stat-a" id="incDisp">1 500 000 UZS</div>
           </div>
-          <button class="act-card" onclick="openModal('expModal',false)">
-            <div class="add-c" style="background:#fff0f0">
-              <span style="color:#ff4b4b;font-size:26px;font-weight:300;line-height:1">+</span>
-            </div>
-            <span class="act-l">Добавить расход</span>
-          </button>
-          <button class="act-card" onclick="openModal('incModal',false)">
-            <div class="add-c" style="background:#edfbf3">
-              <span style="color:#2dbd71;font-size:26px;font-weight:300;line-height:1">+</span>
-            </div>
-            <span class="act-l">Добавить доход</span>
-          </button>
+          <div class="qa-strip" style="grid-column:1/-1">
+            <button class="qa-ic" onclick="openExpQuick('fuel')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v13"/><path d="M3 13h8"/><path d="M14 7h1a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0 2-2V8l-2-2"/><line x1="3" y1="22" x2="15" y2="22"/></svg></span><small>Топливо</small></button>
+            <button class="qa-ic" onclick="openExpQuick('food')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v7a2 2 0 0 0 4 0V2"/><path d="M20 9v13"/><path d="M4 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M6 10v11"/></svg></span><small>Питание</small></button>
+            <button class="qa-ic" onclick="openExpQuick('parking')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><small>Стоянка</small></button>
+            <button class="qa-ic" onclick="openExpQuick('parts')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><small>Запчасти</small></button>
+            <button class="qa-ic" onclick="openExpQuick('service')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><small>Сервис</small></button>
+            <button class="qa-ic" onclick="openExpQuick('wash')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span><small>Мойка</small></button>
+            <button class="qa-ic" onclick="openExpQuick('fine')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><small>Штраф</small></button>
+            <button class="qa-ic" onclick="openExpQuick('insure')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><small>Страховка</small></button>
+            <button class="qa-ic" onclick="openExpQuick('other')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><small>Другое</small></button>
+          </div>
           <div class="net-row">
             <span class="net-l">Чистая прибыль</span>
             <span class="net-a" id="netDisp">+1 500 000 UZS</span>
@@ -1169,17 +1103,17 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div class="mtitle">Статус водителя</div>
     <div class="msub">Выберите ваш текущий статус</div>
     <div class="status-grid">
-      <div class="status-option" data-key="driving" onclick="setStatus('driving')" style="color:#1a8c52;background:#e8f9f0;">
-        <div class="so-dot" style="background:#2dbd71"></div><span class="so-text" style="color:#1a8c52">В пути</span>
+      <div class="status-option" data-key="driving" onclick="setStatus('driving')">
+        <div class="so-dot" style="background:#2dbd71"></div><span class="so-text">В пути</span>
       </div>
-      <div class="status-option" data-key="parked" onclick="setStatus('parked')" style="color:#c07a00;background:#fff8e6;">
-        <div class="so-dot" style="background:#f5a623"></div><span class="so-text" style="color:#c07a00">Стоянка</span>
+      <div class="status-option" data-key="parked" onclick="setStatus('parked')">
+        <div class="so-dot" style="background:#f5a623"></div><span class="so-text">Стоянка</span>
       </div>
-      <div class="status-option" data-key="free" onclick="setStatus('free')" style="color:#cc1c1c;background:#ffeaea;">
-        <div class="so-dot" style="background:#ff4b4b"></div><span class="so-text" style="color:#cc1c1c">Свободен</span>
+      <div class="status-option" data-key="free" onclick="setStatus('free')">
+        <div class="so-dot" style="background:#ff4b4b"></div><span class="so-text">Свободен</span>
       </div>
-      <div class="status-option" data-key="repair" onclick="setStatus('repair')" style="color:#c06000;background:#fff3e0;">
-        <span style="font-size:14px">🔧</span><span class="so-text" style="color:#c06000">Ремонт</span>
+      <div class="status-option" data-key="repair" onclick="setStatus('repair')">
+        <div class="so-dot" style="background:#8a94a6"></div><span class="so-text">Ремонт</span>
       </div>
     </div>
     <p style="font-size:12px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5">
@@ -1215,7 +1149,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div class="tp-row"><span class="tp-lbl">Расстояние</span><span class="tp-v" id="prevDist">—</span></div>
       <div class="tp-row"><span class="tp-lbl">Прибыль</span><span class="tp-v" style="color:#FAE436" id="prevProfit">—</span></div>
     </div>
-    <button class="btn btn-dark" onclick="startTrip()">🚛 &nbsp;Начать рейс</button>
+    <button class="btn btn-dark" onclick="startTrip()">Начать рейс</button>
     <button class="btn-cancel" onclick="closeModal('newTripModal')">Отмена</button>
   </div>
 </div>
@@ -1224,10 +1158,10 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 <div class="modal" id="finishConfirmModal">
   <div class="msheet" style="padding:24px 20px 40px">
     <div class="mhandle"></div>
-    <div style="text-align:center;margin-bottom:6px;font-size:36px">🏁</div>
+    <div style="display:flex;justify-content:center;margin-bottom:6px"><span style="width:48px;height:48px;border-radius:24px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="16 10 11 15 8 12"/></svg></span></div>
     <div class="mtitle">Завершить рейс?</div>
     <div class="msub" style="margin-bottom:24px">После завершения вы сможете начать новый рейс</div>
-    <button class="btn btn-dark" onclick="finishTripConfirmed()">✓ &nbsp;Завершить рейс</button>
+    <button class="btn btn-dark" onclick="finishTripConfirmed()">Завершить рейс</button>
     <button class="btn-cancel" onclick="closeModal('finishConfirmModal')">Отмена</button>
   </div>
 </div>
@@ -1237,7 +1171,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   <div class="msheet">
     <div class="mhandle"></div>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
-      <div style="width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#3d5afe,#7b1fa2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">👤</div>
+      <div style="width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#3d5afe,#7b1fa2);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <div>
         <div style="font-size:18px;font-weight:800;color:#0F0F37;line-height:1.2">Назначить рейс</div>
         <div style="font-size:12px;color:#888;margin-top:1px">Иван Петров · Владелец</div>
@@ -1266,7 +1200,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div class="tp-row"><span class="tp-lbl">Расстояние</span><span class="tp-v" id="otPrevDist">—</span></div>
       <div class="tp-row"><span class="tp-lbl">Оплата</span><span class="tp-v" style="color:#3d5afe" id="otPrevProfit">—</span></div>
     </div>
-    <button class="btn" style="background:linear-gradient(135deg,#3d5afe,#7b1fa2);color:#fff;margin-top:8px" onclick="ownerAssignTrip()">📤 &nbsp;Отправить водителю</button>
+    <button class="btn" style="background:linear-gradient(135deg,#3d5afe,#7b1fa2);color:#fff;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px" onclick="ownerAssignTrip()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Отправить водителю</button>
     <button class="btn-cancel" onclick="closeModal('ownerTripModal')">Отмена</button>
   </div>
 </div>
@@ -1277,7 +1211,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div class="mhandle"></div>
     <!-- Header notification -->
     <div id="oanHeaderBg" style="background:linear-gradient(135deg,#e8eaf6,#ede7f6);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:18px">
-      <div id="oanHeaderIcon" style="width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#3d5afe,#7b1fa2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👤</div>
+      <div id="oanHeaderIcon" style="width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#3d5afe,#7b1fa2);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <div>
         <div id="oanHeaderTitle" style="font-size:13px;font-weight:800;color:#3d5afe;letter-spacing:.1px">Новый рейс от владельца</div>
         <div id="oanHeaderSub" style="font-size:12px;color:#7b1fa2;margin-top:2px">Иван Петров назначил вам рейс</div>
@@ -1301,29 +1235,29 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 <div class="modal" id="expModal">
   <div class="msheet" style="padding:16px 20px 48px">
     <div class="msheet-handle"></div>
-    <div class="mtitle" style="color:#ff4b4b;margin-bottom:4px">Добавить расход</div>
+    <div class="mtitle" style="color:#ff4b4b;margin-bottom:4px">Quick add</div>
     <div style="font-size:12px;color:#aaa;text-align:center;margin-bottom:16px" id="expContext"></div>
 
     <!-- Category grid -->
     <div class="field-label" style="margin-bottom:10px">Категория</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px" id="expCatGrid">
-      <button class="exp-cat-btn" data-cat="fuel"    onclick="pickExpCat(this)"><span>⛽</span><span>Топливо</span></button>
-      <button class="exp-cat-btn" data-cat="food"    onclick="pickExpCat(this)"><span>🍽</span><span>Питание</span></button>
-      <button class="exp-cat-btn" data-cat="parking" onclick="pickExpCat(this)"><span>🅿</span><span>Стоянка</span></button>
-      <button class="exp-cat-btn" data-cat="parts"   onclick="pickExpCat(this)"><span>🔩</span><span>Запчасти</span></button>
-      <button class="exp-cat-btn" data-cat="service" onclick="pickExpCat(this)"><span>🔧</span><span>Сервис/Мастер</span></button>
-      <button class="exp-cat-btn" data-cat="wash"    onclick="pickExpCat(this)"><span>🚿</span><span>Мойка</span></button>
-      <button class="exp-cat-btn" data-cat="fine"    onclick="pickExpCat(this)"><span>📋</span><span>Штраф</span></button>
-      <button class="exp-cat-btn" data-cat="insure"  onclick="pickExpCat(this)"><span>🛡</span><span>Страховка</span></button>
-      <button class="exp-cat-btn" data-cat="other"   onclick="pickExpCat(this)"><span>📦</span><span>Другое</span></button>
+      <button class="exp-cat-btn" data-cat="fuel"    onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v13"/><path d="M3 13h8"/><path d="M14 7h1a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0 2-2V8l-2-2"/><line x1="3" y1="22" x2="15" y2="22"/></svg></span><span>Топливо</span></button>
+      <button class="exp-cat-btn" data-cat="food"    onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v7a2 2 0 0 0 4 0V2"/><path d="M20 9v13"/><path d="M4 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M6 10v11"/></svg></span><span>Питание</span></button>
+      <button class="exp-cat-btn" data-cat="parking" onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><span>Стоянка</span></button>
+      <button class="exp-cat-btn" data-cat="parts"   onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><span>Запчасти</span></button>
+      <button class="exp-cat-btn" data-cat="service" onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span>Сервис/Мастер</span></button>
+      <button class="exp-cat-btn" data-cat="wash"    onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span><span>Мойка</span></button>
+      <button class="exp-cat-btn" data-cat="fine"    onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span>Штраф</span></button>
+      <button class="exp-cat-btn" data-cat="insure"  onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span>Страховка</span></button>
+      <button class="exp-cat-btn" data-cat="other"   onclick="pickExpCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><span>Другое</span></button>
     </div>
 
     <!-- Fuel sub-type (only for Топливо) -->
     <div id="expFuelRow" style="display:none;margin-bottom:14px">
       <div class="field-label" style="margin-bottom:8px">Тип топлива</div>
       <div style="display:flex;gap:8px">
-        <button id="expFuelDiesel" onclick="pickFuelType('diesel')" style="flex:1;padding:10px;border-radius:12px;border:2px solid #0F0F37;background:#0F0F37;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">🛢 Салярка</button>
-        <button id="expFuelGas"    onclick="pickFuelType('gas')"    style="flex:1;padding:10px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">💨 Газ</button>
+        <button id="expFuelDiesel" onclick="pickFuelType('diesel')" style="flex:1;padding:10px;border-radius:12px;border:2px solid #0F0F37;background:#0F0F37;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Салярка</button>
+        <button id="expFuelGas"    onclick="pickFuelType('gas')"    style="flex:1;padding:10px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">Газ</button>
       </div>
     </div>
 
@@ -1368,8 +1302,8 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <!-- Comment (text / voice) -->
     <div class="field-label" style="margin-bottom:10px;margin-top:6px">Комментарий <span style="font-weight:400;color:#bbb;font-size:11px">(необязательно)</span></div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
-      <button id="expCmtTabText"  onclick="switchExpCmt('text')"  style="flex:1;padding:9px;border-radius:12px;border:2px solid #0F0F37;background:#0F0F37;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">✏ Текст</button>
-      <button id="expCmtTabVoice" onclick="switchExpCmt('voice')" style="flex:1;padding:9px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">🎤 Голосовое</button>
+      <button id="expCmtTabText"  onclick="switchExpCmt('text')"  style="flex:1;padding:9px;border-radius:12px;border:2px solid #0F0F37;background:#0F0F37;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Текст</button>
+      <button id="expCmtTabVoice" onclick="switchExpCmt('voice')" style="flex:1;padding:9px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">Голосовое</button>
     </div>
     <div id="expCmtText">
       <textarea class="note-inp" id="expNote" placeholder="Заметка к расходу..."></textarea>
@@ -1437,14 +1371,14 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
     <div class="field-label" style="margin-bottom:10px">Категория</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
-      <button class="exp-cat-btn" data-cat="trip"  onclick="pickIncCat(this)"><span>💰</span><span>Оплата рейса</span></button>
-      <button class="exp-cat-btn" data-cat="bonus" onclick="pickIncCat(this)"><span>🎁</span><span>Бонус</span></button>
-      <button class="exp-cat-btn" data-cat="other" onclick="pickIncCat(this)"><span>📥</span><span>Другое</span></button>
+      <button class="exp-cat-btn" data-cat="trip"  onclick="pickIncCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span>Оплата рейса</span></button>
+      <button class="exp-cat-btn" data-cat="bonus" onclick="pickIncCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span><span>Бонус</span></button>
+      <button class="exp-cat-btn" data-cat="other" onclick="pickIncCat(this)"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span><span>Другое</span></button>
     </div>
     <div class="field-label" style="margin-bottom:10px;margin-top:6px">Комментарий <span style="font-weight:400;color:#bbb;font-size:11px">(необязательно)</span></div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
-      <button id="incCmtTabText"  onclick="switchIncCmt('text')"  style="flex:1;padding:9px;border-radius:12px;border:2px solid #2dbd71;background:#2dbd71;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">✏ Текст</button>
-      <button id="incCmtTabVoice" onclick="switchIncCmt('voice')" style="flex:1;padding:9px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">🎤 Голосовое</button>
+      <button id="incCmtTabText"  onclick="switchIncCmt('text')"  style="flex:1;padding:9px;border-radius:12px;border:2px solid #2dbd71;background:#2dbd71;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Текст</button>
+      <button id="incCmtTabVoice" onclick="switchIncCmt('voice')" style="flex:1;padding:9px;border-radius:12px;border:2px solid #e0e0e0;background:#fff;color:#888;font-size:13px;font-weight:700;cursor:pointer;">Голосовое</button>
     </div>
     <div id="incCmtText">
       <textarea class="note-inp" id="incNote" placeholder="Заметка к доходу..."></textarea>
@@ -1498,8 +1432,8 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div class="msub" id="odoSub">VOLVO FH 12 · 01 A 234 DG<br><span style="font-size:13px;color:#bbb">Последнее: 245 000 км</span></div>
     <div style="height:110px;background:#f5f5f5;border-radius:18px;border:2px dashed #e0e0e0;
       display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;
-      margin-bottom:18px;cursor:pointer;" onclick="toast('📷 Подключите react-native-image-picker')">
-      <span style="font-size:32px">📷</span>
+      margin-bottom:18px;cursor:pointer;" onclick="toast('Подключите react-native-image-picker')">
+      <span style="color:#aaa"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
       <span style="font-size:13px;color:#aaa;font-weight:500">Сфотографировать панель приборов</span>
     </div>
     <div class="field-label" style="margin-bottom:8px">Текущие показания (км)</div>
@@ -1530,7 +1464,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div style="padding:12px 14px 14px">
         <div style="font-size:17px;font-weight:700;color:#0F0F37">VOLVO FH 12 · 2021</div>
         <div style="font-size:13px;color:#888;margin-top:2px">🇺🇿 01 A 234 DG</div>
-        <div style="font-size:12px;color:#aaa;margin-top:4px">🔗 Прицеп: 01 B 123 RT · Рефрижератор · 20т</div>
+        <div style="font-size:12px;color:#aaa;margin-top:4px">Прицеп: 01 B 123 RT · Рефрижератор · 20т</div>
       </div>
     </div>
     <button class="btn btn-green" onclick="closeModal('inviteModal')">✓ &nbsp;Принять</button>
@@ -1583,14 +1517,22 @@ function openTripFromModal(fn){
   setTimeout(fn, 340);
 }
 
-/* ── Garage tabs ─────────────────────────────── */
-function switchGTab(btn,panelId){
-  document.querySelectorAll('.g-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.g-panel').forEach(p=>p.classList.remove('show'));
-  document.getElementById(panelId).classList.add('show');
-  const sub=document.getElementById('gSub');
-  if(sub) sub.textContent=panelId==='panelOwn'?'3 грузовика':'Назначенный грузовик';
+/* ── Garage panels ───────────────────────────── */
+function showOwnFleet(){
+  document.getElementById('panelWork').classList.remove('show');
+  document.getElementById('panelOwn').classList.add('show');
+  document.getElementById('gSub').textContent='3 грузовика';
+  document.getElementById('gOwnIconBtn').classList.add('active-icon');
+}
+function showWorkTruck(){
+  document.getElementById('panelOwn').classList.remove('show');
+  document.getElementById('panelWork').classList.add('show');
+  document.getElementById('gSub').textContent='ООО «АвтоТранс»';
+  document.getElementById('gOwnIconBtn').classList.remove('active-icon');
+}
+function toggleOwnFleet(){
+  const isShown=document.getElementById('panelOwn').classList.contains('show');
+  if(isShown) showWorkTruck(); else showOwnFleet();
 }
 
 /* ── Navigation stack ────────────────────────── */
@@ -1617,7 +1559,7 @@ function goBack(){
 }
 
 /* ── Go to orders (truck → orders screen) ────── */
-function goToOrders(idx, tab){
+function goToOrders(idx){
   activeTruckIdx=idx;
   const t=TRUCKS[idx];
 
@@ -1689,21 +1631,9 @@ function goToOrders(idx, tab){
     if(mmEl) mmEl.style.display='none';
   }
 
-  // Switch to requested tab
-  const showOrders = tab === 'orders';
-  document.getElementById('tcTabInfo').style.display = showOrders ? 'none' : 'block';
-  document.getElementById('tcTabOrders').style.display = showOrders ? 'block' : 'none';
   renderOrdersTab(idx);
 
   navigate('screenTruck');
-}
-
-/* ── Truck detail tabs ───────────────────────── */
-function switchTcTab(btn,panelId){
-  document.querySelectorAll('.tc-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tcTabInfo').style.display=panelId==='tcTabInfo'?'block':'none';
-  document.getElementById('tcTabOrders').style.display=panelId==='tcTabOrders'?'block':'none';
 }
 
 function renderOrdersTab(idx){
@@ -1715,7 +1645,7 @@ function renderOrdersTab(idx){
   if(idx===0&&!tripActive){
     html+=`
       <button onclick="openModal('newTripModal')" style="width:100%;background:#FAE436;border:none;border-radius:16px;padding:15px;font-size:15px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px">
-        <span>🚛</span><span>Начать рейс</span>
+        <span>Начать рейс</span>
       </button>`;
   }
 
@@ -1732,7 +1662,7 @@ function renderOrdersTab(idx){
       ?'<span style="background:#f0f0f0;color:#888;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✓ Завершён</span>'
       :'<span style="background:#ffeaea;color:#cc1c1c;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✕ Отменён</span>';
     html+=`
-      <div onclick="openHistoryTrip(${t.i})" style="background:#fff;border-radius:18px;padding:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:10px;cursor:pointer;">
+      <div onclick="openHistoryTrip(${t.i})" style="background:#fff;border-radius:18px;padding:14px;border:1.5px solid #eee;margin-bottom:10px;cursor:pointer;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           ${badge}
           <span style="font-size:11px;color:#bbb">${t.date}</span>
@@ -1757,7 +1687,7 @@ const STATUS={
   driving:{cls:'s-driving',text:'В пути',  dot:'#2dbd71'},
   parked: {cls:'s-parked', text:'Стоянка', dot:'#f5a623'},
   free:   {cls:'s-free',   text:'Свободен',dot:'#ff4b4b'},
-  repair: {cls:'s-repair', text:'Ремонт',  dot:null,icon:'🔧'},
+  repair: {cls:'s-repair', text:'Ремонт',  dot:'#8a94a6'},
 };
 let curStatus='driving';
 let tripActive=true;
@@ -1769,9 +1699,9 @@ function updateTcStatusBottom(key){
   if(key==='driving'){
     el.innerHTML='<button onclick="finishTrip()" style="width:100%;padding:14px;background:#FAE436;color:#0F0F37;font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;">Завершить рейс</button>';
   } else if(key==='parked'){
-    el.innerHTML='<div style="background:#fff8e6;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:26px">🅿</span><div><div style="font-size:14px;font-weight:800;color:#c07a00">На стоянке</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">▶ Продолжить движение</button>';
+    el.innerHTML='<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="width:40px;height:40px;border-radius:20px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><div><div style="font-size:14px;font-weight:800;color:#0F0F37">На стоянке</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">Продолжить движение</button>';
   } else if(key==='repair'){
-    el.innerHTML='<div style="background:#fff3e0;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:26px">🔧</span><div><div style="font-size:14px;font-weight:800;color:#c06000">На ремонте</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">✅ Завершить ремонт</button>';
+    el.innerHTML='<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="width:40px;height:40px;border-radius:20px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><div><div style="font-size:14px;font-weight:800;color:#0F0F37">На ремонте</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">Завершить ремонт</button>';
   } else {
     el.innerHTML='';
   }
@@ -1845,7 +1775,7 @@ function setStatus(key){
   }
   applyStatus(key);
   document.querySelectorAll('.status-option').forEach(el=>{
-    el.style.border=el.dataset.key===key?'2px solid currentColor':'2px solid transparent';
+    el.classList.toggle('active',el.dataset.key===key);
   });
   closeModal('statusModal');
   toast('Статус изменён: '+STATUS[key].text);
@@ -1944,7 +1874,7 @@ function startTrip(){
 
   // Update modal header: driver → owner direction
   document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8f5e9,#f1f8e9)';
-  document.getElementById('oanHeaderIcon').textContent='📤';
+  document.getElementById('oanHeaderIcon').innerHTML="<svg width='21' height='21' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='22' y1='2' x2='11' y2='13'/><polygon points='22 2 15 22 11 13 2 9 22 2'/></svg>";
   document.getElementById('oanHeaderIcon').style.background='linear-gradient(135deg,#43a047,#66bb6a)';
   document.getElementById('oanHeaderTitle').style.color='#2e7d32';
   document.getElementById('oanHeaderTitle').textContent='Запрос отправлен владельцу';
@@ -2275,6 +2205,18 @@ function pickIncCat(el){
   el.classList.add('active');
 }
 
+/* ── Quick-add icon strips (under Расходы/Доходы) ─ */
+function openExpQuick(cat){
+  openModal('expModal',false);
+  const btn=document.querySelector('.exp-cat-btn[data-cat="'+cat+'"]');
+  if(btn) pickExpCat(btn);
+}
+function openIncQuick(cat){
+  openModal('incModal',false);
+  const btn=document.querySelector('#incModal .exp-cat-btn[data-cat="'+cat+'"]');
+  if(btn) pickIncCat(btn);
+}
+
 // Income comment / voice
 let incVoiceInterval=null, incVoiceSeconds=0, incVoiceRecorded=false;
 function switchIncCmt(type){
@@ -2468,7 +2410,7 @@ function acceptOwnerTrip(){
   pendingOwnerTrip=null;
   // Reset modal header to owner-assigned defaults
   document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8eaf6,#ede7f6)';
-  document.getElementById('oanHeaderIcon').textContent='👤';
+  document.getElementById('oanHeaderIcon').innerHTML="<svg width='21' height='21' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>";
   document.getElementById('oanHeaderIcon').style.background='linear-gradient(135deg,#3d5afe,#7b1fa2)';
   document.getElementById('oanHeaderTitle').style.color='#3d5afe';
   document.getElementById('oanHeaderTitle').textContent='Новый рейс от владельца';
@@ -2490,7 +2432,7 @@ function declineOwnerTrip(){
   document.getElementById('oanPendingState').style.display='none';
   document.getElementById('oanDeclineBtn').textContent='Отклонить';
   document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8eaf6,#ede7f6)';
-  document.getElementById('oanHeaderIcon').textContent='👤';
+  document.getElementById('oanHeaderIcon').innerHTML="<svg width='21' height='21' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>";
   document.getElementById('oanHeaderIcon').style.background='linear-gradient(135deg,#3d5afe,#7b1fa2)';
   document.getElementById('oanHeaderTitle').style.color='#3d5afe';
   document.getElementById('oanHeaderTitle').textContent='Новый рейс от владельца';
@@ -2512,6 +2454,8 @@ function declineOwnerTrip(){
 })();
 applyStatus('driving');
 updateTcStatusBottom('driving');
+// Land straight on the truck detail screen on open
+goToOrders(0);
 setTimeout(()=>openModal('inviteModal'),800);
 </script>
 
