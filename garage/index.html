@@ -815,11 +815,14 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div class="stepper" id="tdStepper" style="display:none;margin-top:14px;margin-bottom:0"></div>
     </div>
 
-    <!-- Add income (active only) -->
-    <button id="tdIncBtn" onclick="openModal('incModal',true)" style="width:calc(100% - 32px);margin:0 16px 10px;padding:12px;border-radius:14px;border:none;background:#edfbf3;color:#1a8c52;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:none;">Добавить доход</button>
-
     <!-- Finish button (active only) -->
     <button class="td-finish-btn" id="tdFinishBtn" onclick="finishTrip();goBack()">Завершить рейс</button>
+
+    <!-- Trip expense/income log (active only) -->
+    <div id="tripTxSection" style="display:none;padding:0 16px;margin-top:14px">
+      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Расходы и доходы рейса</div>
+      <div id="tripTxList"></div>
+    </div>
 
     <!-- Finance summary (history only) -->
     <div id="tdFinanceWrap" style="display:none">
@@ -858,6 +861,27 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
 </div><!-- /screenTripDetail -->
 
+<!-- ══════════════════════════════════════════
+     SCREEN — ALL TRIPS
+══════════════════════════════════════════ -->
+<div class="screen" id="screenAllTrips">
+
+  <div class="sbar">
+    <span class="sbar-time" id="clk5">10:56</span>
+    <div class="sbar-icons"><span>4G</span><span>▪▪▪</span><span>🔋 80</span></div>
+  </div>
+
+  <div class="hdr">
+    <div class="hdr-back" onclick="goBack()">‹</div>
+    <span class="hdr-title">Все рейсы</span>
+  </div>
+
+  <div class="screen-scroll">
+    <div style="padding:12px 16px 30px" id="allTripsContent"></div>
+  </div>
+
+</div><!-- /screenAllTrips -->
+
 
 <!-- ══════════════════════════════════════════
      SCREEN 4 — TRUCK DETAIL
@@ -869,15 +893,10 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div class="sbar-icons"><span>4G</span><span>▪▪▪</span><span>🔋 80</span></div>
   </div>
 
-  <div class="hdr">
-    <button class="hdr-back" onclick="goBack();showOwnFleet();" title="Свой грузовик" style="color:#0F0F37">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7v-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
-    </button>
-    <span class="hdr-title" id="truckHdrTitle">VOLVO FH 12</span>
-    <button class="hdr-action" onclick="openModal('tripsModal')" title="История рейсов">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-      </svg>
+  <div class="hdr" style="justify-content:flex-start;padding:0 16px;">
+    <button onclick="renderTruckSwitchList();openModal('truckSwitchModal')" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;max-width:100%;">
+      <span class="hdr-title" id="truckHdrTitle" style="font-size:17px">VOLVO FH 12</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0F0F37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
   </div>
 
@@ -1003,7 +1022,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       </div>
       <!-- actions (не открывают детали рейса) -->
       <div onclick="event.stopPropagation()" style="margin-top:14px">
-        <button onclick="openModal('incModal',true)" style="width:100%;padding:12px;border-radius:14px;border:none;background:#edfbf3;color:#1a8c52;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;">Добавить доход</button>
         <div id="tcStatusBottom"></div>
       </div>
     </div>
@@ -1024,12 +1042,12 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div style="margin-bottom:4px">
       <div class="sec-title">Финансы за месяц</div>
       <div class="fin-grid">
-        <div class="stat-card">
+        <div class="stat-card" onclick="openModal('expModal',false)" style="cursor:pointer">
           <div class="stat-ic" style="background:#fff0f0"><span style="color:#ff4b4b">↗</span></div>
           <div class="stat-l">Расходы</div>
           <div class="stat-a" id="expDisp">0 UZS</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" onclick="openModal('incModal',false)" style="cursor:pointer">
           <div class="stat-ic" style="background:#edfbf3"><span style="color:#2dbd71">↙</span></div>
           <div class="stat-l">Доходы</div>
           <div class="stat-a" id="incDisp">1 500 000 UZS</div>
@@ -1081,12 +1099,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div id="tcOrdersContent"></div>
     </div>
 
-    <!-- Transaction log (soft-delete: struck through, not removed) -->
-    <div style="padding-bottom:20px">
-      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Последние операции</div>
-      <div id="txLogList" style="display:flex;flex-direction:column;gap:8px"></div>
-    </div>
-
   </div>
   </div><!-- /screen-scroll -->
 
@@ -1096,6 +1108,15 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 <!-- ══════════════════════════════════════════
      MODALS
 ══════════════════════════════════════════ -->
+
+<!-- Truck switcher (from header title) -->
+<div class="modal" id="truckSwitchModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mtitle" style="margin-bottom:14px">Мои грузовики</div>
+    <div id="truckSwitchList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:6px"></div>
+  </div>
+</div>
 
 <div class="modal" id="statusModal">
   <div class="msheet">
@@ -1512,6 +1533,22 @@ const TRUCKS=[
 
 let activeTruckIdx=0;
 
+function renderTruckSwitchList(){
+  const el=document.getElementById('truckSwitchList');
+  if(!el) return;
+  el.innerHTML=TRUCKS.map((t,i)=>`
+    <button onclick="closeModal('truckSwitchModal');goToOrders(${i})" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid ${i===activeTruckIdx?'#0F0F37':'#eee'};border-radius:16px;padding:10px;cursor:pointer;font-family:inherit;text-align:left;width:100%;">
+      <img src="${t.photo}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:800;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name} ${t.model}</div>
+        <div style="font-size:12px;color:#aaa;margin-top:1px">${t.plateReg} ${t.plate}</div>
+      </div>
+      <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#0F0F37;flex-shrink:0">
+        <span style="width:7px;height:7px;border-radius:50%;background:${t.statusDot}"></span>${t.statusText}
+      </span>
+    </button>`).join('');
+}
+
 function openTripFromModal(fn){
   closeModal('tripsModal');
   setTimeout(fn, 340);
@@ -1540,11 +1577,13 @@ const navStack=['screenGarage'];
 
 function navigate(screenId){
   const cur=navStack[navStack.length-1];
-  document.getElementById(cur).classList.add('behind');
-  document.getElementById(cur).classList.remove('active');
-  document.getElementById(screenId).classList.add('active');
-  document.getElementById(screenId).classList.remove('behind');
-  navStack.push(screenId);
+  if(cur!==screenId){
+    document.getElementById(cur).classList.add('behind');
+    document.getElementById(cur).classList.remove('active');
+    document.getElementById(screenId).classList.add('active');
+    document.getElementById(screenId).classList.remove('behind');
+    navStack.push(screenId);
+  }
   const sc=document.querySelector('#'+screenId+' .screen-scroll');
   if(sc) sc.scrollTop=0;
 }
@@ -1636,6 +1675,34 @@ function goToOrders(idx){
   navigate('screenTruck');
 }
 
+const TRIP_HIST_SUMMARY=[
+  {i:0,route:'Самарканд → Бухара',cargo:'Стройматериалы · 18 тонн',date:'18 июня',dist:'620 км',time:'7ч 15м',profit:'+980 000 UZS',green:true,pct:100,done:true},
+  {i:1,route:'Ташкент → Наманган',cargo:'Электроника · 8 тонн',date:'12 июня',dist:'310 км',time:'4ч 10м',profit:'+650 000 UZS',green:true,pct:100,done:true},
+  {i:2,route:'Фергана → Андижан',cargo:'Продукты · 15 тонн',date:'5 июня',dist:'68 из 305 км',time:'—',profit:'Отменён',green:false,pct:22,done:false},
+];
+
+function tripHistCardHtml(t){
+  const badge=t.done
+    ?'<span style="background:#f0f0f0;color:#888;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✓ Завершён</span>'
+    :'<span style="background:#ffeaea;color:#cc1c1c;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✕ Отменён</span>';
+  return `
+    <div onclick="openHistoryTrip(${t.i})" style="background:#fff;border-radius:18px;padding:14px;border:1.5px solid #eee;margin-bottom:10px;cursor:pointer;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        ${badge}
+        <span style="font-size:11px;color:#bbb">${t.date}</span>
+      </div>
+      <div style="font-size:15px;font-weight:800;color:#0F0F37;margin-bottom:3px">${t.route}</div>
+      <div style="font-size:12px;color:#999;margin-bottom:10px">${t.cargo}</div>
+      <div style="height:4px;background:#f0f0f0;border-radius:2px;margin-bottom:8px;overflow:hidden">
+        <div style="height:100%;border-radius:2px;background:${t.done?'#FAE436':'#ff4b4b'};width:${t.pct}%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="font-size:12px;color:#888">📍 ${t.dist} · ⏱ ${t.time}</span>
+        <span style="font-size:14px;font-weight:800;color:${t.green?'#2dbd71':'#ff4b4b'}">${t.profit}</span>
+      </div>
+    </div>`;
+}
+
 function renderOrdersTab(idx){
   const el=document.getElementById('tcOrdersContent');
   if(!el) return;
@@ -1649,37 +1716,19 @@ function renderOrdersTab(idx){
       </button>`;
   }
 
-  html+='<div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px">История рейсов</div>';
+  html+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.7px">История рейсов</span>
+      <button onclick="renderAllTrips();navigate('screenAllTrips')" style="background:none;border:none;font-size:12px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;">Все</button>
+    </div>`;
 
-  const HIST=[
-    {i:0,route:'Самарканд → Бухара',cargo:'Стройматериалы · 18 тонн',date:'18 июня',dist:'620 км',time:'7ч 15м',profit:'+980 000 UZS',green:true,pct:100,done:true},
-    {i:1,route:'Ташкент → Наманган',cargo:'Электроника · 8 тонн',date:'12 июня',dist:'310 км',time:'4ч 10м',profit:'+650 000 UZS',green:true,pct:100,done:true},
-    {i:2,route:'Фергана → Андижан',cargo:'Продукты · 15 тонн',date:'5 июня',dist:'68 из 305 км',time:'—',profit:'Отменён',green:false,pct:22,done:false},
-  ];
-
-  HIST.forEach(t=>{
-    const badge=t.done
-      ?'<span style="background:#f0f0f0;color:#888;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✓ Завершён</span>'
-      :'<span style="background:#ffeaea;color:#cc1c1c;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px">✕ Отменён</span>';
-    html+=`
-      <div onclick="openHistoryTrip(${t.i})" style="background:#fff;border-radius:18px;padding:14px;border:1.5px solid #eee;margin-bottom:10px;cursor:pointer;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          ${badge}
-          <span style="font-size:11px;color:#bbb">${t.date}</span>
-        </div>
-        <div style="font-size:15px;font-weight:800;color:#0F0F37;margin-bottom:3px">${t.route}</div>
-        <div style="font-size:12px;color:#999;margin-bottom:10px">${t.cargo}</div>
-        <div style="height:4px;background:#f0f0f0;border-radius:2px;margin-bottom:8px;overflow:hidden">
-          <div style="height:100%;border-radius:2px;background:${t.done?'#FAE436':'#ff4b4b'};width:${t.pct}%"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between">
-          <span style="font-size:12px;color:#888">📍 ${t.dist} · ⏱ ${t.time}</span>
-          <span style="font-size:14px;font-weight:800;color:${t.green?'#2dbd71':'#ff4b4b'}">${t.profit}</span>
-        </div>
-      </div>`;
-  });
+  TRIP_HIST_SUMMARY.forEach(t=>{ html+=tripHistCardHtml(t); });
 
   el.innerHTML=html;
+}
+function renderAllTrips(){
+  const el=document.getElementById('allTripsContent');
+  if(!el) return;
+  el.innerHTML=TRIP_HIST_SUMMARY.map(tripHistCardHtml).join('');
 }
 
 /* ── Status ──────────────────────────────────── */
@@ -1759,7 +1808,7 @@ function applyStatus(key){
     badge.insertBefore(ico,badge.firstChild);
   }
   document.getElementById('statusText').textContent=s.text;
-  curStatus=key;
+  if(activeTruckIdx===0) curStatus=key;
   updateTcStatusBottom(key);
   // show/hide mini map
   const mm=document.getElementById('tcMiniMapCard');
@@ -1767,10 +1816,10 @@ function applyStatus(key){
 }
 
 function setStatus(key){
-  if(key==='driving'&&!tripActive){
+  if(key==='driving'&&!(activeTruckIdx===0&&tripActive)){
     toast('Статус «В пути» устанавливается автоматически при начале рейса');return;
   }
-  if(tripActive&&key==='free'){
+  if(activeTruckIdx===0&&tripActive&&key==='free'){
     toast('Завершите текущий рейс перед сменой статуса');closeModal('statusModal');return;
   }
   applyStatus(key);
@@ -1825,38 +1874,48 @@ let exp=0,inc=1500000;
 function fmt(n){return n.toLocaleString('ru-RU')+' UZS';}
 const CAT_LABELS={fuel:'Топливо',food:'Питание',parking:'Стоянка',parts:'Запчасти',service:'Сервис/Мастер',
   wash:'Мойка',fine:'Штраф',insure:'Страховка',other:'Другое',trip:'Оплата рейса',bonus:'Бонус'};
-let txLog=[],txIdSeq=0;
-function renderTxLog(){
-  const el=document.getElementById('txLogList');
+let tripTxLog=[],tripTxIdSeq=0;
+function nowHM(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function renderTripTxLog(){
+  const el=document.getElementById('tripTxList');
   if(!el) return;
-  if(!txLog.length){
-    el.innerHTML='<div style="font-size:13px;color:#bbb;text-align:center;padding:8px 0">Пока нет операций</div>';
+  if(!tripTxLog.length){
+    el.innerHTML='<div style="font-size:13px;color:#bbb;text-align:center;padding:10px 0">Пока нет операций по рейсу</div>';
     return;
   }
-  el.innerHTML=txLog.slice().reverse().map(t=>{
+  el.innerHTML=tripTxLog.slice().reverse().map(t=>{
     const sign=t.type==='exp'?'−':'+';
-    const cancelledStyle=t.cancelled?'text-decoration:line-through;opacity:.45;':'';
     const amtColor=t.type==='exp'?'#ff4b4b':'#2dbd71';
-    return `<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #eee;border-radius:14px;padding:10px 12px;${cancelledStyle}">
-      <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:700;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.catLabel}</div>
-        ${t.note?`<div style="font-size:11px;color:#aaa;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.note}</div>`:''}
+    const struck=t.deleted?'text-decoration:line-through;opacity:.45;':'';
+    const commentHtml=t.voice
+      ?`<div style="font-size:11px;color:#aaa;margin-top:2px;display:flex;align-items:center;gap:4px"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm-1 19.93A8 8 0 0 1 4 13H2a10 10 0 0 0 9 9.93V24h2v-1.07A10 10 0 0 0 22 13h-2a8 8 0 0 1-7 7.93z"/></svg>Голосовое · ${t.voice}</div>`
+      :(t.note?`<div style="font-size:11px;color:#aaa;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.note}</div>`:'');
+    const metaHtml=t.deleted
+      ?`<div style="font-size:10px;color:#cc1c1c;margin-top:5px">Удалил ${t.deletedBy} · ${t.deletedAt}</div>`
+      :`<div style="font-size:10px;color:#bbb;margin-top:5px">Добавил ${t.addedBy} · ${t.addedAt}</div>`;
+    return `<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:10px 12px;margin-bottom:8px;${struck}">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700;color:#0F0F37">${t.catLabel}</div>
+          ${commentHtml}
+        </div>
+        <div style="font-size:13px;font-weight:700;color:${t.deleted?'#aaa':amtColor};flex-shrink:0">${sign}${t.amount.toLocaleString('ru-RU')} ${t.currency}</div>
+        ${t.deleted?'':`<button onclick="deleteTripTx(${t.id})" title="Удалить" style="width:24px;height:24px;border-radius:12px;background:#f8f8f8;border:none;color:#aaa;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`}
       </div>
-      <div style="font-size:13px;font-weight:700;color:${cancelledStyle?'#aaa':amtColor};flex-shrink:0">${sign}${t.amount.toLocaleString('ru-RU')} ${t.currency}</div>
-      ${t.cancelled
-        ? '<span style="font-size:11px;color:#bbb;flex-shrink:0">Удалено</span>'
-        : `<button onclick="deleteTx(${t.id})" title="Удалить" style="width:26px;height:26px;border-radius:13px;background:#f8f8f8;border:none;color:#aaa;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`}
+      ${metaHtml}
     </div>`;
   }).join('');
 }
-function deleteTx(id){
-  const t=txLog.find(x=>x.id===id);
-  if(!t||t.cancelled) return;
-  t.cancelled=true;
+function deleteTripTx(id){
+  const t=tripTxLog.find(x=>x.id===id);
+  if(!t||t.deleted) return;
+  t.deleted=true;
+  t.deletedBy=TRUCKS[activeTruckIdx].driverName;
+  t.deletedAt=nowHM();
   if(t.type==='exp') exp-=t.amount; else inc-=t.amount;
   refreshFin();
-  renderTxLog();
-  toast('Запись удалена из расчёта');
+  renderTripTxLog();
+  toast('Запись удалена');
 }
 function refreshFin(){
   const net=inc-exp;
@@ -1867,7 +1926,6 @@ function refreshFin(){
   el.style.color=net>=0?'#2dbd71':'#ff4b4b';
 }
 refreshFin();
-renderTxLog();
 
 /* ── Start/Finish Trip ───────────────────────── */
 function updatePreview(){
@@ -2039,7 +2097,8 @@ function openActiveTrip(){
   el('tdMiniMap').style.display='block';
   updateTdMiniMap(driven,dist,from,to,'~'+(Math.round((dist-driven)/90))+'ч до прибытия');
   el('tdFinishBtn').style.display='block';
-  el('tdIncBtn').style.display='block';
+  el('tripTxSection').style.display='block';
+  renderTripTxLog();
   el('tdFinanceWrap').style.display='none';
   el('tdExpWrap').style.display='none';
   el('tdOwnerWrap').style.display='none';
@@ -2068,7 +2127,7 @@ function openHistoryTrip(idx){
   el('tdStepper').style.display='none';
   el('tdMiniMap').style.display='none';
   el('tdFinishBtn').style.display='none';
-  el('tdIncBtn').style.display='none';
+  el('tripTxSection').style.display='none';
   // Finance
   if(t.income>0||t.expenses.length>0){
     const expTotal=t.expenses.reduce((s,e)=>s+e.amount,0);
@@ -2353,11 +2412,22 @@ function saveTx(type){
   const v=parseFloat(document.getElementById(id).value);
   if(!v||v<=0){toast('Введите сумму');return;}
   if(type==='exp')exp+=v;else inc+=v;
+
   const cat=type==='exp'?expSelectedCat:document.querySelector('#incModal .exp-cat-btn.active')?.dataset.cat;
-  const currency=type==='exp'?expCurrency:incCurrency;
+  const isVoiceMode=document.getElementById(type==='exp'?'expCmtVoice':'incCmtVoice').style.display!=='none';
+  const voiceRecorded=type==='exp'?expVoiceRecorded:incVoiceRecorded;
+  const voiceDur=document.getElementById(type==='exp'?'expVoiceDur':'incVoiceDur').textContent;
   const note=(document.getElementById(type==='exp'?'expNote':'incNote').value||'').trim();
-  txLog.push({id:++txIdSeq,type,cat,catLabel:CAT_LABELS[cat]||'Другое',amount:v,currency,note,cancelled:false});
-  renderTxLog();
+  tripTxLog.push({
+    id:++tripTxIdSeq,type,catLabel:CAT_LABELS[cat]||(type==='exp'?'Расход':'Доход'),
+    amount:v,currency:type==='exp'?expCurrency:incCurrency,
+    note:(isVoiceMode&&voiceRecorded)?null:(note||null),
+    voice:(isVoiceMode&&voiceRecorded)?voiceDur:null,
+    addedBy:TRUCKS[activeTruckIdx].driverName,addedAt:nowHM(),
+    deleted:false,deletedBy:null,deletedAt:null,
+  });
+  renderTripTxLog();
+
   refreshFin();document.getElementById(id).value='';
   closeModal(type==='exp'?'expModal':'incModal');
   toast(type==='exp'?`−${v.toLocaleString('ru-RU')} UZS · Расход добавлен`:`+${v.toLocaleString('ru-RU')} UZS · Доход добавлен`);
