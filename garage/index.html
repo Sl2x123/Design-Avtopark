@@ -44,7 +44,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   position:relative;background:#f5f5f5;flex-shrink:0;}
 .hdr-back{position:absolute;left:14px;width:34px;height:34px;border-radius:17px;background:#fff;
   display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  box-shadow:0 2px 8px rgba(0,0,0,.08);border:none;font-family:inherit;}
 .hdr-title{font-size:18px;font-weight:700;color:#0F0F37;}
 .hdr-action{position:absolute;right:14px;font-size:13px;font-weight:600;color:#4a90d9;cursor:pointer;}
 
@@ -815,6 +815,9 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div class="stepper" id="tdStepper" style="display:none;margin-top:14px;margin-bottom:0"></div>
     </div>
 
+    <!-- Add income (active only) -->
+    <button id="tdIncBtn" onclick="openModal('incModal',true)" style="width:calc(100% - 32px);margin:0 16px 10px;padding:12px;border-radius:14px;border:none;background:#edfbf3;color:#1a8c52;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:none;">Добавить доход</button>
+
     <!-- Finish button (active only) -->
     <button class="td-finish-btn" id="tdFinishBtn" onclick="finishTrip();goBack()">Завершить рейс</button>
 
@@ -867,7 +870,9 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   </div>
 
   <div class="hdr">
-    <div class="hdr-back" onclick="goBack()">‹</div>
+    <button class="hdr-back" onclick="goBack();showOwnFleet();" title="Свой грузовик" style="color:#0F0F37">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7v-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+    </button>
     <span class="hdr-title" id="truckHdrTitle">VOLVO FH 12</span>
     <button class="hdr-action" onclick="openModal('tripsModal')" title="История рейсов">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -973,45 +978,34 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       </div>
     </div>
 
-    <!-- Current trip card (shown when В пути) -->
+    <!-- Current trip card (shown when В пути) — compact, tap for detail -->
     <div id="tcTripCard" style="display:none;background:#fff;border-radius:20px;padding:16px;margin-bottom:12px;border:1.5px solid #eee;">
-      <!-- header row -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <span style="font-size:11px;font-weight:700;color:#aaa;letter-spacing:.6px;text-transform:uppercase">Текущий рейс</span>
-        <span style="background:#e8f9f0;color:#1a8c52;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px">
-          <span style="width:7px;height:7px;border-radius:50%;background:#2dbd71;display:inline-block"></span>
-          В пути
-        </span>
-      </div>
-      <!-- route & cargo -->
-      <div id="tcTripRoute" style="font-size:20px;font-weight:800;color:#0F0F37;margin-bottom:4px">Ташкент → Самарканд</div>
-      <div id="tcTripCargo" style="font-size:13px;color:#666;margin-bottom:12px">Электроника · 12 тонн</div>
-      <!-- chips -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-        <span id="tcTripDate" style="background:#f4f4f4;border-radius:10px;padding:5px 10px;font-size:12px;color:#444">📅 22 июня 2026</span>
-        <span id="tcTripDistChip" style="background:#f4f4f4;border-radius:10px;padding:5px 10px;font-size:12px;color:#444">📍 847 км</span>
-        <span id="tcTripTimeChip" style="background:#f4f4f4;border-radius:10px;padding:5px 10px;font-size:12px;color:#444">⏱ ~9 часов</span>
-      </div>
-      <!-- progress labels -->
-      <div style="display:flex;justify-content:space-between;margin-bottom:2px">
-        <span style="font-size:10px;font-weight:700;color:#aaa;letter-spacing:.5px;text-transform:uppercase">Проехано</span>
-        <span style="font-size:10px;font-weight:700;color:#aaa;letter-spacing:.5px;text-transform:uppercase">Осталось</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-        <span id="tcTripProhKm" style="font-size:22px;font-weight:800;color:#0F0F37">320 км</span>
-        <span id="tcTripPct" style="font-size:14px;font-weight:700;color:#888">38%</span>
-        <span id="tcTripRemKm" style="font-size:22px;font-weight:800;color:#bbb">527 км</span>
-      </div>
-      <!-- progress bar -->
-      <div style="height:10px;background:#f0f0f0;border-radius:5px;overflow:visible;position:relative;margin-bottom:14px">
-        <div id="tcTripBar" style="height:100%;background:#FAE436;border-radius:5px;width:38%;position:relative;transition:width .4s">
-          <span style="position:absolute;right:-9px;top:-4px;width:18px;height:18px;border-radius:9px;background:#0F0F37;border:2px solid #fff;display:block"></span>
+      <!-- route & meta, single compact line — tappable, opens full trip detail -->
+      <div onclick="openActiveTrip()" style="cursor:pointer">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <div id="tcTripRoute" style="font-size:16px;font-weight:800;color:#0F0F37;flex:1">Ташкент → Самарканд</div>
+          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="#ccc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="1,1 7,7 1,13"/></svg>
+        </div>
+        <div style="font-size:12px;color:#888;margin-bottom:12px">
+          <span id="tcTripCargo">Электроника · 12 тонн</span> · <span id="tcTripDistChip">847 км</span> · <span id="tcTripTimeChip">~9 часов</span>
+        </div>
+        <!-- progress bar -->
+        <div style="height:8px;background:#f0f0f0;border-radius:4px;position:relative;margin-bottom:6px">
+          <div id="tcTripBar" style="height:100%;background:#FAE436;border-radius:4px;width:38%;position:relative;transition:width .4s">
+            <span style="position:absolute;right:-8px;top:-3px;width:14px;height:14px;border-radius:7px;background:#0F0F37;border:2px solid #fff;display:block"></span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#aaa;font-weight:700">
+          <span id="tcTripProhKm">320 км</span>
+          <span id="tcTripPct">38%</span>
+          <span id="tcTripRemKm">527 км осталось</span>
         </div>
       </div>
-      <!-- stepper -->
-      <div id="tcStepper" class="stepper" style="margin-bottom:14px"></div>
-      <!-- dynamic status bottom -->
-      <div id="tcStatusBottom"></div>
+      <!-- actions (не открывают детали рейса) -->
+      <div onclick="event.stopPropagation()" style="margin-top:14px">
+        <button onclick="openModal('incModal',true)" style="width:100%;padding:12px;border-radius:14px;border:none;background:#edfbf3;color:#1a8c52;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;">Добавить доход</button>
+        <div id="tcStatusBottom"></div>
+      </div>
     </div>
 
     <!-- Driver status -->
@@ -1026,8 +1020,40 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       </button>
     </div>
 
+    <!-- Finance block -->
+    <div style="margin-bottom:4px">
+      <div class="sec-title">Финансы за месяц</div>
+      <div class="fin-grid">
+        <div class="stat-card">
+          <div class="stat-ic" style="background:#fff0f0"><span style="color:#ff4b4b">↗</span></div>
+          <div class="stat-l">Расходы</div>
+          <div class="stat-a" id="expDisp">0 UZS</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ic" style="background:#edfbf3"><span style="color:#2dbd71">↙</span></div>
+          <div class="stat-l">Доходы</div>
+          <div class="stat-a" id="incDisp">1 500 000 UZS</div>
+        </div>
+        <div class="qa-strip" style="grid-column:1/-1">
+          <button class="qa-ic" onclick="openExpQuick('fuel')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v13"/><path d="M3 13h8"/><path d="M14 7h1a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0 2-2V8l-2-2"/><line x1="3" y1="22" x2="15" y2="22"/></svg></span><small>Топливо</small></button>
+          <button class="qa-ic" onclick="openExpQuick('food')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v7a2 2 0 0 0 4 0V2"/><path d="M20 9v13"/><path d="M4 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M6 10v11"/></svg></span><small>Питание</small></button>
+          <button class="qa-ic" onclick="openExpQuick('parking')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><small>Стоянка</small></button>
+          <button class="qa-ic" onclick="openExpQuick('parts')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><small>Запчасти</small></button>
+          <button class="qa-ic" onclick="openExpQuick('service')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><small>Сервис</small></button>
+          <button class="qa-ic" onclick="openExpQuick('wash')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span><small>Мойка</small></button>
+          <button class="qa-ic" onclick="openExpQuick('fine')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><small>Штраф</small></button>
+          <button class="qa-ic" onclick="openExpQuick('insure')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><small>Страховка</small></button>
+          <button class="qa-ic" onclick="openExpQuick('other')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><small>Другое</small></button>
+        </div>
+        <div class="net-row">
+          <span class="net-l">Чистая прибыль</span>
+          <span class="net-a" id="netDisp">+1 500 000 UZS</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Odometer photo -->
-    <button onclick="openModal('odoModal')" style="width:100%;background:#fff;border-radius:20px;padding:18px 20px;border:1.5px solid #eee;cursor:pointer;display:flex;align-items:center;gap:16px;margin-bottom:12px;text-align:left;">
+    <button id="odoBtn" onclick="openModal('odoModal')" style="width:100%;background:#fff;border-radius:20px;padding:18px 20px;border:1.5px solid #eee;cursor:pointer;display:flex;align-items:center;gap:16px;margin:12px 0;text-align:left;">
       <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#f7971e,#ffd200);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(247,151,30,.35);">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -1051,40 +1077,14 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
     <div id="tcTabOrders" style="padding-bottom:20px">
 
-      <!-- Finance block -->
-      <div style="margin-bottom:4px">
-        <div class="sec-title">Финансы за месяц</div>
-        <div class="fin-grid">
-          <div class="stat-card">
-            <div class="stat-ic" style="background:#fff0f0"><span style="color:#ff4b4b">↗</span></div>
-            <div class="stat-l">Расходы</div>
-            <div class="stat-a" id="expDisp">0 UZS</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-ic" style="background:#edfbf3"><span style="color:#2dbd71">↙</span></div>
-            <div class="stat-l">Доходы</div>
-            <div class="stat-a" id="incDisp">1 500 000 UZS</div>
-          </div>
-          <div class="qa-strip" style="grid-column:1/-1">
-            <button class="qa-ic" onclick="openExpQuick('fuel')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V9a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v13"/><path d="M3 13h8"/><path d="M14 7h1a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0 2-2V8l-2-2"/><line x1="3" y1="22" x2="15" y2="22"/></svg></span><small>Топливо</small></button>
-            <button class="qa-ic" onclick="openExpQuick('food')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v7a2 2 0 0 0 4 0V2"/><path d="M20 9v13"/><path d="M4 2v6a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V2"/><path d="M6 10v11"/></svg></span><small>Питание</small></button>
-            <button class="qa-ic" onclick="openExpQuick('parking')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><small>Стоянка</small></button>
-            <button class="qa-ic" onclick="openExpQuick('parts')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><small>Запчасти</small></button>
-            <button class="qa-ic" onclick="openExpQuick('service')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><small>Сервис</small></button>
-            <button class="qa-ic" onclick="openExpQuick('wash')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span><small>Мойка</small></button>
-            <button class="qa-ic" onclick="openExpQuick('fine')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><small>Штраф</small></button>
-            <button class="qa-ic" onclick="openExpQuick('insure')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><small>Страховка</small></button>
-            <button class="qa-ic" onclick="openExpQuick('other')"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><small>Другое</small></button>
-          </div>
-          <div class="net-row">
-            <span class="net-l">Чистая прибыль</span>
-            <span class="net-a" id="netDisp">+1 500 000 UZS</span>
-          </div>
-        </div>
-      </div>
-
       <!-- Orders/trips list -->
       <div id="tcOrdersContent"></div>
+    </div>
+
+    <!-- Transaction log (soft-delete: struck through, not removed) -->
+    <div style="padding-bottom:20px">
+      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Последние операции</div>
+      <div id="txLogList" style="display:flex;flex-direction:column;gap:8px"></div>
     </div>
 
   </div>
@@ -1823,6 +1823,41 @@ let currentTripProfit=1500000;
 /* ── Finance ─────────────────────────────────── */
 let exp=0,inc=1500000;
 function fmt(n){return n.toLocaleString('ru-RU')+' UZS';}
+const CAT_LABELS={fuel:'Топливо',food:'Питание',parking:'Стоянка',parts:'Запчасти',service:'Сервис/Мастер',
+  wash:'Мойка',fine:'Штраф',insure:'Страховка',other:'Другое',trip:'Оплата рейса',bonus:'Бонус'};
+let txLog=[],txIdSeq=0;
+function renderTxLog(){
+  const el=document.getElementById('txLogList');
+  if(!el) return;
+  if(!txLog.length){
+    el.innerHTML='<div style="font-size:13px;color:#bbb;text-align:center;padding:8px 0">Пока нет операций</div>';
+    return;
+  }
+  el.innerHTML=txLog.slice().reverse().map(t=>{
+    const sign=t.type==='exp'?'−':'+';
+    const cancelledStyle=t.cancelled?'text-decoration:line-through;opacity:.45;':'';
+    const amtColor=t.type==='exp'?'#ff4b4b':'#2dbd71';
+    return `<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #eee;border-radius:14px;padding:10px 12px;${cancelledStyle}">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.catLabel}</div>
+        ${t.note?`<div style="font-size:11px;color:#aaa;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.note}</div>`:''}
+      </div>
+      <div style="font-size:13px;font-weight:700;color:${cancelledStyle?'#aaa':amtColor};flex-shrink:0">${sign}${t.amount.toLocaleString('ru-RU')} ${t.currency}</div>
+      ${t.cancelled
+        ? '<span style="font-size:11px;color:#bbb;flex-shrink:0">Удалено</span>'
+        : `<button onclick="deleteTx(${t.id})" title="Удалить" style="width:26px;height:26px;border-radius:13px;background:#f8f8f8;border:none;color:#aaa;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`}
+    </div>`;
+  }).join('');
+}
+function deleteTx(id){
+  const t=txLog.find(x=>x.id===id);
+  if(!t||t.cancelled) return;
+  t.cancelled=true;
+  if(t.type==='exp') exp-=t.amount; else inc-=t.amount;
+  refreshFin();
+  renderTxLog();
+  toast('Запись удалена из расчёта');
+}
 function refreshFin(){
   const net=inc-exp;
   document.getElementById('expDisp').textContent=fmt(exp);
@@ -1832,6 +1867,7 @@ function refreshFin(){
   el.style.color=net>=0?'#2dbd71':'#ff4b4b';
 }
 refreshFin();
+renderTxLog();
 
 /* ── Start/Finish Trip ───────────────────────── */
 function updatePreview(){
@@ -2003,6 +2039,7 @@ function openActiveTrip(){
   el('tdMiniMap').style.display='block';
   updateTdMiniMap(driven,dist,from,to,'~'+(Math.round((dist-driven)/90))+'ч до прибытия');
   el('tdFinishBtn').style.display='block';
+  el('tdIncBtn').style.display='block';
   el('tdFinanceWrap').style.display='none';
   el('tdExpWrap').style.display='none';
   el('tdOwnerWrap').style.display='none';
@@ -2031,6 +2068,7 @@ function openHistoryTrip(idx){
   el('tdStepper').style.display='none';
   el('tdMiniMap').style.display='none';
   el('tdFinishBtn').style.display='none';
+  el('tdIncBtn').style.display='none';
   // Finance
   if(t.income>0||t.expenses.length>0){
     const expTotal=t.expenses.reduce((s,e)=>s+e.amount,0);
@@ -2315,6 +2353,11 @@ function saveTx(type){
   const v=parseFloat(document.getElementById(id).value);
   if(!v||v<=0){toast('Введите сумму');return;}
   if(type==='exp')exp+=v;else inc+=v;
+  const cat=type==='exp'?expSelectedCat:document.querySelector('#incModal .exp-cat-btn.active')?.dataset.cat;
+  const currency=type==='exp'?expCurrency:incCurrency;
+  const note=(document.getElementById(type==='exp'?'expNote':'incNote').value||'').trim();
+  txLog.push({id:++txIdSeq,type,cat,catLabel:CAT_LABELS[cat]||'Другое',amount:v,currency,note,cancelled:false});
+  renderTxLog();
   refreshFin();document.getElementById(id).value='';
   closeModal(type==='exp'?'expModal':'incModal');
   toast(type==='exp'?`−${v.toLocaleString('ru-RU')} UZS · Расход добавлен`:`+${v.toLocaleString('ru-RU')} UZS · Доход добавлен`);
@@ -2404,7 +2447,7 @@ function acceptOwnerTrip(){
   document.getElementById('tcTripRemKm').textContent=distN+' км';
   document.getElementById('tcTripDistChip').textContent='📍 '+(dist||'—')+' км';
   document.getElementById('tcTripTimeChip').textContent='⏱ '+(time||'—');
-  document.getElementById('tcTripDate').textContent='📅 '+today;
+  const tcTripDateEl=document.getElementById('tcTripDate');if(tcTripDateEl)tcTripDateEl.textContent='📅 '+today;
   buildStepper('tcStepper');
   document.getElementById('tcTripCard').style.display='block';
   pendingOwnerTrip=null;
@@ -2443,13 +2486,12 @@ function declineOwnerTrip(){
 }
 
 /* ── Init ────────────────────────────────────── */
-// Move trip elements into the Заказы tab on load
+// Move map + current-trip card to sit right under "Зафиксировать пробег"
 (function(){
-  const ordersEl=document.getElementById('tcTabOrders');
-  const contentEl=document.getElementById('tcOrdersContent');
-  ['tcMiniMapCard','tcTripCard'].forEach(id=>{
+  const odoBtn=document.getElementById('odoBtn');
+  ['tcTripCard','tcMiniMapCard'].forEach(id=>{
     const el=document.getElementById(id);
-    if(el&&ordersEl&&contentEl) ordersEl.insertBefore(el,contentEl);
+    if(el&&odoBtn) odoBtn.insertAdjacentElement('afterend',el);
   });
 })();
 applyStatus('driving');
