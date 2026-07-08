@@ -6,6 +6,8 @@
 <title>Рейсы — Avtopakt Fura</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="assets/tw.js?v=29"></script>
 <link rel="stylesheet" href="assets/styles.css?v=29">
@@ -42,6 +44,95 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="#0F0F37" stroke-width="2.5" width="18" height="18"><path d="M12 5v14M5 12h14"/></svg>
     Создать рейс
   </button>
+
+  <!-- Create Order sheet -->
+  <div id="createOrderSheet" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h2 class="text-lg font-bold text-navy-800">Создать рейс</h2>
+        <button data-close-order class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
+      </div>
+      <div class="sheet-body space-y-4">
+
+        <div>
+          <label class="f-label">Откуда</label>
+          <div class="flex gap-2">
+            <input id="co-from" class="f-field flex-1" placeholder="Введите город или выберите на карте" oninput="onAddressTyped('from')">
+            <button onclick="openMapPicker('from')" class="w-12 h-12 rounded-lg bg-navy-800 text-white flex items-center justify-center shrink-0"><i data-icon="map" class="w-5 h-5"></i></button>
+          </div>
+        </div>
+
+        <div>
+          <label class="f-label">Куда</label>
+          <div class="flex gap-2">
+            <input id="co-to" class="f-field flex-1" placeholder="Введите город или выберите на карте" oninput="onAddressTyped('to')">
+            <button onclick="openMapPicker('to')" class="w-12 h-12 rounded-lg bg-navy-800 text-white flex items-center justify-center shrink-0"><i data-icon="map" class="w-5 h-5"></i></button>
+          </div>
+        </div>
+
+        <div id="co-route-info" class="hidden rounded-xl p-3.5" style="background:#F9FAFB;border:1px solid #EAECF0">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-500">Расстояние</span>
+            <span id="co-route-dist" class="font-bold text-navy-800">—</span>
+          </div>
+          <div class="flex items-center justify-between text-sm mt-1.5">
+            <span class="text-gray-500">Время в пути</span>
+            <span id="co-route-time" class="font-bold text-navy-800">—</span>
+          </div>
+          <div class="flex items-center justify-between text-sm mt-1.5">
+            <span class="text-gray-500">Прибытие (расч.)</span>
+            <span id="co-route-eta" class="font-bold text-navy-800">—</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-2"><label class="f-label">Груз</label><input id="co-cargo" class="f-field" placeholder="e.g. Электроника"></div>
+          <div><label class="f-label">Вес, т</label><input id="co-weight" class="f-field" inputmode="numeric" placeholder="14"></div>
+        </div>
+
+        <div><label class="f-label">Ожидаемый доход</label><div class="f-plate"><span class="seg">$</span><input id="co-income" inputmode="numeric" placeholder="e.g. 4500"></div></div>
+
+        <div><label class="f-label">Комментарий для водителя (необязательно)</label><textarea id="co-note" class="f-field" style="height:80px;padding-top:12px;resize:none" placeholder="Например: погрузка со склада №3, звонить за час до прибытия"></textarea></div>
+
+        <div>
+          <label class="f-label">Грузовик</label>
+          <div id="co-truck-picker">
+            <button onclick="toggleTruckList()" class="btn h-12 w-full rounded-lg border border-gray-300 text-navy-800 font-semibold hover:bg-gray-50 flex items-center justify-center gap-2">
+              <i data-icon="truck" class="w-4 h-4"></i>Выбрать грузовик
+            </button>
+            <div id="co-truck-list" class="hidden mt-2 space-y-2"></div>
+          </div>
+          <div id="co-truck-selected" class="hidden rounded-2xl bg-gray-50 p-3.5 flex items-center gap-3">
+            <img id="co-truck-img" class="w-14 h-14 rounded-lg object-cover shrink-0" src="">
+            <div class="flex-1 min-w-0">
+              <p id="co-truck-name" class="text-sm font-bold text-navy-800"></p>
+              <p id="co-truck-driver" class="text-xs text-gray-500 mt-0.5"></p>
+              <p id="co-truck-trailer" class="text-xs text-gray-400 mt-0.5"></p>
+            </div>
+            <button onclick="toggleTruckList()" class="text-xs font-semibold text-primary-600 shrink-0">Изменить</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="sheet-foot">
+        <button data-close-order class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold hover:bg-gray-50">Cancel</button>
+        <button onclick="submitCreateOrder()" class="btn flex-1 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold shadow-sm">Создать рейс</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map picker overlay -->
+  <div id="mapPickerOverlay" style="position:fixed;inset:0;z-index:2000;background:#fff;display:none;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 16px;border-bottom:1px solid #EAECF0;flex:0 0 auto">
+      <h2 class="text-lg font-bold text-navy-800">Выберите точку на карте</h2>
+      <button onclick="closeMapPicker()" class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50"><i data-icon="close" class="w-5 h-5"></i></button>
+    </div>
+    <div id="mapPicker" style="flex:1 1 auto"></div>
+    <div style="padding:14px 16px calc(14px + env(safe-area-inset-bottom,8px));border-top:1px solid #EAECF0;flex:0 0 auto">
+      <p id="co-picker-preview" class="text-sm text-gray-500 mb-2.5 text-center">Нажмите на карту, чтобы выбрать точку</p>
+      <button id="co-picker-confirm" onclick="confirmMapPick()" disabled class="btn h-12 w-full rounded-lg bg-primary-500 text-navy-800 font-bold opacity-40 pointer-events-none">Подтвердить точку</button>
+    </div>
+  </div>
 
 </div>
 
@@ -104,6 +195,7 @@ const APP_ORDERS = [
 ];
 
 const A_STATUS = {
+  pending:   {label:'Ожидание водителя', bg:'#FFFBEB', color:'#B54708', dot:'#F79009'},
   active:    {label:'В рейсе',  bg:'#ECFDF3', color:'#027A48', dot:'#17B26A'},
   done:      {label:'Завершён', bg:'#F2F4F7', color:'#344054', dot:'#667085'},
   cancelled: {label:'Отменён',  bg:'#FEF3F2', color:'#B42318', dot:'#F04438'},
@@ -125,13 +217,18 @@ const QUICK_CATS = [
 
 let _curFilter = 'all';
 
-const TABS = [
-  ['all','Все',6],['active','В рейсе',2],['done','Завершён',2],['cancelled','Отменён',2]
+const TAB_DEFS = [
+  ['all','Все'],['pending','Ожидание'],['active','В рейсе'],['done','Завершён'],['cancelled','Отменён']
 ];
 
-document.getElementById('order-tabs').innerHTML = TABS.map(([k,l,c],i)=>
-  `<button class="seg-tab ${i===0?'on':''}" onclick="setTab('${k}',this)">${l}<span class="c">${c}</span></button>`
-).join('');
+function renderTabs() {
+  document.getElementById('order-tabs').innerHTML = TAB_DEFS.map(([k,l],i)=>{
+    const c = k==='all' ? APP_ORDERS.length : APP_ORDERS.filter(o=>o.status===k).length;
+    if (k!=='all' && c===0) return '';
+    return `<button class="seg-tab ${_curFilter===k?'on':''}" onclick="setTab('${k}',this)">${l}<span class="c">${c}</span></button>`;
+  }).join('');
+  document.querySelector('.sticky-head p.text-xs').textContent = APP_ORDERS.length+' заказов';
+}
 
 function setTab(key, btn) {
   _curFilter = key;
@@ -142,7 +239,7 @@ function setTab(key, btn) {
 
 function renderList() {
   const items = APP_ORDERS.filter(o => _curFilter==='all' || o.status===_curFilter);
-  document.getElementById('orders-list').innerHTML = items.map((o,i) => {
+  document.getElementById('orders-list').innerHTML = items.map((o) => {
     const s = A_STATUS[o.status];
     const idx = APP_ORDERS.indexOf(o);
     return `
@@ -168,6 +265,10 @@ function renderList() {
           <div style="display:flex;justify-content:space-between">
             <span style="font-size:12px;color:#98A2B3">${o.driver.name}</span>
             <span style="font-size:12px;font-weight:800;color:#0F0F37">${o.pct}% пройдено</span>
+          </div>` : o.status==='pending' ? `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <span style="font-size:12px;color:#98A2B3">${o.driver.name}</span>
+            <button onclick="event.preventDefault();event.stopPropagation();simulateDriverAccept(${idx})" style="font-size:11px;font-weight:700;color:#0F0F37;background:#FFF7CC;border:1px solid #FFE58A;border-radius:999px;padding:4px 10px;cursor:pointer;font-family:inherit">Симулировать принятие</button>
           </div>` : `<p style="font-size:12px;color:#98A2B3">${o.driver.name} · ${o.startDate}</p>`}
         </div>
       </div>
@@ -175,13 +276,211 @@ function renderList() {
   }).join('');
 }
 
-function openCreateOrder() {
-  alert('Создание нового рейса — в разработке');
+/* ── Create Order ─────────────────────────────── */
+const IDLE_TRUCKS = [
+  {name:'Mercedes Actros', plate:'30 C 201 BA', img:'assets/img/trucks/truck5.jpg',
+   driver:{name:'Sardor Kholmatov', phone:'+998 90 555 44 33', img:'assets/img/drivers/d4.jpg'},
+   trailer:null},
+];
+
+const CITIES = [
+  {name:'Ташкент', lat:41.2995, lng:69.2401},
+  {name:'Самарканд', lat:39.6270, lng:66.9750},
+  {name:'Бухара', lat:39.7747, lng:64.4286},
+  {name:'Андижан', lat:40.7833, lng:72.3333},
+  {name:'Фергана', lat:40.3894, lng:71.7828},
+  {name:'Наманган', lat:41.0011, lng:71.6672},
+  {name:'Нукус', lat:42.4531, lng:59.6103},
+  {name:'Термез', lat:37.2242, lng:67.2783},
+  {name:'Бишкек', lat:42.8746, lng:74.5698},
+  {name:'Алматы', lat:43.2220, lng:76.8512},
+  {name:'Москва', lat:55.7558, lng:37.6173},
+  {name:'Стамбул', lat:41.0082, lng:28.9784},
+  {name:'Прага', lat:50.0755, lng:14.4378},
+  {name:'Варшава', lat:52.2297, lng:21.0122},
+  {name:'Лондон', lat:51.5072, lng:-0.1276},
+];
+
+function haversineKm(lat1,lng1,lat2,lng2){
+  const R=6371, toRad=d=>d*Math.PI/180;
+  const dLat=toRad(lat2-lat1), dLng=toRad(lng2-lng1);
+  const a=Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+let _orderFrom=null, _orderTo=null, _orderTruck=null;
+let _pickerTarget=null, _pickerMap=null, _pickerMarker=null, _pickerPick=null;
+
+function openCreateOrder(){
+  _orderFrom=null; _orderTo=null; _orderTruck=null;
+  document.getElementById('co-from').value='';
+  document.getElementById('co-to').value='';
+  document.getElementById('co-income').value='';
+  document.getElementById('co-cargo').value='';
+  document.getElementById('co-weight').value='';
+  document.getElementById('co-note').value='';
+  document.getElementById('co-route-info').classList.add('hidden');
+  document.getElementById('co-truck-list').classList.add('hidden');
+  document.getElementById('co-truck-selected').classList.add('hidden');
+  document.getElementById('co-truck-picker').querySelector('button').classList.remove('hidden');
+  document.getElementById('createOrderSheet').classList.add('open');
+}
+
+/* Typing a city name directly (as an alternative to picking on the map) */
+function onAddressTyped(target){
+  const el = document.getElementById(target==='from' ? 'co-from' : 'co-to');
+  const q = el.value.trim().toLowerCase();
+  const match = q ? CITIES.find(c => c.name.toLowerCase()===q || c.name.toLowerCase().startsWith(q)) : null;
+  if (target==='from') _orderFrom = match || null;
+  else _orderTo = match || null;
+  updateRouteCalc();
+}
+
+function toggleTruckList(){
+  const list=document.getElementById('co-truck-list');
+  const willShow=list.classList.contains('hidden');
+  if(willShow){
+    list.innerHTML = IDLE_TRUCKS.length ? IDLE_TRUCKS.map((t,i)=>`
+      <button onclick="selectTruckForOrder(${i})" style="width:100%;display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #EAECF0;border-radius:16px;padding:10px;cursor:pointer;font-family:inherit;text-align:left">
+        <img src="${t.img}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex-shrink:0">
+        <div style="flex:1;min-width:0">
+          <p style="font-size:14px;font-weight:800;color:#0F0F37">${t.name}</p>
+          <p style="font-size:12px;color:#98A2B3">${t.plate}</p>
+        </div>
+        <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:#ECFDF3;color:#027A48">Свободен</span>
+      </button>`).join('')
+      : `<p style="font-size:13px;color:#98A2B3;text-align:center;padding:12px 0">Нет свободных грузовиков</p>`;
+    Panda.render(list);
+  }
+  list.classList.toggle('hidden', !willShow);
+  document.getElementById('co-truck-selected').classList.add('hidden');
+}
+
+function selectTruckForOrder(i){
+  _orderTruck = IDLE_TRUCKS[i];
+  document.getElementById('co-truck-list').classList.add('hidden');
+  document.getElementById('co-truck-picker').querySelector('button').classList.add('hidden');
+  document.getElementById('co-truck-img').src = _orderTruck.img;
+  document.getElementById('co-truck-name').textContent = _orderTruck.name+' · '+_orderTruck.plate;
+  document.getElementById('co-truck-driver').textContent = 'Водитель: '+_orderTruck.driver.name;
+  document.getElementById('co-truck-trailer').textContent = _orderTruck.trailer ? ('Прицеп: '+_orderTruck.trailer.name+' · '+_orderTruck.trailer.plate) : 'Без прицепа';
+  document.getElementById('co-truck-selected').classList.remove('hidden');
+}
+
+function openMapPicker(target){
+  _pickerTarget = target;
+  _pickerPick = null;
+  document.getElementById('co-picker-preview').textContent = 'Нажмите на карту, чтобы выбрать точку';
+  const confirmBtn = document.getElementById('co-picker-confirm');
+  confirmBtn.disabled = true;
+  confirmBtn.classList.add('opacity-40','pointer-events-none');
+  document.getElementById('mapPickerOverlay').style.display = 'flex';
+
+  if (!_pickerMap) {
+    _pickerMap = L.map('mapPicker', {zoomControl:false, attributionControl:false}).setView([41.3, 64], 5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(_pickerMap);
+    _pickerMap.on('click', e => {
+      const {lat,lng} = e.latlng;
+      if (_pickerMarker) _pickerMap.removeLayer(_pickerMarker);
+      _pickerMarker = L.marker([lat,lng]).addTo(_pickerMap);
+      let nearest=null, best=Infinity;
+      CITIES.forEach(c=>{ const d=haversineKm(lat,lng,c.lat,c.lng); if(d<best){best=d; nearest=c;} });
+      _pickerPick = {name:nearest.name, lat, lng};
+      document.getElementById('co-picker-preview').innerHTML = `Ближайший город: <b>${nearest.name}</b> (~${Math.round(best)} км от точки)`;
+      const btn = document.getElementById('co-picker-confirm');
+      btn.disabled = false;
+      btn.classList.remove('opacity-40','pointer-events-none');
+    });
+  }
+  setTimeout(()=>_pickerMap.invalidateSize(), 50);
+}
+
+function closeMapPicker(){
+  document.getElementById('mapPickerOverlay').style.display = 'none';
+}
+
+function confirmMapPick(){
+  if (!_pickerPick) return;
+  if (_pickerTarget==='from') { _orderFrom = _pickerPick; document.getElementById('co-from').value = _pickerPick.name; }
+  else { _orderTo = _pickerPick; document.getElementById('co-to').value = _pickerPick.name; }
+  closeMapPicker();
+  updateRouteCalc();
+}
+
+function updateRouteCalc(){
+  const box = document.getElementById('co-route-info');
+  if (!_orderFrom || !_orderTo) { box.classList.add('hidden'); return; }
+  const km = haversineKm(_orderFrom.lat,_orderFrom.lng,_orderTo.lat,_orderTo.lng);
+  const hours = km / 70;
+  const days = Math.floor(hours/24);
+  const hrsLeft = Math.round(hours%24);
+  document.getElementById('co-route-dist').textContent = Math.round(km).toLocaleString('ru-RU')+' км';
+  document.getElementById('co-route-time').textContent = days>0 ? `${days} дн. ${hrsLeft} ч.` : `${hrsLeft} ч.`;
+  const eta = new Date();
+  eta.setHours(eta.getHours() + Math.ceil(hours));
+  document.getElementById('co-route-eta').textContent = eta.toLocaleDateString('ru-RU');
+  box.classList.remove('hidden');
+}
+
+function toast(msg){
+  document.querySelectorAll('.app-toast').forEach(t=>t.remove());
+  const t=document.createElement('div');
+  t.className='app-toast';
+  t.style.cssText='position:fixed;left:16px;right:16px;bottom:calc(64px + env(safe-area-inset-bottom) + 16px);background:#0F0F37;color:#fff;border-radius:14px;padding:14px 16px;font-size:13px;font-weight:600;text-align:center;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,.25)';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3200);
+}
+
+function submitCreateOrder(){
+  if (!_orderFrom || !_orderTo) { toast('Укажите города отправления и назначения (введите город или выберите на карте)'); return; }
+  if (!_orderTruck) { toast('Выберите грузовик'); return; }
+  const cargoName = document.getElementById('co-cargo').value.trim();
+  if (!cargoName) { toast('Укажите, что везём (груз)'); return; }
+
+  const km = haversineKm(_orderFrom.lat,_orderFrom.lng,_orderTo.lat,_orderTo.lng);
+  const hours = km / 70;
+  const weight = document.getElementById('co-weight').value.trim();
+  const incomeVal = parseFloat(document.getElementById('co-income').value) || 0;
+  const note = document.getElementById('co-note').value.trim();
+  const today = new Date();
+  const startDate = today.toLocaleDateString('ru-RU');
+  const eta = new Date(); eta.setHours(eta.getHours() + Math.ceil(hours));
+  const estEnd = eta.toLocaleDateString('ru-RU');
+
+  APP_ORDERS.unshift({
+    id: 'ORD-'+String(APP_ORDERS.length+1).padStart(3,'0'),
+    status:'pending', from:_orderFrom.name, to:_orderTo.name,
+    cargo: cargoName + (weight ? ' · '+weight+' т' : ''), dist: Math.round(km).toLocaleString('ru-RU')+' км', pct:0,
+    startDate, estEnd, income: incomeVal ? '$'+incomeVal.toLocaleString('en-US') : '—',
+    note: note || null,
+    truck:{name:_orderTruck.name, plate:_orderTruck.plate, img:_orderTruck.img},
+    driver:_orderTruck.driver,
+    trailer:_orderTruck.trailer,
+    expenses:[]
+  });
+
+  document.getElementById('createOrderSheet').classList.remove('open');
+  renderTabs();
+  renderList();
+  toast('Рейс создан и отправлен водителю. Ожидаем подтверждения.');
+}
+
+function simulateDriverAccept(idx){
+  APP_ORDERS[idx].status = 'active';
+  renderTabs();
+  renderList();
+  toast('🔔 Уведомление: водитель начал рейс. Статус обновлён на «В рейсе».');
 }
 
 Panda.mountNav('fleet');
 Panda.render();
+renderTabs();
 renderList();
+
+const _orderSheet = document.getElementById('createOrderSheet');
+_orderSheet.addEventListener('click', e => { if (e.target===_orderSheet) _orderSheet.classList.remove('open'); });
+_orderSheet.querySelectorAll('[data-close-order]').forEach(el => el.addEventListener('click', () => _orderSheet.classList.remove('open')));
 </script>
 </body>
 </html>
