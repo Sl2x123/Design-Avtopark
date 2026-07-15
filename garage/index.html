@@ -1625,12 +1625,12 @@ let activeTruckIdx=0;
 
 const WORK_TRUCK_IDX=0;
 
-function truckRowHtml(t,i,showStatus){
+function truckRowHtml(t,i,showStatus,source){
   const statusHtml=showStatus===false?'':`
       <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#0F0F37;flex-shrink:0">
         <span style="width:7px;height:7px;border-radius:50%;background:${t.statusDot}"></span>${t.statusText}
       </span>`;
-  return `<button onclick="closeModal('truckSwitchModal');goToOrders(${i})" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid ${i===activeTruckIdx?'#0F0F37':'#eee'};border-radius:16px;padding:10px;cursor:pointer;font-family:inherit;text-align:left;width:100%;">
+  return `<button onclick="closeModal('truckSwitchModal');goToOrders(${i},'${source||'work'}')" style="display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid ${i===activeTruckIdx?'#0F0F37':'#eee'};border-radius:16px;padding:10px;cursor:pointer;font-family:inherit;text-align:left;width:100%;">
       <img src="${t.photo}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;"/>
       <div style="flex:1;min-width:0">
         <div style="font-size:14px;font-weight:800;color:#0F0F37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name} ${t.model}</div>
@@ -1650,12 +1650,12 @@ function renderTruckSwitchList(){
   const workTruck=TRUCKS[WORK_TRUCK_IDX];
   if(workTruck){
     html+=truckGroupLabel('ООО «АвтоТранс»');
-    html+=truckRowHtml(workTruck,WORK_TRUCK_IDX);
+    html+=truckRowHtml(workTruck,WORK_TRUCK_IDX,true,'work');
   }
   const ownTrucks=TRUCKS.map((t,i)=>({t,i})).filter(x=>x.i!==WORK_TRUCK_IDX);
   if(ownTrucks.length){
     html+=truckGroupLabel('Свои грузовики');
-    html+=ownTrucks.map(x=>truckRowHtml(x.t,x.i,false)).join('');
+    html+=ownTrucks.map(x=>truckRowHtml(x.t,x.i,false,'own')).join('');
   }
   el.innerHTML=html;
 }
@@ -2809,7 +2809,7 @@ function declineOwnerTrip(){
 applyStatus('driving');
 updateTcStatusBottom('driving');
 // Land straight on the truck detail screen on open
-goToOrders(0);
+goToOrders(0,'work');
 setTimeout(()=>openModal('inviteModal'),800);
 </script>
 
