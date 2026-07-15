@@ -1785,6 +1785,7 @@ function goToOrders(idx,source){
 
   renderOrdersTab(idx);
   updateFinBlockMode();
+  applyTruckDetailVisibility();
 
   navigate('screenTruck');
 }
@@ -1804,6 +1805,25 @@ function updateFinBlockMode(){
     expCard.onclick=function(){ openModal('expModal',false); };
     incCard.onclick=function(){ openModal('incModal',false); };
   }
+}
+
+/* ── Truck detail screen: "свой" грузовик shows only photo(+edit) and finance ── */
+function applyTruckDetailVisibility(){
+  const isOwn=currentTruckSource==='own';
+  // elements with their own dynamic show/hide logic elsewhere — only force-hide, never force-show
+  ['tcMiniMapCard','tcTripCard'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el&&isOwn) el.style.display='none';
+  });
+  // elements with no other controller — safe to toggle both ways
+  const odo=document.getElementById('odoBtn');
+  if(odo) odo.style.display=isOwn?'none':'flex';
+  const info=document.querySelector('#screenTruck .info-chip-grid');
+  if(info) info.style.display=isOwn?'none':'grid';
+  const driverCard=document.querySelector('#screenTruck .driver-status-card');
+  if(driverCard) driverCard.style.display=isOwn?'none':'block';
+  const ordersTab=document.getElementById('tcTabOrders');
+  if(ordersTab) ordersTab.style.display=isOwn?'none':'block';
 }
 
 const TRIP_HIST_SUMMARY=[
