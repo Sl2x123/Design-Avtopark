@@ -20,8 +20,8 @@
 
   <div class="app-scroll px-5 py-5">
     <div class="rounded-2xl bg-primary-50 border border-primary-200 p-4 mb-6 flex items-center justify-between">
-      <div><p class="text-sm text-navy-800 font-semibold">Professional</p><p class="text-xs text-navy-500">Subscription · 1 month</p></div>
-      <span class="text-2xl font-bold text-navy-800">$79</span>
+      <div><p class="text-sm text-navy-800 font-semibold" id="payPlanName">Professional</p><p class="text-xs text-navy-500">Subscription · 1 month</p></div>
+      <span class="text-2xl font-bold text-navy-800" id="payPlanPrice">$79</span>
     </div>
 
     <h3 class="text-sm font-semibold text-navy-800 mb-3">Payment method</h3>
@@ -34,7 +34,7 @@
   </div>
 
   <div class="px-5 pt-3 pb-7 border-t border-gray-100">
-    <a href="fleet.html" class="btn h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm gap-2"><i data-icon="lock" class="w-4 h-4"></i> Pay $79</a>
+    <button id="payBtn" class="btn h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm gap-2"><i data-icon="lock" class="w-4 h-4"></i> <span id="payBtnLabel">Pay $79</span></button>
     <p class="text-center text-gray-400 text-xs mt-3">Subscription activates automatically after payment</p>
   </div>
 </div>
@@ -50,10 +50,29 @@
 </style>
 <script>
   Panda.render();
+
+  const plan=JSON.parse(localStorage.getItem('af_plan')||'{"name":"Professional","price":79}');
+  document.getElementById('payPlanName').textContent=plan.name;
+  document.getElementById('payPlanPrice').textContent='$'+plan.price;
+  document.getElementById('payBtnLabel').textContent='Pay $'+plan.price;
+
+  let selectedProvider='Click';
   document.querySelectorAll('.pay').forEach(p=>p.addEventListener('click',()=>{
     document.querySelectorAll('.pay').forEach(x=>{x.classList.remove('selected');x.querySelector('.radio').classList.remove('on');});
     p.classList.add('selected'); p.querySelector('.radio').classList.add('on');
+    selectedProvider=p.querySelector('.name').textContent;
   }));
+
+  document.getElementById('payBtn').addEventListener('click',()=>{
+    const now=new Date();
+    const expires=new Date(now.getTime()+30*24*60*60*1000);
+    localStorage.setItem('af_subscription',JSON.stringify({
+      plan:plan.name, price:plan.price, provider:selectedProvider,
+      activatedAt:now.toISOString(), expiresAt:expires.toISOString(), active:true
+    }));
+    localStorage.setItem('af_logged_in','1');
+    window.location.href='fleet.html';
+  });
 </script>
 </body>
 </html>

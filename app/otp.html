@@ -22,25 +22,25 @@
         <i data-icon="shield-check" class="w-7 h-7"></i>
       </div>
       <h2 class="text-xl font-semibold text-navy-800 mb-1.5">Verification code</h2>
-      <p class="text-gray-500 text-sm mb-7">Code sent to <span class="font-semibold text-gray-700">+998 90 *** ** 67</span></p>
+      <p class="text-gray-500 text-sm mb-7">Code sent to <span class="font-semibold text-gray-700" id="phoneEcho">+998 90 *** ** 67</span></p>
 
       <div class="grid grid-cols-6 gap-2 mb-2">
-        <input maxlength="1" value="4" class="otp-cell">
-        <input maxlength="1" value="7" class="otp-cell">
-        <input maxlength="1" value="2" class="otp-cell">
-        <input maxlength="1" class="otp-cell focused">
-        <input maxlength="1" class="otp-cell">
-        <input maxlength="1" class="otp-cell">
+        <input maxlength="1" inputmode="numeric" class="otp-cell focused">
+        <input maxlength="1" inputmode="numeric" class="otp-cell">
+        <input maxlength="1" inputmode="numeric" class="otp-cell">
+        <input maxlength="1" inputmode="numeric" class="otp-cell">
+        <input maxlength="1" inputmode="numeric" class="otp-cell">
+        <input maxlength="1" inputmode="numeric" class="otp-cell">
       </div>
+      <p id="otpError" class="hidden text-error-600 text-xs mt-1">Enter all 6 digits</p>
 
-      <a href="create-company.html" class="btn mt-6 h-12 rounded-lg bg-primary-500 hover:bg-primary-400 text-navy-800 font-bold flex items-center justify-center shadow-sm">Verify</a>
+      <button id="verifyBtn" disabled class="btn mt-6 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold flex items-center justify-center shadow-sm opacity-40 pointer-events-none">Verify</button>
 
       <div class="mt-6 text-center text-sm text-gray-500">
         Didn't get the code?
-        <span class="text-gray-400 font-medium ml-1" id="timer">Resend in 0:60</span>
+        <span class="text-gray-400 font-medium ml-1" id="timer">Resend in 1:00</span>
       </div>
     </div>
-    <p class="text-center text-gray-400 text-xs pb-8">Demo code prefilled — tap "Verify"</p>
   </div>
 </div>
 <style>
@@ -50,14 +50,52 @@
 </style>
 <script>
   Panda.render();
-  let t=60; const el=document.getElementById('timer');
-  const iv=setInterval(()=>{ t--; const m=Math.floor(t/60), s=String(t%60).padStart(2,'0');
-    el.textContent=`Resend in ${m}:${s}`;
-    if(t<=0){ clearInterval(iv); el.outerHTML='<span class="text-navy-700 font-semibold ml-1 cursor-pointer">Resend code</span>'; }
-  },1000);
+  const phone=sessionStorage.getItem('af_phone');
+  if(phone){
+    const digits=phone.replace(/\D/g,'').slice(-9);
+    document.getElementById('phoneEcho').textContent='+998 '+digits.slice(0,2)+' *** ** '+digits.slice(-2);
+  }
+
   const cells=[...document.querySelectorAll('.otp-cell')];
-  cells.forEach((c,i)=>{ c.addEventListener('input',()=>{ if(c.value&&cells[i+1]) cells[i+1].focus(); });
-    c.addEventListener('keydown',e=>{ if(e.key==='Backspace'&&!c.value&&cells[i-1]) cells[i-1].focus(); }); });
+  const verifyBtn=document.getElementById('verifyBtn');
+  function updateVerifyState(){
+    const full=cells.every(c=>c.value.trim()!=='');
+    verifyBtn.disabled=!full;
+    verifyBtn.classList.toggle('opacity-40',!full);
+    verifyBtn.classList.toggle('pointer-events-none',!full);
+    verifyBtn.classList.toggle('hover:bg-primary-400',full);
+    if(full) document.getElementById('otpError').classList.add('hidden');
+  }
+  cells.forEach((c,i)=>{
+    c.addEventListener('input',()=>{ c.value=c.value.replace(/\D/g,'').slice(0,1); if(c.value&&cells[i+1]) cells[i+1].focus(); updateVerifyState(); });
+    c.addEventListener('keydown',e=>{ if(e.key==='Backspace'&&!c.value&&cells[i-1]) cells[i-1].focus(); });
+  });
+  verifyBtn.addEventListener('click',()=>{
+    if(verifyBtn.disabled){ document.getElementById('otpError').classList.remove('hidden'); return; }
+    sessionStorage.setItem('af_otp_verified','1');
+    window.location.href='create-company.html';
+  });
+
+  let t=60;
+  const timerEl=document.getElementById('timer');
+  let iv=null;
+  function startTimer(){
+    t=60;
+    timerEl.textContent='Resend in 1:00';
+    timerEl.className='text-gray-400 font-medium ml-1';
+    clearInterval(iv);
+    iv=setInterval(()=>{
+      t--; const m=Math.floor(t/60), s=String(t%60).padStart(2,'0');
+      timerEl.textContent=`Resend in ${m}:${s}`;
+      if(t<=0){
+        clearInterval(iv);
+        timerEl.textContent='Resend code';
+        timerEl.className='text-navy-700 font-semibold ml-1 cursor-pointer';
+        timerEl.addEventListener('click',startTimer,{once:true});
+      }
+    },1000);
+  }
+  startTimer();
 </script>
 </body>
 </html>

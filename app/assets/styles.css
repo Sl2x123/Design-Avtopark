@@ -132,6 +132,36 @@ body {
 .f-plate input { flex:1; min-width:0; height:48px; padding:0 14px; border:0; outline:none; font-size:15px; color:#0F0F37; background:#fff; }
 .dropzone { border:2px dashed #FFCB00; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:26px; text-align:center; cursor:pointer; background:#FFFDF2; }
 
+/* ---------- Tablet design mode (toggle) ---------- */
+html.tablet-mode body { background: #eceef3; }
+html.tablet-mode .app {
+  max-width: none;
+  width: 100%;
+  box-shadow: none;
+}
+html.tablet-mode .has-nav { padding-bottom: 92px; }
+html.tablet-mode .navbar {
+  max-width: none;
+  padding: 10px 24px calc(12px + env(safe-area-inset-bottom, 8px));
+}
+html.tablet-mode .navbar a { flex: 0 0 96px; }
+html.tablet-mode .sheet { max-width: 560px; border-radius: 24px; margin-bottom: 40px; }
+
+.design-toggle-btn {
+  position: fixed; right: 20px; bottom: 20px; z-index: 900;
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 46px; padding: 0 18px 0 14px;
+  border-radius: 999px; border: none;
+  background: #0F0F37; color: #fff;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; box-shadow: 0 10px 24px -6px rgba(15,15,55,.45);
+}
+.design-toggle-btn:active { transform: translateY(1px); }
+.design-toggle-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+body:has(.navbar) .design-toggle-btn { bottom: 98px; }
+html.tablet-mode .design-toggle-btn { right: 28px; }
+html.tablet-mode body:has(.navbar) .design-toggle-btn { bottom: 108px; }
+
 /* ---------- Bottom sheet (modal) ---------- */
 .sheet-overlay { position:fixed; inset:0; z-index:1000; background:rgba(15,15,55,.45); display:flex; align-items:flex-end; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; }
 .sheet-overlay.open { opacity:1; pointer-events:auto; }

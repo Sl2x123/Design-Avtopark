@@ -111,3 +111,40 @@ window.NAV_FILLED['warehouse'] = '<g transform="scale(0.9231)"><path d="M24 8.33
 window.LUCIDE_ICONS['upload']="<path d=\"M12 3v12\" /> <path d=\"m17 8-5-5-5 5\" /> <path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\" />";
 window.LUCIDE_ICONS['x']="<path d=\"M18 6 6 18\" /> <path d=\"m6 6 12 12\" />";
 window.LUCIDE_ICONS['close']=window.LUCIDE_ICONS['x'];
+
+/* ---------- Design mode (mobile ⇄ tablet layout toggle) ---------- */
+(function(){
+  var KEY='af_design_mode';
+  function isTablet(){ return localStorage.getItem(KEY)==='tablet'; }
+  function applyMode(){ document.documentElement.classList.toggle('tablet-mode', isTablet()); }
+  applyMode(); // run immediately (before body paints) to avoid a layout flash
+
+  var MOBILE_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>';
+  var TABLET_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M11 16h2"/></svg>';
+
+  function updateBtn(){
+    var btn=document.getElementById('designToggleBtn');
+    if(!btn) return;
+    var t=isTablet();
+    btn.innerHTML=(t?MOBILE_ICON:TABLET_ICON)+'<span>'+(t?'Телефон':'Планшет')+'</span>';
+  }
+  function setMode(mode){
+    localStorage.setItem(KEY,mode);
+    applyMode();
+    updateBtn();
+  }
+  function mountToggle(){
+    if(document.getElementById('designToggleBtn')) return;
+    var btn=document.createElement('button');
+    btn.id='designToggleBtn';
+    btn.type='button';
+    btn.className='design-toggle-btn';
+    btn.title='Переключить дизайн: телефон / планшет';
+    btn.addEventListener('click',function(){ setMode(isTablet()?'mobile':'tablet'); });
+    document.body.appendChild(btn);
+    updateBtn();
+  }
+  window.Panda.mountDesignToggle=mountToggle;
+  window.Panda.isTabletMode=isTablet;
+  if(document.readyState!=='loading') mountToggle(); else document.addEventListener('DOMContentLoaded',mountToggle);
+})();

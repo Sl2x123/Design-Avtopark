@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garage · Trailers — Avtopakt Fura</title>
+<script>
+  if(!localStorage.getItem('af_logged_in')){ location.replace('login.html'); }
+  else { const s=JSON.parse(localStorage.getItem('af_subscription')||'null'); if(s&&new Date(s.expiresAt)<new Date()){ location.replace('subscription-expired.html'); } }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>

@@ -336,6 +336,37 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .net-l{font-size:14px;color:#666;font-weight:500;}
 .net-a{font-size:17px;font-weight:700;}
 
+/* Expenses / Income list screens */
+.fx-chip-row{display:flex;gap:8px;overflow-x:auto;padding:0 16px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.fx-chip-row::-webkit-scrollbar{display:none;}
+.fx-chip{flex:0 0 auto;padding:8px 14px;border-radius:20px;border:1.5px solid #eee;background:#fafafa;
+  font-size:13px;font-weight:700;color:#555;cursor:pointer;font-family:inherit;white-space:nowrap;}
+.fx-chip.active{background:#FAE436;border-color:#FAE436;color:#0F0F37;}
+.fx-date-lbl{font-size:12px;font-weight:700;color:#aaa;margin:14px 16px 8px;text-transform:uppercase;letter-spacing:.3px;}
+.fx-row{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid #eee;
+  border-radius:16px;padding:12px 14px;margin:0 16px 8px;}
+.fx-row-ic{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fx-row-lbl{flex:1;min-width:0;font-size:14px;font-weight:700;color:#0F0F37;}
+.fx-row-time{font-size:11px;color:#bbb;font-weight:600;margin-top:2px;}
+.fx-row-amt{font-size:14px;font-weight:800;flex-shrink:0;}
+.fx-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 30px 30px;text-align:center;}
+.fx-empty-ic{font-size:60px;margin-bottom:16px;}
+.fx-empty-t{font-size:16px;font-weight:800;color:#0F0F37;margin-bottom:4px;}
+.fx-empty-s{font-size:13px;color:#aaa;}
+.fx-fab{position:absolute;right:16px;bottom:24px;width:56px;height:56px;border-radius:28px;
+  border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 6px 16px rgba(0,0,0,.22);z-index:5;}
+.fx-fab:active{transform:scale(.94);}
+
+/* Category picker (vertical list) */
+.cat-pick-row{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid #f2f2f2;
+  cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;width:100%;
+  font-family:inherit;text-align:left;}
+.cat-pick-row:last-child{border-bottom:none;}
+.cat-pick-ic{width:40px;height:40px;border-radius:12px;background:#fff0f0;color:#ff4b4b;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cat-pick-lbl{flex:1;font-size:15px;font-weight:700;color:#0F0F37;}
+
 /* Compact info chips (matches reference "Общая информация" chip style) */
 .info-chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
 .info-chip{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #eee;
@@ -496,7 +527,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   <div class="g-pad">
 
     <!-- VOLVO -->
-    <div class="gc-card" onclick="goToOrders(0)">
+    <div class="gc-card" onclick="goToOrders(0,'own')">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -524,7 +555,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
 
     <!-- SCANIA -->
-    <div class="gc-card" onclick="goToOrders(1)">
+    <div class="gc-card" onclick="goToOrders(1,'own')">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -552,7 +583,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
 
     <!-- MAN -->
-    <div class="gc-card" onclick="goToOrders(2)">
+    <div class="gc-card" onclick="goToOrders(2,'own')">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -592,7 +623,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   <div class="g-pad">
 
     <!-- Assigned truck from employer -->
-    <div class="work-truck-card" onclick="goToOrders(0)" style="cursor:pointer">
+    <div class="work-truck-card" onclick="goToOrders(0,'work')" style="cursor:pointer">
       <div class="gc-photo-wrap">
         <img class="gc-photo-img" src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&h=420&fit=crop&q=85" alt=""/>
         <div class="gc-overlay-top">
@@ -884,6 +915,62 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 
 
 <!-- ══════════════════════════════════════════
+     SCREEN — EXPENSES (свой грузовик)
+══════════════════════════════════════════ -->
+<div class="screen" id="screenExpenses">
+
+  <div class="sbar">
+    <span class="sbar-time" id="clkExp">10:56</span>
+    <div class="sbar-icons"><span>4G</span><span>▪▪▪</span><span>🔋 80</span></div>
+  </div>
+
+  <div class="hdr">
+    <div class="hdr-back" onclick="goBack()">‹</div>
+    <span class="hdr-title">Расходы</span>
+  </div>
+
+  <div class="fx-chip-row" id="expChips"></div>
+
+  <div class="screen-scroll">
+    <div id="expListContent" style="padding-bottom:90px"></div>
+  </div>
+
+  <button class="fx-fab" style="background:#ff4b4b" onclick="openCatPicker()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+</div><!-- /screenExpenses -->
+
+
+<!-- ══════════════════════════════════════════
+     SCREEN — ДОХОД (свой грузовик)
+══════════════════════════════════════════ -->
+<div class="screen" id="screenIncome">
+
+  <div class="sbar">
+    <span class="sbar-time" id="clkInc">10:56</span>
+    <div class="sbar-icons"><span>4G</span><span>▪▪▪</span><span>🔋 80</span></div>
+  </div>
+
+  <div class="hdr">
+    <div class="hdr-back" onclick="goBack()">‹</div>
+    <span class="hdr-title">Доход</span>
+  </div>
+
+  <div class="fx-chip-row" id="incChips"></div>
+
+  <div class="screen-scroll">
+    <div id="incListContent" style="padding-bottom:90px"></div>
+  </div>
+
+  <button class="fx-fab" style="background:#2dbd71" onclick="openModal('incModal',false)">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+
+</div><!-- /screenIncome -->
+
+
+<!-- ══════════════════════════════════════════
      SCREEN 4 — TRUCK DETAIL
 ══════════════════════════════════════════ -->
 <div class="screen" id="screenTruck">
@@ -1042,12 +1129,12 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div style="margin-bottom:4px">
       <div class="sec-title">Финансы за месяц</div>
       <div class="fin-grid">
-        <div class="stat-card" onclick="openModal('expModal',false)" style="cursor:pointer">
+        <div class="stat-card" id="finExpCard" onclick="openModal('expModal',false)" style="cursor:pointer">
           <div class="stat-ic" style="background:#fff0f0"><span style="color:#ff4b4b">↗</span></div>
-          <div class="stat-l">Итого</div>
+          <div class="stat-l" id="expDispLbl">Итого</div>
           <div class="stat-a" id="expDisp">0 UZS</div>
         </div>
-        <div class="stat-card" onclick="openModal('incModal',false)" style="cursor:pointer">
+        <div class="stat-card" id="finIncCard" onclick="openModal('incModal',false)" style="cursor:pointer">
           <div class="stat-ic" style="background:#edfbf3"><span style="color:#2dbd71">↙</span></div>
           <div class="stat-l">Итого</div>
           <div class="stat-a" id="incDisp">1 500 000 UZS</div>
@@ -1253,6 +1340,17 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   </div>
 </div>
 
+<div class="modal" id="catPickerModal">
+  <div class="msheet" style="padding:16px 20px 32px">
+    <div class="msheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="mtitle" style="margin:0">Выберите тип расхода</div>
+      <button onclick="closeModal('catPickerModal')" style="width:30px;height:30px;border-radius:15px;background:#f4f4f4;border:none;color:#888;font-size:16px;cursor:pointer">✕</button>
+    </div>
+    <div id="catPickerList"></div>
+  </div>
+</div>
+
 <div class="modal" id="expModal">
   <div class="msheet" style="padding:16px 20px 48px">
     <div class="msheet-handle"></div>
@@ -1295,15 +1393,11 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div style="text-align:center;margin-bottom:14px">
       <div style="display:inline-flex;align-items:baseline;gap:6px;border-bottom:2px solid #eee;padding-bottom:8px">
         <input type="number" placeholder="0" id="expAmt" style="font-size:42px;font-weight:700;color:#0F0F37;border:none;outline:none;background:transparent;width:140px;text-align:right;font-family:inherit"/>
-        <span id="expCurSymbol" style="font-size:15px;font-weight:600;color:#bbb;padding-bottom:4px">Sum</span>
+        <span id="expCurSymbol" style="font-size:15px;font-weight:600;color:#bbb;padding-bottom:4px">$</span>
       </div>
     </div>
-    <div style="display:flex;gap:6px;margin-bottom:20px">
-      <button class="exp-cur-btn active" data-cur="UZS"   onclick="setExpCur('UZS')">Sum</button>
-      <button class="exp-cur-btn"        data-cur="USD"   onclick="setExpCur('USD')">$</button>
-      <button class="exp-cur-btn"        data-cur="RUB"   onclick="setExpCur('RUB')">Rub</button>
-      <button class="exp-cur-btn"        data-cur="KZT"   onclick="setExpCur('KZT')">Tenge</button>
-      <button class="exp-cur-btn"        data-cur="EUR"   onclick="setExpCur('EUR')">Euro</button>
+    <div style="display:none;margin-bottom:20px">
+      <button class="exp-cur-btn active" data-cur="USD"   onclick="setExpCur('USD')">$</button>
     </div>
 
     <!-- Photo receipt (for categories that have it) -->
@@ -1380,15 +1474,11 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div style="text-align:center;margin-bottom:14px">
       <div style="display:inline-flex;align-items:baseline;gap:6px;border-bottom:2px solid #eee;padding-bottom:8px">
         <input type="number" placeholder="0" id="incAmt" style="font-size:42px;font-weight:700;color:#0F0F37;border:none;outline:none;background:transparent;width:140px;text-align:right;font-family:inherit"/>
-        <span id="incCurSymbol" style="font-size:15px;font-weight:600;color:#bbb;padding-bottom:4px">Sum</span>
+        <span id="incCurSymbol" style="font-size:15px;font-weight:600;color:#bbb;padding-bottom:4px">$</span>
       </div>
     </div>
-    <div style="display:flex;gap:6px;margin-bottom:20px">
-      <button class="exp-cur-btn active" data-cur="UZS" onclick="setIncCur('UZS')">Sum</button>
-      <button class="exp-cur-btn"        data-cur="USD" onclick="setIncCur('USD')">$</button>
-      <button class="exp-cur-btn"        data-cur="RUB" onclick="setIncCur('RUB')">Rub</button>
-      <button class="exp-cur-btn"        data-cur="KZT" onclick="setIncCur('KZT')">Tenge</button>
-      <button class="exp-cur-btn"        data-cur="EUR" onclick="setIncCur('EUR')">Euro</button>
+    <div style="display:none;margin-bottom:20px">
+      <button class="exp-cur-btn active" data-cur="USD" onclick="setIncCur('USD')">$</button>
     </div>
     <div class="field-label" style="margin-bottom:10px">Категория</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
@@ -1619,8 +1709,10 @@ function goBack(){
 }
 
 /* ── Go to orders (truck → orders screen) ────── */
-function goToOrders(idx){
+let currentTruckSource='work';
+function goToOrders(idx,source){
   activeTruckIdx=idx;
+  currentTruckSource=source==='own'?'own':'work';
   const t=TRUCKS[idx];
 
 
@@ -1692,8 +1784,26 @@ function goToOrders(idx){
   }
 
   renderOrdersTab(idx);
+  updateFinBlockMode();
 
   navigate('screenTruck');
+}
+
+/* ── Finance block: differs for "свой" vs "рабочий" грузовик ── */
+function updateFinBlockMode(){
+  const expLbl=document.getElementById('expDispLbl');
+  const expCard=document.getElementById('finExpCard');
+  const incCard=document.getElementById('finIncCard');
+  if(!expLbl||!expCard||!incCard) return;
+  if(currentTruckSource==='own'){
+    expLbl.textContent='История расходов';
+    expCard.onclick=function(){ renderExpensesList('all'); navigate('screenExpenses'); };
+    incCard.onclick=function(){ renderIncomeList('all'); navigate('screenIncome'); };
+  } else {
+    expLbl.textContent='Итого';
+    expCard.onclick=function(){ openModal('expModal',false); };
+    incCard.onclick=function(){ openModal('incModal',false); };
+  }
 }
 
 const TRIP_HIST_SUMMARY=[
@@ -1895,6 +2005,7 @@ let exp=0,inc=1500000;
 function fmt(n){return n.toLocaleString('ru-RU')+' UZS';}
 const CAT_LABELS={fuel:'Топливо',food:'Питание',parking:'Стоянка',parts:'Запчасти',service:'Сервис/Мастер',
   wash:'Мойка',fine:'Штраф',insure:'Страховка',other:'Другое',trip:'Оплата рейса',bonus:'Бонус'};
+const CAT_ICON={fuel:'⛽',food:'🍔',parking:'🅿️',parts:'🔧',service:'🛠️',wash:'🚿',fine:'🚨',insure:'🛡️',other:'📦',trip:'🚚',bonus:'🎁'};
 let tripTxLog=[],tripTxIdSeq=0;
 function nowHM(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 function renderTripTxLog(){
@@ -1947,6 +2058,94 @@ function refreshFin(){
   el.style.color=net>=0?'#2dbd71':'#ff4b4b';
 }
 refreshFin();
+
+/* ── Расходы / Доход list screens (свой грузовик) ───── */
+const EXP_CHIP_CATS=[
+  {key:'all',label:'Все'},{key:'fuel',label:'Топливо'},{key:'parts',label:'Запчасти'},
+  {key:'service',label:'Сервис'},{key:'fine',label:'Штрафы'},{key:'food',label:'Еда'},
+  {key:'parking',label:'Парковка'},{key:'wash',label:'Мойка'},{key:'insure',label:'Страховка'},{key:'other',label:'Другое'},
+];
+const INC_CHIP_CATS=[
+  {key:'all',label:'Все'},{key:'trip',label:'От грузоперевозок'},{key:'bonus',label:'Прочие доходы'},
+];
+let expListFilter='all', incListFilter='all';
+
+function fxGroupByDate(list){
+  const groups=[];
+  list.slice().reverse().forEach(t=>{
+    let g=groups.find(g=>g.date===t.dateLabel);
+    if(!g){g={date:t.dateLabel,items:[]};groups.push(g);}
+    g.items.push(t);
+  });
+  return groups;
+}
+
+function fxRowHtml(t){
+  const sign=t.type==='exp'?'−':'+';
+  const color=t.type==='exp'?'#ff4b4b':'#2dbd71';
+  const bg=t.type==='exp'?'#fff0f0':'#edfbf3';
+  return `<div class="fx-row">
+    <div class="fx-row-ic" style="background:${bg}">${CAT_ICON[t.cat]||'💳'}</div>
+    <div class="fx-row-lbl">${t.catLabel}<div class="fx-row-time">${t.addedAt}</div></div>
+    <div class="fx-row-amt" style="color:${color}">${sign}${t.amount.toLocaleString('ru-RU')} ${t.currency}</div>
+  </div>`;
+}
+
+function renderExpensesList(filter){
+  if(filter!==undefined) expListFilter=filter;
+  const chipsEl=document.getElementById('expChips');
+  chipsEl.innerHTML=EXP_CHIP_CATS.map(c=>
+    `<button class="fx-chip${expListFilter===c.key?' active':''}" onclick="renderExpensesList('${c.key}')">${c.label}</button>`
+  ).join('');
+  const items=tripTxLog.filter(t=>t.type==='exp'&&!t.deleted&&(expListFilter==='all'||t.cat===expListFilter));
+  const el=document.getElementById('expListContent');
+  if(!items.length){
+    el.innerHTML=`<div class="fx-empty"><div class="fx-empty-ic">📦</div><div class="fx-empty-t">Расходы не найдены</div><div class="fx-empty-s">У вас пока нет расходов</div></div>`;
+    return;
+  }
+  el.innerHTML=fxGroupByDate(items).map(g=>
+    `<div class="fx-date-lbl">${g.date}</div>${g.items.map(fxRowHtml).join('')}`
+  ).join('');
+}
+
+function renderIncomeList(filter){
+  if(filter!==undefined) incListFilter=filter;
+  const chipsEl=document.getElementById('incChips');
+  chipsEl.innerHTML=INC_CHIP_CATS.map(c=>
+    `<button class="fx-chip${incListFilter===c.key?' active':''}" onclick="renderIncomeList('${c.key}')">${c.label}</button>`
+  ).join('');
+  const items=tripTxLog.filter(t=>{
+    if(t.type!=='inc'||t.deleted) return false;
+    if(incListFilter==='all') return true;
+    if(incListFilter==='bonus') return t.cat!=='trip';
+    return t.cat===incListFilter;
+  });
+  const el=document.getElementById('incListContent');
+  if(!items.length){
+    el.innerHTML=`<div class="fx-empty"><div class="fx-empty-ic">📦</div><div class="fx-empty-t">Доходы не найдены</div><div class="fx-empty-s">У вас пока нет доходов</div></div>`;
+    return;
+  }
+  el.innerHTML=fxGroupByDate(items).map(g=>
+    `<div class="fx-date-lbl">${g.date}</div>${g.items.map(fxRowHtml).join('')}`
+  ).join('');
+}
+
+/* ── Category picker (vertical list) ─────────────────── */
+const CAT_PICKER_LIST=['fuel','parts','service','fine','food','parking','wash','insure','other'];
+function openCatPicker(){
+  document.getElementById('catPickerList').innerHTML=CAT_PICKER_LIST.map(cat=>
+    `<button class="cat-pick-row" onclick="pickCatFromPicker('${cat}')">
+      <span class="cat-pick-ic">${CAT_ICON[cat]}</span>
+      <span class="cat-pick-lbl">${CAT_LABELS[cat]}</span>
+      <span style="color:#ccc;font-size:18px">›</span>
+    </button>`
+  ).join('');
+  openModal('catPickerModal',false);
+}
+function pickCatFromPicker(cat){
+  closeModal('catPickerModal');
+  openExpQuick(cat);
+}
 
 /* ── Start/Finish Trip ───────────────────────── */
 function updatePreview(){
@@ -2251,8 +2450,8 @@ function mockPhotoReceipt(){
 }
 
 // Expense currency
-let expCurrency='UZS';
-const EXP_CUR_LABEL={UZS:'Sum',USD:'$',RUB:'Rub',KZT:'Tenge',EUR:'Euro'};
+let expCurrency='USD';
+const EXP_CUR_LABEL={USD:'$'};
 function setExpCur(cur){
   expCurrency=cur;
   document.querySelectorAll('.exp-cur-btn').forEach(b=>{
@@ -2309,7 +2508,7 @@ function toggleExpVoicePlay(btn){
 }
 
 // Income currency + category
-let incCurrency='UZS';
+let incCurrency='USD';
 function setIncCur(cur){
   incCurrency=cur;
   document.querySelectorAll('#incModal .exp-cur-btn').forEach(b=>{
@@ -2378,7 +2577,7 @@ function toggleIncVoicePlay(btn){
 
 function openModal(id,fromTrip){
   if(id==='expModal'){
-    setExpCur('UZS');
+    setExpCur('USD');
     switchExpCmt('text');
     document.getElementById('expNote').value='';
     document.getElementById('expAmt').value='';
@@ -2399,7 +2598,7 @@ function openModal(id,fromTrip){
   }
   if(id==='incModal'){
     switchIncCmt('text');
-    setIncCur('UZS');
+    setIncCur('USD');
     document.getElementById('incNote').value='';
     document.getElementById('incAmt').value='';
     document.getElementById('incVoiceIdle').style.display='block';
@@ -2441,11 +2640,12 @@ function saveTx(type){
   const voiceDur=document.getElementById(type==='exp'?'expVoiceDur':'incVoiceDur').textContent;
   const note=(document.getElementById(type==='exp'?'expNote':'incNote').value||'').trim();
   tripTxLog.push({
-    id:++tripTxIdSeq,type,catLabel:CAT_LABELS[cat]||(type==='exp'?'Расход':'Доход'),
+    id:++tripTxIdSeq,type,cat:cat||null,catLabel:CAT_LABELS[cat]||(type==='exp'?'Расход':'Доход'),
     amount:v,currency:type==='exp'?expCurrency:incCurrency,
     note:(isVoiceMode&&voiceRecorded)?null:(note||null),
     voice:(isVoiceMode&&voiceRecorded)?voiceDur:null,
     addedBy:TRUCKS[activeTruckIdx].driverName,addedAt:nowHM(),
+    dateLabel:new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'long'}),
     deleted:false,deletedBy:null,deletedAt:null,
   });
   renderTripTxLog();

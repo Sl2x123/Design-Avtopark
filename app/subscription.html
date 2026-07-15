@@ -21,13 +21,13 @@
   <div class="app-scroll bg-gray-50 px-4 py-4 space-y-4">
     <div class="rounded-2xl bg-navy-800 shadow-lg p-5 text-white">
       <div class="flex items-center justify-between">
-        <span class="text-sm font-semibold">Fleet Pro Plan</span>
+        <span class="text-sm font-semibold" id="subPlanName">Fleet Pro Plan</span>
         <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold bg-success-400/20 text-success-200 px-2 py-1 rounded-full"><span class="dot" style="background:#75E0A7"></span>Active</span>
       </div>
-      <p class="text-3xl font-bold mt-3 text-primary-500">$79<span class="text-base text-navy-100 font-medium">/mo</span></p>
+      <p class="text-3xl font-bold mt-3 text-primary-500"><span id="subPlanPrice">$79</span><span class="text-base text-navy-100 font-medium">/mo</span></p>
       <div class="mt-4 pt-4 border-t border-white/15 grid grid-cols-2 gap-3 text-sm">
-        <div><p class="text-navy-100 text-xs">Valid until</p><p class="font-semibold">06/01/2027</p></div>
-        <div><p class="text-navy-100 text-xs">Next charge</p><p class="font-semibold">$79 · 06/01/2027</p></div>
+        <div><p class="text-navy-100 text-xs">Valid until</p><p class="font-semibold" id="subValidUntil">06/01/2027</p></div>
+        <div><p class="text-navy-100 text-xs">Next charge</p><p class="font-semibold" id="subNextCharge">$79 · 06/01/2027</p></div>
       </div>
     </div>
 
@@ -37,41 +37,35 @@
     </div>
 
     <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
-      <div class="flex items-center justify-between px-4 py-3.5">
-        <div>
-          <p class="text-sm font-semibold text-navy-800">Автопродление</p>
-          <p class="text-xs text-gray-400">Раз в месяц · следующее 06.01.2027</p>
-        </div>
-        <span class="w-11 h-6 rounded-full bg-primary-500 relative shrink-0"><span class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow"></span></span>
-      </div>
-      <div class="border-t border-gray-100 px-4 py-3">
+      <div class="px-4 py-3">
         <p class="text-xs text-gray-400 mb-2">Способ оплаты</p>
         <div class="flex gap-2">
-          <div class="flex-1 flex items-center gap-2 border-2 border-primary-400 rounded-xl px-3 py-2.5 bg-primary-50">
+          <button id="payUzum" data-active="1" class="flex-1 flex items-center gap-2 border-2 border-primary-400 rounded-xl px-3 py-2.5 bg-primary-50" style="cursor:pointer;text-align:left">
             <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shrink-0 shadow-xs">
               <span style="font-size:9px;font-weight:900;color:#7C3AED;line-height:1">UZUM<br>PAY</span>
             </div>
             <div class="min-w-0">
               <p class="text-[12px] font-bold text-navy-800">Uzum Pay Me</p>
-              <p class="text-[10px] text-gray-400">Активный</p>
+              <p class="text-[10px] text-gray-400" id="payUzumStatus">Активный</p>
             </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" width="16" height="16" class="shrink-0 ml-auto"><path d="M20 6L9 17l-5-5"/></svg>
-          </div>
-          <div class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 bg-white">
+            <svg id="payUzumCheck" viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" width="16" height="16" class="shrink-0 ml-auto"><path d="M20 6L9 17l-5-5"/></svg>
+          </button>
+          <button id="payClick" data-active="0" class="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2.5 bg-white" style="cursor:pointer;text-align:left">
             <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
               <span style="font-size:11px;font-weight:900;color:#16A34A;line-height:1">CLI<br>CK</span>
             </div>
             <div class="min-w-0">
               <p class="text-[12px] font-bold text-navy-800">Click</p>
-              <p class="text-[10px] text-gray-400">Подключить</p>
+              <p class="text-[10px] text-gray-400" id="payClickStatus">Подключить</p>
             </div>
-          </div>
+            <svg id="payClickCheck" viewBox="0 0 24 24" fill="none" stroke="#FFCB00" stroke-width="2.5" width="16" height="16" class="shrink-0 ml-auto hidden"><path d="M20 6L9 17l-5-5"/></svg>
+          </button>
         </div>
       </div>
     </div>
 
     <a href="plans.html" class="btn h-12 rounded-xl bg-primary-500 text-navy-800 font-bold flex items-center justify-center shadow-sm">Изменить тариф</a>
-    <button class="btn w-full h-11 rounded-xl text-error-600 text-sm font-semibold">Отменить подписку</button>
+    <button id="cancelSubBtn" class="btn w-full h-11 rounded-xl text-error-600 text-sm font-semibold">Отменить подписку</button>
   </div>
 </div>
 <script>
@@ -80,6 +74,40 @@
     <div><div class="flex justify-between text-xs mb-1"><span class="text-gray-500">${l}</span><span class="font-semibold text-gray-700">${v} / ${m}</span></div>
     <div class="h-2 rounded-full bg-gray-100"><div class="h-2 rounded-full ${v/m>0.85?'bg-warning-500':'bg-navy-800'}" style="width:${Math.round(v/m*100)}%"></div></div></div>`).join('');
   Panda.render();
+
+  // Populate from the plan actually purchased in payment.html, if present
+  const sub=JSON.parse(localStorage.getItem('af_subscription')||'null');
+  if(sub){
+    document.getElementById('subPlanName').textContent=sub.plan+' Plan';
+    document.getElementById('subPlanPrice').textContent='$'+sub.price;
+    const until=new Date(sub.expiresAt).toLocaleDateString('en-US');
+    document.getElementById('subValidUntil').textContent=until;
+    document.getElementById('subNextCharge').textContent='$'+sub.price+' · '+until;
+  }
+
+  // Payment method switch
+  function selectPayMethod(active){
+    const uzumBtn=document.getElementById('payUzum'), clickBtn=document.getElementById('payClick');
+    const isUzum=active==='uzum';
+    uzumBtn.classList.toggle('border-2',isUzum); uzumBtn.classList.toggle('border-primary-400',isUzum); uzumBtn.classList.toggle('bg-primary-50',isUzum);
+    uzumBtn.classList.toggle('border',!isUzum); uzumBtn.classList.toggle('border-gray-200',!isUzum); uzumBtn.classList.toggle('bg-white',!isUzum);
+    clickBtn.classList.toggle('border-2',!isUzum); clickBtn.classList.toggle('border-primary-400',!isUzum); clickBtn.classList.toggle('bg-primary-50',!isUzum);
+    clickBtn.classList.toggle('border',isUzum); clickBtn.classList.toggle('border-gray-200',isUzum); clickBtn.classList.toggle('bg-white',isUzum);
+    document.getElementById('payUzumStatus').textContent=isUzum?'Активный':'Подключить';
+    document.getElementById('payClickStatus').textContent=isUzum?'Подключить':'Активный';
+    document.getElementById('payUzumCheck').classList.toggle('hidden',!isUzum);
+    document.getElementById('payClickCheck').classList.toggle('hidden',isUzum);
+  }
+  document.getElementById('payUzum').addEventListener('click',()=>selectPayMethod('uzum'));
+  document.getElementById('payClick').addEventListener('click',()=>selectPayMethod('click'));
+
+  // Cancel subscription
+  document.getElementById('cancelSubBtn').addEventListener('click',()=>{
+    if(!confirm('Отменить подписку? Доступ к Fleet, Map, Analytics и Garage будет приостановлен.')) return;
+    const s=JSON.parse(localStorage.getItem('af_subscription')||'null');
+    if(s){ s.expiresAt=new Date(0).toISOString(); localStorage.setItem('af_subscription',JSON.stringify(s)); }
+    window.location.href='subscription-expired.html';
+  });
 </script>
 </body>
 </html>

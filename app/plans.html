@@ -30,7 +30,7 @@
         <li class="flex gap-2"><i data-icon="check" class="w-4 h-4 text-success-600 mt-0.5"></i>Up to 15 drivers</li>
         <li class="flex gap-2"><i data-icon="check" class="w-4 h-4 text-success-600 mt-0.5"></i>Up to 10 trailers</li>
       </ul>
-      <a href="payment.html" class="btn mt-4 h-11 rounded-lg border border-gray-300 text-navy-800 font-semibold flex items-center justify-center hover:bg-gray-50">Choose plan</a>
+      <button onclick="choosePlan('Starter',29)" class="btn mt-4 h-11 rounded-lg border border-gray-300 text-navy-800 font-semibold flex items-center justify-center hover:bg-gray-50">Choose plan</button>
     </div>
 
     <!-- Professional (featured) -->
@@ -44,7 +44,7 @@
         <li class="flex gap-2"><i data-icon="check" class="w-4 h-4 text-primary-500 mt-0.5"></i>Higher limits</li>
         <li class="flex gap-2"><i data-icon="check" class="w-4 h-4 text-primary-500 mt-0.5"></i>Advanced analytics</li>
       </ul>
-      <a href="payment.html" class="btn mt-4 h-11 rounded-lg bg-primary-500 text-navy-800 font-bold flex items-center justify-center hover:bg-primary-400">Choose plan</a>
+      <button onclick="choosePlan('Professional',79)" class="btn mt-4 h-11 rounded-lg bg-primary-500 text-navy-800 font-bold flex items-center justify-center hover:bg-primary-400">Choose plan</button>
     </div>
 
     <!-- Enterprise -->
@@ -58,10 +58,16 @@
         <li class="flex gap-2"><i data-icon="check" class="w-4 h-4 text-success-600 mt-0.5"></i>Extended analytics</li>
         <li class="flex gap-2"><i data-icon="check" class="w-4 h-4 text-success-600 mt-0.5"></i>Priority support</li>
       </ul>
-      <a href="payment.html" class="btn mt-4 h-11 rounded-lg border border-gray-300 text-navy-800 font-semibold flex items-center justify-center hover:bg-gray-50">Choose plan</a>
+      <button onclick="choosePlan('Enterprise',199)" class="btn mt-4 h-11 rounded-lg border border-gray-300 text-navy-800 font-semibold flex items-center justify-center hover:bg-gray-50">Choose plan</button>
     </div>
   </div>
 </div>
-<script>Panda.render();</script>
+<script>
+  Panda.render();
+  function choosePlan(name,price){
+    localStorage.setItem('af_plan',JSON.stringify({name,price}));
+    window.location.href='payment.html';
+  }
+</script>
 </body>
 </html>

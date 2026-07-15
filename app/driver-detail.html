@@ -54,11 +54,6 @@
       <h3 class="text-sm font-semibold text-navy-800 mb-3">Assignment history</h3>
       <div class="space-y-3" id="hist"></div>
     </div>
-
-    <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
-      <div class="px-4 py-3.5 border-b border-gray-100"><h3 class="text-sm font-semibold text-navy-800">Documents</h3></div>
-      <div id="docs"></div>
-    </div>
   </div>
 
   <!-- Edit driver sheet -->
@@ -106,14 +101,6 @@
   document.getElementById('hist').innerHTML = hist.map(([p,n,pl])=>`
     <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="truck" class="w-4.5 h-4.5"></i></div>
     <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${n} <span class="text-xs text-gray-400 font-normal">${pl}</span></p><p class="text-[11px] text-gray-400">${p}</p></div></div>`).join('');
-
-  const DS={ok:{cls:'bg-success-50 text-success-700',label:'Active',dot:'#17B26A'},soon:{cls:'bg-warning-50 text-warning-700',label:'Expiring',dot:'#F79009'}};
-  const docs=[['Driver license','ok','420 days left','id-card'],['Passport','ok','900 days left','book-user'],['Medical certificate','soon','22 days left','stethoscope']];
-  document.getElementById('docs').innerHTML = docs.map((d,i)=>{const s=DS[d[1]];return `
-    <div class="flex items-center gap-3 px-4 py-3 ${i?'border-t border-gray-100':''}">
-      <div class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 text-gray-500"><i data-icon="${d[3]}" class="w-4.5 h-4.5"></i></div>
-      <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-navy-800">${d[0]}</p><p class="text-[11px] text-gray-400">${d[2]}</p></div>
-      <span class="inline-flex items-center gap-1.5 ${s.cls} text-[11px] font-semibold px-2 py-1 rounded-full"><span class="dot" style="background:${s.dot}"></span>${s.label}</span></div>`;}).join('');
 
   const mini=L.map('mini',{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false}).setView([52.0,19.0],5);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(mini);
