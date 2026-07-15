@@ -510,9 +510,16 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div class="g-title">Гараж</div>
       <div class="g-sub" id="gSub">ООО «АвтоТранс»</div>
     </div>
-    <button class="g-own-icon-btn" id="gOwnIconBtn" onclick="toggleOwnFleet()" title="Свой грузовик">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7v-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
-    </button>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button class="g-own-icon-btn" id="gProfileBtn" onclick="openDriverProfile()" title="Профиль водителя">
+        <span id="gProfileAvatar" style="width:100%;height:100%;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+      </button>
+      <button class="g-own-icon-btn" id="gOwnIconBtn" onclick="toggleOwnFleet()" title="Свой грузовик">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7v-7z"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="screen-scroll">
@@ -1232,32 +1239,107 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 <div class="modal" id="newTripModal">
   <div class="msheet">
     <div class="mhandle"></div>
-    <div class="mtitle">Новый рейс</div>
-    <div class="msub">Заполните данные перед отправкой</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="mtitle" style="margin-bottom:0;text-align:left">Создать рейс</div>
+      <button type="button" onclick="closeModal('newTripModal')" style="width:34px;height:34px;border-radius:10px;border:1.5px solid #eee;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#888;flex-shrink:0">✕</button>
+    </div>
+    <div class="msub" style="text-align:left;margin-bottom:18px">Заполните данные перед отправкой</div>
+
     <div class="field"><div class="field-label">Откуда</div>
-      <input class="field-input" id="ntFrom" placeholder="Город отправления" oninput="updatePreview()"/></div>
-    <div class="route-arrow">↓</div>
+      <div style="display:flex;gap:8px">
+        <input class="field-input" style="flex:1" id="ntFrom" placeholder="Введите город или выберите на карте" oninput="updatePreview()"/>
+        <button type="button" onclick="toast('Выбор на карте скоро будет доступен')" style="width:48px;height:48px;border-radius:12px;background:#0F0F37;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg>
+        </button>
+      </div>
+    </div>
     <div class="field"><div class="field-label">Куда</div>
-      <input class="field-input" id="ntTo" placeholder="Город назначения" oninput="updatePreview()"/></div>
+      <div style="display:flex;gap:8px">
+        <input class="field-input" style="flex:1" id="ntTo" placeholder="Введите город или выберите на карте" oninput="updatePreview()"/>
+        <button type="button" onclick="toast('Выбор на карте скоро будет доступен')" style="width:48px;height:48px;border-radius:12px;background:#0F0F37;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg>
+        </button>
+      </div>
+    </div>
+
     <div class="field-row">
       <div class="field"><div class="field-label">Расстояние (км)</div>
         <input class="field-input" id="ntDist" type="number" placeholder="847" oninput="updatePreview()"/></div>
       <div class="field"><div class="field-label">Время в пути</div>
         <input class="field-input" id="ntTime" placeholder="~9 часов" oninput="updatePreview()"/></div>
     </div>
-    <div class="field"><div class="field-label">Груз</div>
-      <input class="field-input" id="ntCargo" placeholder="Описание груза, тип, вес" oninput="updatePreview()"/></div>
-    <div class="field"><div class="field-label">Ожидаемая прибыль (UZS)</div>
-      <input class="field-input big" id="ntProfit" type="number" placeholder="0" oninput="updatePreview()"/></div>
-    <div class="trip-preview" id="ntPreview" style="display:none">
+
+    <div style="display:flex;gap:10px">
+      <div class="field" style="flex:2"><div class="field-label">Груз</div>
+        <input class="field-input" id="ntCargo" placeholder="e.g. Электроника" oninput="updatePreview()"/></div>
+      <div class="field" style="flex:1"><div class="field-label">Вес, т</div>
+        <input class="field-input" id="ntWeight" type="number" placeholder="14"/></div>
+    </div>
+
+    <div class="field"><div class="field-label">Ожидаемый доход</div>
+      <div style="display:flex;align-items:stretch;background:#f7f7f7;border-radius:14px;overflow:hidden">
+        <span style="display:flex;align-items:center;padding:0 0 0 16px;font-weight:700;color:#0F0F37">$</span>
+        <input class="field-input" id="ntProfit" type="number" placeholder="e.g. 4500" style="background:transparent;padding-left:6px" oninput="updatePreview()"/>
+      </div>
+    </div>
+
+    <div class="field"><div class="field-label">Комментарий для владельца (необязательно)</div>
+      <textarea class="note-inp" id="ntNote" placeholder="Например: есть вопрос по маршруту или грузу" style="margin-bottom:0"></textarea>
+    </div>
+
+    <div class="trip-preview" id="ntPreview" style="display:none;margin-top:14px">
       <div style="font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Предпросмотр</div>
       <div class="tp-row"><span class="tp-lbl">Маршрут</span><span class="tp-v" id="prevRoute">—</span></div>
       <div class="tp-row"><span class="tp-lbl">Груз</span><span class="tp-v" id="prevCargo">—</span></div>
       <div class="tp-row"><span class="tp-lbl">Расстояние</span><span class="tp-v" id="prevDist">—</span></div>
-      <div class="tp-row"><span class="tp-lbl">Прибыль</span><span class="tp-v" style="color:#FAE436" id="prevProfit">—</span></div>
+      <div class="tp-row"><span class="tp-lbl">Доход</span><span class="tp-v" style="color:#FAE436" id="prevProfit">—</span></div>
     </div>
-    <button class="btn btn-dark" onclick="startTrip()">Начать рейс</button>
+    <button class="btn btn-dark" style="margin-top:14px" onclick="startTrip()">Начать рейс</button>
     <button class="btn-cancel" onclick="closeModal('newTripModal')">Отмена</button>
+  </div>
+</div>
+
+<!-- Driver profile modal -->
+<div class="modal" id="driverProfileModal">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="mtitle" style="margin-bottom:0;text-align:left">Haydovchi profili</div>
+      <button type="button" onclick="closeModal('driverProfileModal')" style="width:34px;height:34px;border-radius:10px;border:1.5px solid #eee;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#888;flex-shrink:0">✕</button>
+    </div>
+    <div class="msub" style="text-align:left;margin-bottom:18px">Ma'lumotlaringizni to'ldiring</div>
+
+    <div style="display:flex;justify-content:center;margin-bottom:18px">
+      <label style="cursor:pointer;text-align:center">
+        <div id="dpPhotoPreview" style="width:84px;height:84px;border-radius:42px;background:#f4f4f4;border:1.5px dashed #ccc;display:flex;align-items:center;justify-content:center;color:#aaa;margin:0 auto 8px;overflow:hidden">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>
+        </div>
+        <span onclick="mockDriverPhoto()" style="font-size:12px;font-weight:700;color:#0F0F37">Rasm yuklash</span>
+      </label>
+    </div>
+
+    <div class="field"><div class="field-label">Ism familiya <span style="color:#ff4b4b">*</span></div>
+      <input class="field-input" id="dpFullName" placeholder="Alisher Karimov"/></div>
+
+    <div class="field"><div class="field-label">Guvohnoma raqami <span style="color:#ff4b4b">*</span></div>
+      <input class="field-input" id="dpLicenseNumber" placeholder="AB 1234567"/></div>
+
+    <div class="field-row">
+      <div class="field"><div class="field-label">Guvohnoma muddati <span style="color:#ff4b4b">*</span></div>
+        <input class="field-input" id="dpLicenseExpiry" type="date"/></div>
+      <div class="field"><div class="field-label">Tug'ilgan sana <span style="color:#ff4b4b">*</span></div>
+        <input class="field-input" id="dpDob" type="date"/></div>
+    </div>
+
+    <div class="field-row">
+      <div class="field"><div class="field-label">Tajriba (yil)</div>
+        <input class="field-input" id="dpExperience" type="number" placeholder="8"/></div>
+      <div class="field"><div class="field-label">Telefon (avtomatik)</div>
+        <input class="field-input" id="dpPhone" value="+998 90 727 77 22" disabled style="opacity:.6;cursor:not-allowed"/></div>
+    </div>
+
+    <button class="btn btn-dark" style="margin-top:14px" onclick="saveDriverProfile()">Saqlash</button>
+    <button class="btn-cancel" onclick="closeModal('driverProfileModal')">Bekor qilish</button>
   </div>
 </div>
 
@@ -2173,7 +2255,69 @@ function pickCatFromPicker(cat){
   openExpQuick(cat);
 }
 
+/* ── Driver profile ───────────────────────────── */
+const DRIVER_PROFILE_KEY='gr_driver_profile';
+let driverProfile=JSON.parse(localStorage.getItem(DRIVER_PROFILE_KEY)||'null')||{
+  full_name:'',photo_url:'',license_number:'',license_expiry:'',
+  date_of_birth:'',experience_years:'',phone:'+998 90 727 77 22',
+};
+
+function renderProfileAvatar(){
+  const el=document.getElementById('gProfileAvatar');
+  if(!el) return;
+  if(driverProfile.photo_url){
+    el.innerHTML=`<img src="${driverProfile.photo_url}" style="width:100%;height:100%;object-fit:cover"/>`;
+  } else {
+    el.innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+  }
+}
+renderProfileAvatar();
+
+function openDriverProfile(){
+  document.getElementById('dpFullName').value=driverProfile.full_name;
+  document.getElementById('dpLicenseNumber').value=driverProfile.license_number;
+  document.getElementById('dpLicenseExpiry').value=driverProfile.license_expiry;
+  document.getElementById('dpDob').value=driverProfile.date_of_birth;
+  document.getElementById('dpExperience').value=driverProfile.experience_years;
+  document.getElementById('dpPhone').value=driverProfile.phone;
+  const preview=document.getElementById('dpPhotoPreview');
+  preview.innerHTML=driverProfile.photo_url
+    ? `<img src="${driverProfile.photo_url}" style="width:100%;height:100%;object-fit:cover"/>`
+    : `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>`;
+  openModal('driverProfileModal',false);
+}
+
+function mockDriverPhoto(){
+  document.getElementById('dpPhotoPreview').innerHTML=
+    '<img src="https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=200&h=200&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover"/>';
+  driverProfile._pendingPhoto='https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=200&h=200&fit=crop&q=80';
+  toast('Rasm biriktirildi');
+}
+
+function saveDriverProfile(){
+  const full_name=document.getElementById('dpFullName').value.trim();
+  const license_number=document.getElementById('dpLicenseNumber').value.trim();
+  const license_expiry=document.getElementById('dpLicenseExpiry').value;
+  const date_of_birth=document.getElementById('dpDob').value;
+  if(!full_name||!license_number||!license_expiry||!date_of_birth){
+    toast('Majburiy maydonlarni to\'ldiring');
+    return;
+  }
+  driverProfile={
+    full_name,license_number,license_expiry,date_of_birth,
+    experience_years:document.getElementById('dpExperience').value,
+    phone:document.getElementById('dpPhone').value,
+    photo_url:driverProfile._pendingPhoto||driverProfile.photo_url,
+  };
+  localStorage.setItem(DRIVER_PROFILE_KEY,JSON.stringify(driverProfile));
+  renderProfileAvatar();
+  closeModal('driverProfileModal');
+  toast('Profil saqlandi');
+}
+
 /* ── Start/Finish Trip ───────────────────────── */
+function fmtUsd(n){return '$'+Number(n).toLocaleString('en-US');}
+
 function updatePreview(){
   const from=document.getElementById('ntFrom').value.trim();
   const to=document.getElementById('ntTo').value.trim();
@@ -2186,7 +2330,7 @@ function updatePreview(){
   document.getElementById('prevRoute').textContent=(from||'…')+' → '+(to||'…');
   document.getElementById('prevCargo').textContent=cargo||'—';
   document.getElementById('prevDist').textContent=dist?dist+' км':'—';
-  document.getElementById('prevProfit').textContent=profit?fmt(profit):'—';
+  document.getElementById('prevProfit').textContent=profit?fmtUsd(profit):'—';
 }
 
 function startTrip(){
@@ -2194,22 +2338,25 @@ function startTrip(){
   const to=document.getElementById('ntTo').value.trim();
   const dist=document.getElementById('ntDist').value;
   const cargo=document.getElementById('ntCargo').value.trim();
+  const weight=document.getElementById('ntWeight').value;
   const profit=parseFloat(document.getElementById('ntProfit').value)||0;
   const time=document.getElementById('ntTime').value.trim();
+  const note=document.getElementById('ntNote').value.trim();
   if(!from||!to){toast('Заполните откуда и куда');return;}
 
   // Store trip data for owner confirmation
-  pendingOwnerTrip={from,to,dist,cargo,profit,time};
+  pendingOwnerTrip={from,to,dist,cargo,weight,profit,time,note};
 
   // Build trip detail card
   const card=document.getElementById('ownerAssignCard');
   card.innerHTML=`
     <div style="font-size:17px;font-weight:800;color:#0F0F37;margin-bottom:12px">${from} <span style="color:#2dbd71">→</span> ${to}</div>
     <div style="display:flex;flex-direction:column;gap:7px">
-      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Груз</span><span style="color:#0F0F37;font-weight:600">${cargo||'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Груз</span><span style="color:#0F0F37;font-weight:600">${cargo||'—'}${weight?' · '+weight+' т':''}</span></div>
       <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Расстояние</span><span style="color:#0F0F37;font-weight:600">${dist?dist+' км':'—'}</span></div>
       <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Время в пути</span><span style="color:#0F0F37;font-weight:600">${time||'—'}</span></div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px;padding-top:8px;border-top:1px solid #e0f2e9"><span style="color:#aaa">Ожидаемый доход</span><span style="color:#2dbd71;font-weight:800;font-size:15px">${profit?fmt(profit):'—'}</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px;padding-top:8px;border-top:1px solid #e0f2e9"><span style="color:#aaa">Ожидаемый доход</span><span style="color:#2dbd71;font-weight:800;font-size:15px">${profit?fmtUsd(profit):'—'}</span></div>
+      ${note?`<div style="margin-top:4px;padding-top:8px;border-top:1px solid #e0f2e9"><span style="color:#aaa;font-size:13px">Комментарий владельцу</span><div style="color:#0F0F37;font-weight:600;font-size:13px;margin-top:3px">${note}</div></div>`:''}
     </div>`;
 
   // Update modal header: driver → owner direction
@@ -2224,7 +2371,7 @@ function startTrip(){
   document.getElementById('oanPendingState').style.display='flex';
   document.getElementById('oanDeclineBtn').textContent='Отменить запрос';
 
-  ['ntFrom','ntTo','ntDist','ntCargo','ntProfit','ntTime'].forEach(id=>{document.getElementById(id).value='';});
+  ['ntFrom','ntTo','ntDist','ntCargo','ntWeight','ntProfit','ntTime','ntNote'].forEach(id=>{document.getElementById(id).value='';});
   document.getElementById('ntPreview').style.display='none';
   closeModal('newTripModal');
   setTimeout(()=>openModal('ownerAssignNotifModal'),340);
