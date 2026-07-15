@@ -1125,6 +1125,12 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       </button>
     </div>
 
+    <!-- Work truck: self-service trip creation when free -->
+    <button id="createTripBtn" style="display:none;width:100%;background:#FAE436;border:none;border-radius:16px;padding:15px;font-size:15px;font-weight:700;color:#0F0F37;cursor:pointer;font-family:inherit;align-items:center;justify-content:center;gap:10px;margin-bottom:12px" onclick="openModal('newTripModal')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F0F37" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Создать рейс</span>
+    </button>
+
     <!-- Finance block -->
     <div style="margin-bottom:4px">
       <div class="sec-title">Финансы за месяц</div>
@@ -1824,6 +1830,12 @@ function applyTruckDetailVisibility(){
   if(driverCard) driverCard.style.display=isOwn?'none':'block';
   const ordersTab=document.getElementById('tcTabOrders');
   if(ordersTab) ordersTab.style.display=isOwn?'none':'block';
+  // Work truck: let the driver create/request a trip themselves while the truck is free
+  const tripBtn=document.getElementById('createTripBtn');
+  if(tripBtn){
+    const status=activeTruckIdx===0?curStatus:TRUCKS[activeTruckIdx].status;
+    tripBtn.style.display=(!isOwn&&status==='free')?'flex':'none';
+  }
 }
 
 const TRIP_HIST_SUMMARY=[
@@ -1964,6 +1976,7 @@ function applyStatus(key){
   // show/hide mini map
   const mm=document.getElementById('tcMiniMapCard');
   if(mm) mm.style.display=(tripActive&&key==='driving')?'block':'none';
+  applyTruckDetailVisibility();
 }
 
 function setStatus(key){
