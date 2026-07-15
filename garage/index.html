@@ -470,7 +470,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .oc-av{width:28px;height:28px;border-radius:50%;background:#0F0F37;color:#FAE436;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .oc-body{flex:1;}
 .oc-name{font-size:10px;color:#aaa;margin-bottom:4px;}
-.oc-text{background:#f0f0f0;border-radius:12px 12px 12px 3px;padding:8px 11px;font-size:13px;color:#333;line-height:1.4;}
 .vm-bubble{background:#0F0F37;border-radius:12px 12px 12px 3px;padding:9px 12px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;}
 .vm-play{width:28px;height:28px;border-radius:50%;background:#FAE436;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
 .vm-wave{display:flex;align-items:center;gap:2px;height:20px;}
@@ -879,12 +878,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     <div id="tdExpWrap" style="display:none">
       <div class="td-sect">Расходы</div>
       <div class="td-card" id="tdExpList"></div>
-    </div>
-
-    <!-- Owner comment (history only) -->
-    <div id="tdOwnerWrap" style="display:none">
-      <div class="td-sect">Комментарий владельца</div>
-      <div class="td-card" id="tdOwnerCard"></div>
     </div>
 
   </div>
@@ -2269,13 +2262,11 @@ const TRIP_HISTORY=[
     date:'18 июня 2026',stat:'📍 620 км · ⏱ 7ч 15м',
     income:980000,
     expenses:[
-      {label:'Топливо',amount:245000,comment:null},
-      {label:'Стоянка',amount:22000,comment:null},
+      {label:'Топливо',amount:245000},
+      {label:'Стоянка',amount:22000},
       {label:'Дорожный сбор',amount:35000,
        comment:{type:'voice',duration:'0:32',from:'Иван Петров'}},
     ],
-    ownerNote:{type:'text',from:'Иван Петров',
-      text:'Хорошая работа! Клиент остался очень доволен, груз доставлен точно в срок.'},
     status:'done',
   },
   {
@@ -2283,12 +2274,10 @@ const TRIP_HISTORY=[
     date:'12 июня 2026',stat:'📍 310 км · ⏱ 4ч 10м',
     income:650000,
     expenses:[
-      {label:'Топливо',amount:120000,comment:null},
+      {label:'Топливо',amount:120000},
       {label:'Обед',amount:45000,
-       comment:{type:'text',from:'Иван Петров',
-         text:'В следующий раз прикладывай квитанцию к каждому расходу.'}},
+       comment:{type:'voice',duration:'0:18',from:'Иван Петров'}},
     ],
-    ownerNote:null,
     status:'done',
   },
   {
@@ -2296,7 +2285,6 @@ const TRIP_HISTORY=[
     date:'5 июня 2026',stat:'📍 68 км из 305 км',
     income:0,
     expenses:[],
-    ownerNote:{type:'voice',from:'Иван Петров',duration:'1:15'},
     status:'cancelled',
   },
 ];
@@ -2309,16 +2297,11 @@ function waveHTML(played){
 function ownerCommentHTML(note){
   if(!note) return '';
   const initials=note.from.split(' ').map(w=>w[0]).join('').slice(0,2);
-  let body='';
-  if(note.type==='text'){
-    body=`<div class="oc-text">${note.text}</div>`;
-  } else {
-    body=`<div class="vm-bubble" onclick="playVoice(this)">
+  const body=`<div class="vm-bubble" onclick="playVoice(this)">
       <button class="vm-play">▶</button>
       <div class="vm-wave">${waveHTML(7)}</div>
       <span class="vm-dur">${note.duration}</span>
     </div>`;
-  }
   return `<div class="oc-wrap">
     <div class="oc-av">${initials}</div>
     <div class="oc-body"><div class="oc-name">${note.from}</div>${body}</div>
@@ -2354,7 +2337,6 @@ function openActiveTrip(){
   renderTripTxLog();
   el('tdFinanceWrap').style.display='none';
   el('tdExpWrap').style.display='none';
-  el('tdOwnerWrap').style.display='none';
   el('tdScroll').scrollTop=0;
   navigate('screenTripDetail');
 }
@@ -2409,13 +2391,6 @@ function openHistoryTrip(idx){
   } else {
     el('tdFinanceWrap').style.display='none';
     el('tdExpWrap').style.display='none';
-  }
-  // Owner note
-  if(t.ownerNote){
-    el('tdOwnerCard').innerHTML=ownerCommentHTML(t.ownerNote);
-    el('tdOwnerWrap').style.display='block';
-  } else {
-    el('tdOwnerWrap').style.display='none';
   }
   el('tdScroll').scrollTop=0;
   navigate('screenTripDetail');
