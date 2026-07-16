@@ -290,7 +290,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 .sb-icon{font-size:15px;}
 .sb-text{font-size:15px;font-weight:700;color:#0F0F37;}
 .s-driving .sb-dot{background:#2dbd71;}
-.s-parked .sb-dot{background:#f5a623;}
 .s-free .sb-dot{background:#ff4b4b;}
 .s-repair .sb-dot{background:#8a94a6;}
 .status-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
@@ -600,8 +599,8 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
             <div><div class="gc-name">MAN</div><div class="gc-subname">TGX 18 · 2019</div></div>
           </div>
           <div class="gc-status-chip">
-            <div class="sb-dot" style="background:#f5a623"></div>
-            <span style="color:#0F0F37">Не в сети</span>
+            <div class="sb-dot" style="background:#ff4b4b"></div>
+            <span style="color:#0F0F37">Свободен</span>
           </div>
         </div>
         <div class="gc-plate-row">
@@ -1231,9 +1230,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <div class="status-option" data-key="driving" onclick="setStatus('driving')">
         <div class="so-dot" style="background:#2dbd71"></div><span class="so-text">В пути</span>
       </div>
-      <div class="status-option" data-key="parked" onclick="setStatus('parked')">
-        <div class="so-dot" style="background:#f5a623"></div><span class="so-text">Не в сети</span>
-      </div>
       <div class="status-option" data-key="free" onclick="setStatus('free')">
         <div class="so-dot" style="background:#ff4b4b"></div><span class="so-text">Свободен</span>
       </div>
@@ -1678,8 +1674,8 @@ const TRUCKS=[
    driverName:'Сергей Попов',
    driverPhoto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&q=80',
    pills:['Кат. C','Стаж 3 года','+998 91 111 22 33'],
-   status:'parked',logoColor:'#E2001A',logoLetter:'M',
-   statusDot:'#f5a623',statusText:'Не в сети',statusCls:'s-parked'},
+   status:'free',logoColor:'#E2001A',logoLetter:'M',
+   statusDot:'#ff4b4b',statusText:'Свободен',statusCls:'s-free'},
 ];
 
 let activeTruckIdx=0;
@@ -1952,7 +1948,6 @@ function renderAllTrips(){
 /* ── Status ──────────────────────────────────── */
 const STATUS={
   driving:{cls:'s-driving',text:'В пути',  dot:'#2dbd71'},
-  parked: {cls:'s-parked', text:'Не в сети', dot:'#f5a623'},
   free:   {cls:'s-free',   text:'Свободен',dot:'#ff4b4b'},
   repair: {cls:'s-repair', text:'Ремонт',  dot:'#8a94a6'},
 };
@@ -1965,8 +1960,6 @@ function updateTcStatusBottom(key){
   if(!el) return;
   if(key==='driving'){
     el.innerHTML='<button onclick="finishTrip()" style="width:100%;padding:14px;background:#FAE436;color:#0F0F37;font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;">Завершить рейс</button>';
-  } else if(key==='parked'){
-    el.innerHTML='<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="width:40px;height:40px;border-radius:20px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><div><div style="font-size:14px;font-weight:800;color:#0F0F37">Не в сети</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">Продолжить движение</button>';
   } else if(key==='repair'){
     el.innerHTML='<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="width:40px;height:40px;border-radius:20px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><div><div style="font-size:14px;font-weight:800;color:#0F0F37">На ремонте</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">Завершить ремонт</button>';
   } else {
