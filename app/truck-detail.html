@@ -44,13 +44,15 @@
     <!-- Block 2: driver / trailer -->
     <div class="rounded-2xl bg-white border border-gray-200 shadow-xs overflow-hidden">
       <div class="grid grid-cols-2 divide-x divide-gray-100">
-        <a href="driver-detail.html" class="p-3.5 card-press">
+        <a href="driver-detail.html" class="relative p-3.5 card-press">
+          <button onclick="event.preventDefault();event.stopPropagation();openDriverEdit();" class="absolute top-2 right-2 w-6 h-6 rounded-md bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600"><i data-icon="pencil" class="w-3 h-3"></i></button>
           <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Driver</p>
-          <div class="flex items-center gap-2"><img src="assets/img/drivers/d3.jpg" class="w-9 h-9 rounded-full object-cover"><div class="min-w-0"><p id="b2-driver" class="text-sm font-semibold text-navy-800 truncate">Vali Rakhimov</p><p class="text-[11px] text-gray-500">+998 90 727 77 22</p></div></div>
+          <div class="flex items-center gap-2"><img src="assets/img/drivers/d3.jpg" class="w-9 h-9 rounded-full object-cover shrink-0"><div class="min-w-0"><p id="b2-driver" class="text-sm font-semibold text-navy-800 truncate">Vali Rakhimov</p><p class="text-[11px] text-gray-500">+998 90 727 77 22</p></div></div>
         </a>
-        <a href="trailer-detail.html" class="p-3.5 card-press">
+        <a href="trailer-detail.html" class="relative p-3.5 card-press">
+          <button onclick="event.preventDefault();event.stopPropagation();openTrailerEdit();" class="absolute top-2 right-2 w-6 h-6 rounded-md bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600"><i data-icon="pencil" class="w-3 h-3"></i></button>
           <p class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">Trailer</p>
-          <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500"><i data-icon="container" class="w-5 h-5"></i></span><div class="min-w-0"><p id="b2-trailer" class="text-sm font-semibold text-navy-800 truncate">Kogel</p><p id="b2-trailerplate" class="text-[11px] text-gray-500">60 H 545 AA</p></div></div>
+          <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 shrink-0"><i data-icon="container" class="w-5 h-5"></i></span><div class="min-w-0"><p id="b2-trailer" class="text-sm font-semibold text-navy-800 truncate">Kogel</p><p id="b2-trailerplate" class="text-[11px] text-gray-500">60 H 545 AA</p></div></div>
         </a>
       </div>
     </div>
@@ -310,6 +312,30 @@
     if(e.target&&e.target.id==='ed-save'){
       document.getElementById('b2-driver').textContent=document.getElementById('ed-driver').value;
       const tr=TRAILERS[+document.getElementById('ed-trailer').value];
+      document.getElementById('b2-trailer').textContent=tr[0]; document.getElementById('b2-trailerplate').textContent=tr[1];
+      closeSheet();
+    }
+  });
+
+  // ---- quick edit: driver only ----
+  function openDriverEdit(){
+    openSheet('Change driver',
+      `<div><label class="f-label">Assign driver</label><div class="f-sel"><select id="qe-driver" class="f-field">${DRIVERS.map(d=>`<option ${d===document.getElementById('b2-driver').textContent?'selected':''}>${d}</option>`).join('')}</select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>`,
+      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Cancel</button><button id="qe-driver-save" class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Save</button>`);
+  }
+  // ---- quick edit: trailer only ----
+  function openTrailerEdit(){
+    openSheet('Change trailer',
+      `<div><label class="f-label">Assign trailer</label><div class="f-sel"><select id="qe-trailer" class="f-field">${TRAILERS.map((t,i)=>`<option value="${i}">${t[0]} · ${t[1]}</option>`).join('')}</select><i data-icon="chevron-down" class="f-chev w-5 h-5"></i></div></div>`,
+      `<button data-close class="btn flex-1 h-12 rounded-lg border border-gray-300 text-navy-800 font-bold">Cancel</button><button id="qe-trailer-save" class="btn flex-1 h-12 rounded-lg bg-primary-500 text-navy-800 font-bold">Save</button>`);
+  }
+  document.addEventListener('click',e=>{
+    if(e.target&&e.target.id==='qe-driver-save'){
+      document.getElementById('b2-driver').textContent=document.getElementById('qe-driver').value;
+      closeSheet();
+    }
+    if(e.target&&e.target.id==='qe-trailer-save'){
+      const tr=TRAILERS[+document.getElementById('qe-trailer').value];
       document.getElementById('b2-trailer').textContent=tr[0]; document.getElementById('b2-trailerplate').textContent=tr[1];
       closeSheet();
     }
