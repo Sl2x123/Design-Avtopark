@@ -367,14 +367,14 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .cat-pick-lbl{flex:1;font-size:15px;font-weight:700;color:#0F0F37;}
 
-/* Compact info chips (matches reference "Общая информация" chip style) */
-.info-chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
-.info-chip{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #eee;
-  border-radius:14px;padding:10px 12px;}
-.info-chip-ic{width:30px;height:30px;border-radius:15px;background:#0F0F37;color:#fff;flex-shrink:0;
+/* Truck info list (Пробег / Прицеп / Тип прицепа) */
+.info-list{background:#fff;border:1.5px solid #eee;border-radius:18px;overflow:hidden;margin-bottom:12px;}
+.info-row{display:flex;align-items:center;gap:12px;padding:13px 14px;}
+.info-row:not(:last-child){border-bottom:1px solid #f2f2f2;}
+.info-row-ic{width:36px;height:36px;border-radius:12px;background:#fff7d6;color:#8a6d00;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;}
-.info-chip-l{font-size:10px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
-.info-chip-v{font-size:12.5px;color:#0F0F37;font-weight:700;margin-top:1px;}
+.info-row-l{font-size:11px;color:#aaa;font-weight:600;}
+.info-row-v{font-size:14px;color:#0F0F37;font-weight:700;margin-top:1px;}
 
 /* ── MODALS ────────────────────────────────── */
 .modal{position:absolute;inset:0;background:rgba(0,0,0,.52);display:flex;align-items:flex-end;
@@ -601,7 +601,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
           </div>
           <div class="gc-status-chip">
             <div class="sb-dot" style="background:#f5a623"></div>
-            <span style="color:#0F0F37">Стоянка</span>
+            <span style="color:#0F0F37">Не в сети</span>
           </div>
         </div>
         <div class="gc-plate-row">
@@ -1009,8 +1009,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
             <div style="font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-top:2px" id="tcModel">FH 12 · 2021</div>
           </div>
         </div>
-        <!-- edit button top-right -->
-        <button onclick="openModal('editModal')" style="position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:17px;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);border:none;color:#fff;font-size:15px;cursor:pointer;">✏</button>
         <!-- plate badge bottom-left -->
         <div class="plate plate-abs">
           <div class="plate-reg" id="tcPlateReg">01</div>
@@ -1183,12 +1181,20 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <svg width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="#ccc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,1 7,7 1,13"/></svg>
     </button>
 
-    <!-- Brief truck info (compact info-chip grid) -->
-    <div class="info-chip-grid">
-      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><div><div class="info-chip-l">Двигатель</div><div class="info-chip-v">D13K500 · 500 л.с.</div></div></div>
-      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><div><div class="info-chip-l">Пробег</div><div class="info-chip-v">245 000 км</div></div></div>
-      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div><div class="info-chip-l">Прицеп</div><div class="info-chip-v">01 B 123 RT</div></div></div>
-      <div class="info-chip"><span class="info-chip-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4M7 2l4 4-4 4M17 22l-4-4 4-4M21 2l-4 4 4 4"/><line x1="7" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="17" y2="18"/></svg></span><div><div class="info-chip-l">Тип прицепа</div><div class="info-chip-v">Рефрижератор · 20т</div></div></div>
+    <!-- Brief truck info -->
+    <div class="info-list">
+      <div class="info-row">
+        <span class="info-row-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+        <div><div class="info-row-l">Пробег</div><div class="info-row-v">245 000 км</div></div>
+      </div>
+      <div class="info-row">
+        <span class="info-row-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
+        <div><div class="info-row-l">Прицеп</div><div class="info-row-v">01 B 123 RT</div></div>
+      </div>
+      <div class="info-row">
+        <span class="info-row-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22l4-4M7 2l4 4-4 4M17 22l-4-4 4-4M21 2l-4 4 4 4"/><line x1="7" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="17" y2="18"/></svg></span>
+        <div><div class="info-row-l">Тип прицепа</div><div class="info-row-v">Рефрижератор · 20т</div></div>
+      </div>
     </div>
 
     <div id="tcTabOrders" style="padding-bottom:20px">
@@ -1226,7 +1232,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
         <div class="so-dot" style="background:#2dbd71"></div><span class="so-text">В пути</span>
       </div>
       <div class="status-option" data-key="parked" onclick="setStatus('parked')">
-        <div class="so-dot" style="background:#f5a623"></div><span class="so-text">Стоянка</span>
+        <div class="so-dot" style="background:#f5a623"></div><span class="so-text">Не в сети</span>
       </div>
       <div class="status-option" data-key="free" onclick="setStatus('free')">
         <div class="so-dot" style="background:#ff4b4b"></div><span class="so-text">Свободен</span>
@@ -1309,42 +1315,42 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   <div class="msheet">
     <div class="mhandle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <div class="mtitle" style="margin-bottom:0;text-align:left">Haydovchi profili</div>
+      <div class="mtitle" style="margin-bottom:0;text-align:left">Профиль водителя</div>
       <button type="button" onclick="closeModal('driverProfileModal')" style="width:34px;height:34px;border-radius:10px;border:1.5px solid #eee;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#888;flex-shrink:0">✕</button>
     </div>
-    <div class="msub" style="text-align:left;margin-bottom:18px">Ma'lumotlaringizni to'ldiring</div>
+    <div class="msub" style="text-align:left;margin-bottom:18px">Заполните ваши данные</div>
 
     <div style="display:flex;justify-content:center;margin-bottom:18px">
       <label style="cursor:pointer;text-align:center">
         <div id="dpPhotoPreview" style="width:84px;height:84px;border-radius:42px;background:#f4f4f4;border:1.5px dashed #ccc;display:flex;align-items:center;justify-content:center;color:#aaa;margin:0 auto 8px;overflow:hidden">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>
         </div>
-        <span onclick="mockDriverPhoto()" style="font-size:12px;font-weight:700;color:#0F0F37">Rasm yuklash</span>
+        <span onclick="mockDriverPhoto()" style="font-size:12px;font-weight:700;color:#0F0F37">Загрузить фото</span>
       </label>
     </div>
 
-    <div class="field"><div class="field-label">Ism familiya <span style="color:#ff4b4b">*</span></div>
-      <input class="field-input" id="dpFullName" placeholder="Alisher Karimov"/></div>
+    <div class="field"><div class="field-label">Имя и фамилия <span style="color:#ff4b4b">*</span></div>
+      <input class="field-input" id="dpFullName" placeholder="Алишер Каримов"/></div>
 
-    <div class="field"><div class="field-label">Guvohnoma raqami <span style="color:#ff4b4b">*</span></div>
+    <div class="field"><div class="field-label">Номер удостоверения <span style="color:#ff4b4b">*</span></div>
       <input class="field-input" id="dpLicenseNumber" placeholder="AB 1234567"/></div>
 
     <div class="field-row">
-      <div class="field"><div class="field-label">Guvohnoma muddati <span style="color:#ff4b4b">*</span></div>
+      <div class="field"><div class="field-label">Срок действия удост. <span style="color:#ff4b4b">*</span></div>
         <input class="field-input" id="dpLicenseExpiry" type="date"/></div>
-      <div class="field"><div class="field-label">Tug'ilgan sana <span style="color:#ff4b4b">*</span></div>
+      <div class="field"><div class="field-label">Дата рождения <span style="color:#ff4b4b">*</span></div>
         <input class="field-input" id="dpDob" type="date"/></div>
     </div>
 
     <div class="field-row">
-      <div class="field"><div class="field-label">Tajriba (yil)</div>
+      <div class="field"><div class="field-label">Стаж (лет)</div>
         <input class="field-input" id="dpExperience" type="number" placeholder="8"/></div>
-      <div class="field"><div class="field-label">Telefon (avtomatik)</div>
+      <div class="field"><div class="field-label">Телефон (автоматически)</div>
         <input class="field-input" id="dpPhone" value="+998 90 727 77 22" disabled style="opacity:.6;cursor:not-allowed"/></div>
     </div>
 
-    <button class="btn btn-dark" style="margin-top:14px" onclick="saveDriverProfile()">Saqlash</button>
-    <button class="btn-cancel" onclick="closeModal('driverProfileModal')">Bekor qilish</button>
+    <button class="btn btn-dark" style="margin-top:14px" onclick="saveDriverProfile()">Сохранить</button>
+    <button class="btn-cancel" onclick="closeModal('driverProfileModal')">Отмена</button>
   </div>
 </div>
 
@@ -1640,28 +1646,19 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
   </div>
 </div>
 
-<div class="modal" id="editModal">
-  <div class="msheet">
-    <div class="mhandle"></div>
-    <div class="mtitle">Редактировать</div>
-    <div class="msub">Изменить данные грузовика или прицепа</div>
-    <button class="btn btn-dark" onclick="closeModal('editModal')">Готово</button>
-  </div>
-</div>
-
 <div class="modal" id="inviteModal">
   <div class="msheet">
     <div class="mhandle"></div>
     <div class="mtitle">Приглашение</div>
-    <div class="msub"><b style="color:#0F0F37">Иван Петров</b> назначает вас водителем</div>
-    <div style="background:#f7f7f7;border-radius:20px;overflow:hidden;margin-bottom:22px;">
-      <div style="width:100%;height:130px;overflow:hidden;">
-        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&h=200&fit=crop" style="width:100%;height:100%;object-fit:cover"/>
+    <div class="msub">Вас приглашают присоединиться к автопарку компании</div>
+    <div style="background:#f7f7f7;border-radius:20px;padding:16px;margin-bottom:22px;display:flex;align-items:center;gap:14px">
+      <div style="width:52px;height:52px;border-radius:16px;background:#0F0F37;color:#FAE436;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6"/><line x1="14" y1="6" x2="14" y2="6"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="10" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="14" y2="14"/></svg>
       </div>
-      <div style="padding:12px 14px 14px">
-        <div style="font-size:17px;font-weight:700;color:#0F0F37">VOLVO FH 12 · 2021</div>
-        <div style="font-size:13px;color:#888;margin-top:2px">🇺🇿 01 A 234 DG</div>
-        <div style="font-size:12px;color:#aaa;margin-top:4px">Прицеп: 01 B 123 RT · Рефрижератор · 20т</div>
+      <div style="min-width:0">
+        <div style="font-size:16px;font-weight:800;color:#0F0F37">ООО «АвтоТранс»</div>
+        <div style="font-size:13px;color:#888;margin-top:2px">Владелец: Иван Петров</div>
+        <div style="font-size:13px;color:#888;margin-top:1px">+998 90 123 45 67</div>
       </div>
     </div>
     <button class="btn btn-green" onclick="closeModal('inviteModal')">✓ &nbsp;Принять</button>
@@ -1704,7 +1701,7 @@ const TRUCKS=[
    driverPhoto:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&q=80',
    pills:['Кат. C','Стаж 3 года','+998 91 111 22 33'],
    status:'parked',logoColor:'#E2001A',logoLetter:'M',
-   statusDot:'#f5a623',statusText:'Стоянка',statusCls:'s-parked'},
+   statusDot:'#f5a623',statusText:'Не в сети',statusCls:'s-parked'},
 ];
 
 let activeTruckIdx=0;
@@ -1904,8 +1901,8 @@ function applyTruckDetailVisibility(){
   // elements with no other controller — safe to toggle both ways
   const odo=document.getElementById('odoBtn');
   if(odo) odo.style.display=isOwn?'none':'flex';
-  const info=document.querySelector('#screenTruck .info-chip-grid');
-  if(info) info.style.display=isOwn?'none':'grid';
+  const info=document.querySelector('#screenTruck .info-list');
+  if(info) info.style.display=isOwn?'none':'block';
   const driverCard=document.querySelector('#screenTruck .driver-status-card');
   if(driverCard) driverCard.style.display=isOwn?'none':'block';
   const ordersTab=document.getElementById('tcTabOrders');
@@ -1977,7 +1974,7 @@ function renderAllTrips(){
 /* ── Status ──────────────────────────────────── */
 const STATUS={
   driving:{cls:'s-driving',text:'В пути',  dot:'#2dbd71'},
-  parked: {cls:'s-parked', text:'Стоянка', dot:'#f5a623'},
+  parked: {cls:'s-parked', text:'Не в сети', dot:'#f5a623'},
   free:   {cls:'s-free',   text:'Свободен',dot:'#ff4b4b'},
   repair: {cls:'s-repair', text:'Ремонт',  dot:'#8a94a6'},
 };
@@ -1991,7 +1988,7 @@ function updateTcStatusBottom(key){
   if(key==='driving'){
     el.innerHTML='<button onclick="finishTrip()" style="width:100%;padding:14px;background:#FAE436;color:#0F0F37;font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;">Завершить рейс</button>';
   } else if(key==='parked'){
-    el.innerHTML='<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="width:40px;height:40px;border-radius:20px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><div><div style="font-size:14px;font-weight:800;color:#0F0F37">На стоянке</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">Продолжить движение</button>';
+    el.innerHTML='<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="width:40px;height:40px;border-radius:20px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg></span><div><div style="font-size:14px;font-weight:800;color:#0F0F37">Не в сети</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">Продолжить движение</button>';
   } else if(key==='repair'){
     el.innerHTML='<div style="background:#fff;border:1.5px solid #eee;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="width:40px;height:40px;border-radius:20px;background:#0F0F37;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg></span><div><div style="font-size:14px;font-weight:800;color:#0F0F37">На ремонте</div><div style="font-size:12px;color:#aaa;margin-top:2px">Рейс приостановлен</div></div></div><button onclick="resumeTrip()" style="width:100%;padding:12px;background:#f4f4f4;color:#0F0F37;font-size:15px;font-weight:700;border:none;border-radius:14px;cursor:pointer;">Завершить ремонт</button>';
   } else {
@@ -2296,7 +2293,7 @@ function mockDriverPhoto(){
   document.getElementById('dpPhotoPreview').innerHTML=
     '<img src="https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=200&h=200&fit=crop&q=80" style="width:100%;height:100%;object-fit:cover"/>';
   driverProfile._pendingPhoto='https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=200&h=200&fit=crop&q=80';
-  toast('Rasm biriktirildi');
+  toast('Фото прикреплено');
 }
 
 function saveDriverProfile(){
@@ -2305,7 +2302,7 @@ function saveDriverProfile(){
   const license_expiry=document.getElementById('dpLicenseExpiry').value;
   const date_of_birth=document.getElementById('dpDob').value;
   if(!full_name||!license_number||!license_expiry||!date_of_birth){
-    toast('Majburiy maydonlarni to\'ldiring');
+    toast('Заполните обязательные поля');
     return;
   }
   driverProfile={
@@ -2317,7 +2314,7 @@ function saveDriverProfile(){
   localStorage.setItem(DRIVER_PROFILE_KEY,JSON.stringify(driverProfile));
   renderProfileAvatar();
   closeModal('driverProfileModal');
-  toast('Profil saqlandi');
+  toast('Профиль сохранён');
 }
 
 /* ── Start/Finish Trip ───────────────────────── */
