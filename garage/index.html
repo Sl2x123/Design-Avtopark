@@ -498,7 +498,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 <!-- ══════════════════════════════════════════
      SCREEN 1 — GARAGE LIST
 ══════════════════════════════════════════ -->
-<div class="screen active" id="screenGarage">
+<div class="screen" id="screenGarage">
 
   <div class="sbar">
     <span class="sbar-time" id="clk">10:56</span>
@@ -973,7 +973,7 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
 <!-- ══════════════════════════════════════════
      SCREEN 4 — TRUCK DETAIL
 ══════════════════════════════════════════ -->
-<div class="screen" id="screenTruck">
+<div class="screen active" id="screenTruck">
 
   <div class="sbar">
     <span class="sbar-time" id="clk4">10:56</span>
@@ -1419,14 +1419,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
     </div>
     <!-- Trip detail card -->
     <div id="ownerAssignCard" style="background:#f7f8ff;border-radius:18px;padding:16px;margin-bottom:20px;border:1.5px solid #e3e6ff"></div>
-    <!-- Pending state (shown when driver initiates) -->
-    <div id="oanPendingState" style="display:none;background:#f0fdf4;border-radius:14px;padding:14px 16px;margin-bottom:12px;display:none;align-items:center;gap:12px">
-      <div style="width:36px;height:36px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">⏳</div>
-      <div>
-        <div style="font-size:13px;font-weight:700;color:#15803d">Запрос отправлен</div>
-        <div style="font-size:12px;color:#16a34a;margin-top:2px">Ожидание ответа от Иван Петрова...</div>
-      </div>
-    </div>
     <button id="oanAcceptBtn" class="btn btn-green" onclick="acceptOwnerTrip()">✓ &nbsp;Принять рейс</button>
     <button id="oanDeclineBtn" class="btn btn-ghost-r" onclick="declineOwnerTrip()">Отклонить</button>
   </div>
@@ -1753,7 +1745,7 @@ function toggleOwnFleet(){
 }
 
 /* ── Navigation stack ────────────────────────── */
-const navStack=['screenGarage'];
+const navStack=['screenTruck'];
 
 function navigate(screenId){
   const cur=navStack[navStack.length-1];
@@ -2326,43 +2318,17 @@ function startTrip(){
   const to=document.getElementById('ntTo').value.trim();
   const dist=document.getElementById('ntDist').value;
   const cargo=document.getElementById('ntCargo').value.trim();
-  const weight=document.getElementById('ntWeight').value;
   const profit=parseFloat(document.getElementById('ntProfit').value)||0;
   const time=document.getElementById('ntTime').value.trim();
-  const note=document.getElementById('ntNote').value.trim();
   if(!from||!to){toast('Заполните откуда и куда');return;}
 
-  // Store trip data for owner confirmation
-  pendingOwnerTrip={from,to,dist,cargo,weight,profit,time,note};
-
-  // Build trip detail card
-  const card=document.getElementById('ownerAssignCard');
-  card.innerHTML=`
-    <div style="font-size:17px;font-weight:800;color:#0F0F37;margin-bottom:12px">${from} <span style="color:#2dbd71">→</span> ${to}</div>
-    <div style="display:flex;flex-direction:column;gap:7px">
-      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Груз</span><span style="color:#0F0F37;font-weight:600">${cargo||'—'}${weight?' · '+weight+' т':''}</span></div>
-      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Расстояние</span><span style="color:#0F0F37;font-weight:600">${dist?dist+' км':'—'}</span></div>
-      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#aaa">Время в пути</span><span style="color:#0F0F37;font-weight:600">${time||'—'}</span></div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px;padding-top:8px;border-top:1px solid #e0f2e9"><span style="color:#aaa">Ожидаемый доход</span><span style="color:#2dbd71;font-weight:800;font-size:15px">${profit?fmtUsd(profit):'—'}</span></div>
-      ${note?`<div style="margin-top:4px;padding-top:8px;border-top:1px solid #e0f2e9"><span style="color:#aaa;font-size:13px">Комментарий владельцу</span><div style="color:#0F0F37;font-weight:600;font-size:13px;margin-top:3px">${note}</div></div>`:''}
-    </div>`;
-
-  // Update modal header: driver → owner direction
-  document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8f5e9,#f1f8e9)';
-  document.getElementById('oanHeaderIcon').innerHTML="<svg width='21' height='21' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='22' y1='2' x2='11' y2='13'/><polygon points='22 2 15 22 11 13 2 9 22 2'/></svg>";
-  document.getElementById('oanHeaderIcon').style.background='linear-gradient(135deg,#43a047,#66bb6a)';
-  document.getElementById('oanHeaderTitle').style.color='#2e7d32';
-  document.getElementById('oanHeaderTitle').textContent='Запрос отправлен владельцу';
-  document.getElementById('oanHeaderSub').style.color='#388e3c';
-  document.getElementById('oanHeaderSub').textContent='Иван Петров должен подтвердить рейс';
-  document.getElementById('oanAcceptBtn').style.display='none';
-  document.getElementById('oanPendingState').style.display='flex';
-  document.getElementById('oanDeclineBtn').textContent='Отменить запрос';
+  // Driver-initiated trips start immediately — the owner is only notified, not asked to approve
+  activateTrip(from,to,dist,cargo,profit,time);
 
   ['ntFrom','ntTo','ntDist','ntCargo','ntWeight','ntProfit','ntTime','ntNote'].forEach(id=>{document.getElementById(id).value='';});
   document.getElementById('ntPreview').style.display='none';
   closeModal('newTripModal');
-  setTimeout(()=>openModal('ownerAssignNotifModal'),340);
+  toast('🚛 Рейс начат! Иван Петров уведомлён');
 }
 
 function finishTrip(){
@@ -2847,9 +2813,7 @@ function ownerAssignTrip(){
   setTimeout(()=>openModal('ownerAssignNotifModal'),340);
 }
 
-function acceptOwnerTrip(){
-  if(!pendingOwnerTrip) return;
-  const{from,to,dist,cargo,profit,time}=pendingOwnerTrip;
+function activateTrip(from,to,dist,cargo,profit,time){
   const today=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('tripRoute').textContent=from+' → '+to;
   document.getElementById('tripCargo').textContent=cargo||'—';
@@ -2876,6 +2840,13 @@ function acceptOwnerTrip(){
   const tcTripDateEl=document.getElementById('tcTripDate');if(tcTripDateEl)tcTripDateEl.textContent='📅 '+today;
   buildStepper('tcStepper');
   document.getElementById('tcTripCard').style.display='block';
+  applyStatus('driving');
+}
+
+function acceptOwnerTrip(){
+  if(!pendingOwnerTrip) return;
+  const{from,to,dist,cargo,profit,time}=pendingOwnerTrip;
+  activateTrip(from,to,dist,cargo,profit,time);
   pendingOwnerTrip=null;
   // Reset modal header to owner-assigned defaults
   document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8eaf6,#ede7f6)';
@@ -2887,10 +2858,8 @@ function acceptOwnerTrip(){
   document.getElementById('oanHeaderSub').textContent='Иван Петров назначил вам рейс';
   document.getElementById('oanAcceptBtn').style.display='';
   document.getElementById('oanAcceptBtn').innerHTML='✓ &nbsp;Принять рейс';
-  document.getElementById('oanPendingState').style.display='none';
   document.getElementById('oanDeclineBtn').textContent='Отклонить';
   closeModal('ownerAssignNotifModal');
-  applyStatus('driving');
   toast('✅ Рейс подтверждён владельцем! Статус изменён на «В пути»');
 }
 
@@ -2898,7 +2867,6 @@ function declineOwnerTrip(){
   pendingOwnerTrip=null;
   document.getElementById('oanAcceptBtn').style.display='';
   document.getElementById('oanAcceptBtn').innerHTML='✓ &nbsp;Принять рейс';
-  document.getElementById('oanPendingState').style.display='none';
   document.getElementById('oanDeclineBtn').textContent='Отклонить';
   document.getElementById('oanHeaderBg').style.background='linear-gradient(135deg,#e8eaf6,#ede7f6)';
   document.getElementById('oanHeaderIcon').innerHTML="<svg width='21' height='21' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg>";
@@ -2908,7 +2876,7 @@ function declineOwnerTrip(){
   document.getElementById('oanHeaderSub').style.color='#7b1fa2';
   document.getElementById('oanHeaderSub').textContent='Иван Петров назначил вам рейс';
   closeModal('ownerAssignNotifModal');
-  toast('Запрос отменён');
+  toast('Рейс отклонён');
 }
 
 /* ── Init ────────────────────────────────────── */
