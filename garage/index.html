@@ -1492,20 +1492,6 @@ body{background:#111;display:flex;justify-content:center;align-items:center;min-
       <button class="exp-cur-btn active" data-cur="USD"   onclick="setExpCur('USD')">$</button>
     </div>
 
-    <!-- Photo receipt (for categories that have it) -->
-    <div id="expPhotoRow" style="display:none;margin-bottom:14px">
-      <button onclick="mockPhotoReceipt()" style="width:100%;padding:12px;background:#f8f8f8;border:1.5px dashed #ccc;border-radius:14px;color:#555;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <span id="expPhotoLabel">Фото чека (необязательно)</span>
-      </button>
-    </div>
-
-    <!-- Reason (only for Другое) -->
-    <div id="expReasonRow" style="display:none;margin-bottom:14px">
-      <div class="field-label" style="margin-bottom:8px">Причина</div>
-      <textarea class="note-inp" id="expReason" placeholder="Укажите причину расхода..."></textarea>
-    </div>
-
     <!-- Comment (text / voice) -->
     <div class="field-label" style="margin-bottom:10px;margin-top:6px">Комментарий <span style="font-weight:400;color:#bbb;font-size:11px">(необязательно)</span></div>
     <div style="display:flex;gap:8px;margin-bottom:12px">
@@ -2573,15 +2559,15 @@ function playVoice(el){
 /* ── Modals ──────────────────────────────────── */
 // Expense category
 const EXP_CAT_META={
-  fuel:   {hasQty:true, hasSub:true,  hasPhoto:true,  hasReason:false},
-  food:   {hasQty:false,hasSub:false, hasPhoto:false, hasReason:false},
-  parking:{hasQty:false,hasSub:false, hasPhoto:false, hasReason:false},
-  parts:  {hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
-  service:{hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
-  wash:   {hasQty:false,hasSub:false, hasPhoto:false, hasReason:false},
-  fine:   {hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
-  insure: {hasQty:false,hasSub:false, hasPhoto:true,  hasReason:false},
-  other:  {hasQty:false,hasSub:false, hasPhoto:false, hasReason:true },
+  fuel:   {hasQty:true, hasSub:true},
+  food:   {hasQty:false,hasSub:false},
+  parking:{hasQty:false,hasSub:false},
+  parts:  {hasQty:false,hasSub:false},
+  service:{hasQty:false,hasSub:false},
+  wash:   {hasQty:false,hasSub:false},
+  fine:   {hasQty:false,hasSub:false},
+  insure: {hasQty:false,hasSub:false},
+  other:  {hasQty:false,hasSub:false},
 };
 let expSelectedCat=null, expFuelType='diesel';
 function pickExpCat(el){
@@ -2591,8 +2577,6 @@ function pickExpCat(el){
   const m=EXP_CAT_META[expSelectedCat]||{};
   document.getElementById('expFuelRow').style.display=m.hasSub?'block':'none';
   document.getElementById('expQtyRow').style.display=m.hasQty?'block':'none';
-  document.getElementById('expPhotoRow').style.display=m.hasPhoto?'block':'none';
-  document.getElementById('expReasonRow').style.display=m.hasReason?'block':'none';
 }
 function pickFuelType(type){
   expFuelType=type;
@@ -2600,10 +2584,6 @@ function pickFuelType(type){
   document.getElementById('expFuelDiesel').style.cssText='flex:1;padding:10px;border-radius:12px;border:2px solid '+(isDiesel?'#0F0F37;background:#0F0F37;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
   document.getElementById('expFuelGas').style.cssText='flex:1;padding:10px;border-radius:12px;border:2px solid '+(!isDiesel?'#0F0F37;background:#0F0F37;color:#fff':'#e0e0e0;background:#fff;color:#888')+';font-size:13px;font-weight:700;cursor:pointer;';
   document.getElementById('expQtyUnit').textContent=isDiesel?'Л':'М³';
-}
-function mockPhotoReceipt(){
-  document.getElementById('expPhotoLabel').textContent='✓ Фото прикреплено';
-  toast('Фото чека добавлено');
 }
 
 // Expense currency
@@ -2747,9 +2727,6 @@ function openModal(id,fromTrip){
     expSelectedCat=null;
     document.getElementById('expFuelRow').style.display='none';
     document.getElementById('expQtyRow').style.display='none';
-    document.getElementById('expPhotoRow').style.display='none';
-    document.getElementById('expReasonRow').style.display='none';
-    document.getElementById('expPhotoLabel').textContent='Фото чека (необязательно)';
     document.getElementById('expContext').textContent=
       fromTrip?'Рейс: '+document.getElementById('tripRoute').textContent:'';
   }
